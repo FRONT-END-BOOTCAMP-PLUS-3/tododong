@@ -1,0 +1,68 @@
+// 숨김 콘텐츠
+@mixin srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  overflow: hidden;
+  padding: 0;
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Flexbox
+@mixin flexbox(
+  $direction: row,
+  $wrap: nowrap,
+  $justify: null,
+  $align: null,
+  $gap: null
+) {
+  display: flex;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+// Gridbox
+@mixin gridbox(
+  $column-count,
+  $row-count: auto,
+  $column-gap: null,
+  $row-gap: null
+) {
+  display: grid;
+  grid-template-columns: repeat($column-count, 1fr);
+  grid-template-rows: repeat($row-count, 1fr);
+  gap: $row-gap $column-gap;
+}
+
+// Absolute
+@mixin absolute($top: null, $bottom: null, $left: null, $right: null) {
+  position: absolute;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+}
+
+// Fixed
+@mixin fixed($top: null, $bottom: null, $left: null, $right: null) {
+  position: fixed;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+}
+
+@mixin sticky($top: null, $bottom: null, $left: null, $right: null) {
+  position: sticky;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+}

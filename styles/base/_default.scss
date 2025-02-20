@@ -1,0 +1,34 @@
+@use '../utils/variables' as var;
+
+// 가로 최대크기
+$viewport-max-width: var.$width-desktop-large;
+// 배경색
+$background-color: var.$color-bg;
+// 폰트색
+$font-color: var.$color-white;
+
+body {
+  font-family: var.$base-font-family;
+  line-height: normal;
+  margin: 0 auto;
+  max-width: $viewport-max-width;
+  background-color: $background-color;
+  color: $font-color;
+}
+
+button {
+  color: $font-color;
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+:focus {
+  outline: 0;
+}
+:focus-visible {
+  outline: 2.5px solid var.$color-gray-200;
+  outline-offset: 0.5px;
+  border-radius: 2px;
+}
