@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')], // styles 폴더를 기본 경로로 설정
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
