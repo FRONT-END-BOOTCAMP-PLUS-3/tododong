@@ -1,0 +1,28 @@
+@use 'utils' as *;
+
+.tag {
+  display: inline-block;
+  border-radius: $border-radius-4;
+}
+
+.sm {
+  padding: 2px 8px;
+  font-size: $text-12;
+}
+
+.lg {
+  padding: 6px 8px;
+  font-size: $text-14;
+}
+
+.live {
+  background-color: $color-live;
+}
+
+.final {
+  background-color: $color-end;
+}
+
+.scheduled {
+  background-color: $color-gray-600;
+}
