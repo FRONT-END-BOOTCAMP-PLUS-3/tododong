@@ -17,6 +17,10 @@
     border-radius: $border-radius-8;
     margin-left: 0.5rem;
 
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+
     &:disabled {
       background-color: $bgcolor-disabled;
     }

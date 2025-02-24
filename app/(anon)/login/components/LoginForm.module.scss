@@ -18,6 +18,10 @@
     width: 100%;
     border-radius: $border-radius-8;
 
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+
     &:disabled {
       background-color: $bgcolor-disabled;
     }

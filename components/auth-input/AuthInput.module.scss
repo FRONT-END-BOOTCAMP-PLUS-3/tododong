@@ -25,10 +25,6 @@
     height: 100%;
     color: $color-white;
 
-    &:disabled {
-      color: $color-gray-500;
-    }
-
     &:focus {
       outline: none;
     }
@@ -40,6 +36,11 @@
     &:focus::placeholder {
       font-size: $text-12;
       translate: 0 -0.625rem;
+    }
+
+    &:disabled {
+      color: $color-gray-500;
+      -webkit-text-fill-color: $color-gray-500 !important;
     }
   }
 }
