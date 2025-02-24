@@ -17,16 +17,14 @@ export default function useBodyScrollLock(isOpen: boolean) {
   }, []);
 
   useLayoutEffect(() => {
-    if (isOpen) lockScroll();
-    else {
-      // 저장된 위치로 복귀
-      window.scrollTo(0, scrollYRef.current);
-    }
+    if (isOpen) {
+      lockScroll();
 
-    return () => {
-      // 언마운트 시 스크롤 잠금 해제
-      document.body.style.cssText = '';
-    };
+      return () => {
+        document.body.style.cssText = '';
+        window.scrollTo(0, scrollYRef.current);
+      };
+    }
   }, [isOpen, lockScroll]);
 
   return null;
