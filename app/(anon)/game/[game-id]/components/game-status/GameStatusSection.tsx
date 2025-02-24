@@ -48,7 +48,6 @@ const GameStatusSection = () => {
       </div>
       <div>
         <div className={styles.matchStatus}>
-          {/* <div>{data.scores.visitors.points}</div> */}
           {/* date.start가 현재 일시와 동일하거나 그 이상이면 'live', 이전이면 '예정' end보다 이후면 '종료',*/}
           <p>30</p>
           <GameStatusTag size="lg" status="live" />
@@ -66,18 +65,16 @@ const GameStatusSection = () => {
           </thead>
           <tbody>
             <tr>
-              <td>Memphis Grizzlies</td>
-              <td>38</td>
-              <td>25</td>
-              <td>33</td>
-              <td>27</td>
+              <td>{data.teams.visitors.name}</td>
+              {data.scores.visitors.linescore.map((score, index) => (
+                <td key={index}>{score || '-'}</td>
+              ))}
             </tr>
             <tr>
-              <td>Indiana Pacers</td>
-              <td>31</td>
-              <td>23</td>
-              <td>33</td>
-              <td>13</td>
+              <td>{data.teams.home.name}</td>
+              {data.scores.home.linescore.map((score, index) => (
+                <td key={index}>{score || '-'}</td>
+              ))}
             </tr>
           </tbody>
         </table>
