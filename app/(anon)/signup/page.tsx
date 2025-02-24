@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import SignupForm from './components/SginupForm';
+import SignupForm from './components/SignupForm';
 import styles from './page.module.scss';
 
 const SignUp = () => {
