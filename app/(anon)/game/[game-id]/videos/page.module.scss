@@ -1,0 +1,53 @@
+@use 'utils' as *;
+
+.videoCardContainer {
+  @include gridbox($column-count: 4, $row-gap: 16px);
+}
+
+.videoCard {
+  @include flexbox($direction: column, $gap: 8);
+  width: 200px;
+  color: $color-white;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.thumbnail {
+  border-radius: $border-radius-8;
+}
+
+.details {
+  @include flexbox($direction: column, $gap: 4);
+  padding-left: 4px;
+
+  .title {
+    font-size: $text-16;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .channel {
+    @include flexbox($direction: row, $gap: 4);
+
+    .channelImage {
+      border-radius: $border-radius-circle;
+    }
+
+    .channelTitle {
+      font-size: $text-12;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.gameStatus {
+  height: 100%;
+  text-align: center;
+  align-content: center;
+}
