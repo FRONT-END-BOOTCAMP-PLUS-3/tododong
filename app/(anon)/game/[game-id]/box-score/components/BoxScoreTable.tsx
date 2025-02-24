@@ -5,7 +5,7 @@ import styles from './BoxScoreTable.module.scss';
 import Image from 'next/image';
 
 // Box Score 테이블 헤더
-const BOXSCORETABLEHEADER = [
+const BOX_SCORE_TABLE_HEADER = [
   '선수명',
   '득점',
   '출전\n시간',
@@ -129,7 +129,7 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
           {/* 헤더 */}
           <thead className={styles.tableHeader}>
             <tr>
-              {BOXSCORETABLEHEADER.map((header, index) => {
+              {BOX_SCORE_TABLE_HEADER.map((header, index) => {
                 const isSelected = sortState.key === index;
                 return (
                   <th
