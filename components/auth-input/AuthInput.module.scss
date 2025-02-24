@@ -1,0 +1,41 @@
+@use 'utils' as *;
+
+.inputWrapper {
+  @include flexbox($align: center);
+  width: 100%;
+  height: 56px;
+  padding: 0.5rem;
+  border-radius: $border-radius-8;
+  border: 1px solid $color-border;
+
+  &.isInvalid {
+    border-color: $color-red;
+  }
+
+  &:focus-within {
+    outline: 2.5px solid $color-gray-200;
+  }
+
+  &:has(> input:disabled) {
+    background-color: $color-gray-700;
+  }
+
+  > input {
+    flex-grow: 1;
+    height: 100%;
+    color: $color-white;
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      transition: all 0.2s ease-in;
+    }
+
+    &:focus::placeholder {
+      font-size: $text-12;
+      translate: 0 -0.625rem;
+    }
+  }
+}
