@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['i.ytimg.com', 'yt3.ggpht.com'],
+    domains: ['upload.wikimedia.org', 'i.ytimg.com', 'yt3.ggpht.com'],
   },
 };
 
