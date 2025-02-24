@@ -1,0 +1,8 @@
+@use 'utils' as *;
+
+.container {
+  width: 100%;
+  padding: 4px 0px;
+
+  @include flexbox($align: center, $gap: 8px);
+}
