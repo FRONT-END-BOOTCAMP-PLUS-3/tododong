@@ -15,12 +15,13 @@ type FormDataKeys =
   | 'nickName';
 
 // 유효성 검사 실패 문구
-const messagePhrase: Record<FormDataKeys, string> = {
+const messagePhrase = {
   email: '올바른 형식의 이메일 주소를 입력하세요.',
   authCode: '정확한 인증코드를 입력하세요.',
   password: '영문자, 숫자, 특수문자를 포함한 8~20자를 입력하세요.',
   passwordCheck: '비밀번호가 일치하지 않습니다.',
   nickName: '한글, 영어, 숫자로 된 2~8자 닉네임을 입력하세요.',
+  duplicatedNickName: '이미 사용 중인 닉네임입니다.',
 };
 
 const SignupForm = () => {
@@ -106,7 +107,7 @@ const SignupForm = () => {
     if (!isValid('email', formData.email)) {
       setMessages((prev) => ({
         ...prev,
-        email: messagePhrase['email'],
+        email: messagePhrase.email,
       }));
       return;
     } else setMessages((prev) => ({ ...prev, email: '' }));
@@ -181,7 +182,14 @@ const SignupForm = () => {
       );
       // 성공 시 이동
       router.push('/');
-    } catch {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        if (err.message === '닉네임 중복')
+          setMessages((prev) => ({
+            ...prev,
+            nickName: messagePhrase.duplicatedNickName,
+          }));
+      }
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };

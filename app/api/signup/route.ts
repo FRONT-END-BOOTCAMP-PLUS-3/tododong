@@ -6,6 +6,6 @@ export const POST = async (req: NextRequest) => {
   console.log(email, password, nickName);
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  return NextResponse.json({ message: '회원가입 성공' }, { status: 200 });
-  // return NextResponse.json({ error: '회원가입 실패' }, { status: 400 });
+  // return NextResponse.json({ message: '회원가입 성공' }, { status: 200 });
+  return NextResponse.json({ error: '닉네임 중복' }, { status: 400 });
 };
