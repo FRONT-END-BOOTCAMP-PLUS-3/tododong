@@ -25,6 +25,10 @@
     height: 100%;
     color: $color-white;
 
+    &:disabled {
+      color: $color-gray-500;
+    }
+
     &:focus {
       outline: none;
     }
