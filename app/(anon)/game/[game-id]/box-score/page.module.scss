@@ -2,78 +2,7 @@
 
 .boxScoreContainer {
   @include flexbox($direction: column, $gap: 24);
-}
-
-.teamTitle {
-  @include flexbox($align: center, $gap: 8);
-  position: sticky;
-  left: 0;
-  z-index: 3;
-
-  span {
-    font-weight: 600;
-  }
-}
-
-.table {
-  @include flexbox();
-  font-size: $text-13;
-  width: 867px;
-  overflow-x: auto;
-
-  /* 기본 스크롤바 삭제 */
-  /* 크롬, 사파리 */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 파이어폭스 */
-  scrollbar-width: none;
-
-  /* IE, Edge */
-  -ms-overflow-style: none;
-}
-
-.tableHeader {
-  th {
-    padding: 10px 6px;
-    vertical-align: middle;
-  }
-
-  tr {
-    border-bottom: 2px solid $color-border;
-    color: $color-gray-300;
-    font-size: $text-12;
-    white-space: pre;
-
-    :nth-child(1) {
-      position: sticky;
-      left: 0;
-      z-index: 2;
-      min-width: 100px;
-      background-color: $color-bg;
-      text-align: start;
-    }
-  }
-}
-
-.tableBody {
-  td {
-    padding: 10px 6px;
-    text-align: center;
-  }
-
-  tr {
-    border-bottom: 1px solid $color-border;
-
-    :nth-child(1) {
-      position: sticky;
-      left: 0;
-      z-index: 2;
-      background-color: $color-bg;
-      text-align: start;
-    }
-  }
+  width: 100%;
 }
 
 .scheduledGame {

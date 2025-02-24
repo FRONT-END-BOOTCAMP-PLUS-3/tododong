@@ -2,9 +2,6 @@
 
 .teamTitle {
   @include flexbox($align: center, $gap: 8);
-  position: sticky;
-  left: 0;
-  z-index: 3;
 
   span {
     font-weight: 600;
@@ -14,20 +11,8 @@
 .table {
   @include flexbox();
   font-size: $text-13;
-  width: 867px;
+  width: 100%;
   overflow-x: auto;
-
-  /* 기본 스크롤바 삭제 */
-  /* 크롬, 사파리 */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 파이어폭스 */
-  scrollbar-width: none;
-
-  /* IE, Edge */
-  -ms-overflow-style: none;
 }
 
 .tableHeader {
