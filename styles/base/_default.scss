@@ -5,7 +5,7 @@ $viewport-max-width: $width-desktop-large;
 // 배경색
 $background-color: $color-bg;
 // 폰트
-$base-font-family: pretendard;
+$base-font-family: 'Pretendard Variable', sans-serif;
 $font-color: $color-white;
 
 body {
@@ -17,7 +17,17 @@ body {
   color: $font-color;
 }
 
+input,
+textarea,
+select,
 button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: $base-font-family;
   color: $font-color;
   cursor: pointer;
 }

@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ['upload.wikimedia.org'],
+  },
 };
 
 export default nextConfig;
