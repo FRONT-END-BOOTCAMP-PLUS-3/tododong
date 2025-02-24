@@ -118,3 +118,14 @@ const Modal = ({
 };
 
 export default Modal;
+
+/* 사용 예시
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+return (
+  <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false) }}>
+    <h2>제목</h2>
+    <p>내용</p>
+  </Modal>
+)
+*/
