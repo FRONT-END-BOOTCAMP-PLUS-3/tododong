@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import styles from './BoxScoreTable.module.scss';
+import Image from 'next/image';
 
 // Box Score 테이블 헤더
 const BOXSCORETABLEHEADER = [

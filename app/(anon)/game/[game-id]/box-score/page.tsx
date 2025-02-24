@@ -1,8 +1,8 @@
 'use client';
 
 import styles from './page.module.scss';
+import BoxScoreTable from './components/BoxScoreTable';
 import { useState } from 'react';
-import BoxScoreTable from './component/BoxScoreTable';
 
 type SortState = {
   key: number | null;
