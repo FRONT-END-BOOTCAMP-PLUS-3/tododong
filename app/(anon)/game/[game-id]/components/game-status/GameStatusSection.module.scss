@@ -13,6 +13,8 @@
 }
 
 .teamWrap {
+  text-align: center;
+
   @include flexbox($direction: column, $align: center, $gap: 8px);
 }
 
@@ -29,6 +31,15 @@
   }
 }
 
+.matchScheduled {
+  text-align: center;
+
+  > p:last-child {
+    font-size: $text-28;
+    font-weight: 500;
+  }
+}
+
 .matchStatus {
   > p {
     font-size: $text-36;
@@ -41,6 +52,8 @@
 .matchTable {
   font-size: $text-12;
   font-weight: 400;
+  text-align: center;
+
   th,
   td {
     padding: 5px 12px;
@@ -55,6 +68,7 @@
 
 .matchTableTitle {
   width: 44px;
+  text-align: center;
 
   > div {
     height: 27px;
