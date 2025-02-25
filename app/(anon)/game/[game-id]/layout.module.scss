@@ -1,0 +1,20 @@
+@use 'utils' as *;
+
+.container {
+  @include flexbox($justify: space-between, $gap: 16px);
+
+  > div {
+    width: 900px;
+    @include flexbox($direction: column, $gap: 16px);
+
+    > main {
+      width: 100%;
+      height: auto;
+
+      padding: 12px 20px;
+
+      border-radius: $border-radius-8;
+      background-color: $color-gray-900;
+    }
+  }
+}
