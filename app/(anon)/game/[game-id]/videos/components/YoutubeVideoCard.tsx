@@ -1,7 +1,7 @@
 import styles from './YoutubeVideoCard.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
-import { VideoSnippet } from '@/types/videos';
+import { VideoSnippet } from '@/application/usecases/game/videos/dto/videoDto';
 
 type YoutubeVideoCardProps = {
   data: {
