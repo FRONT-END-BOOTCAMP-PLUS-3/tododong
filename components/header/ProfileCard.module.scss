@@ -1,0 +1,33 @@
+@use 'utils' as *;
+
+.profileCard {
+  width: 18rem;
+  height: 10.375rem;
+  @include absolute($top: 4.5rem, $right: 0);
+  @include flexbox($direction: column, $justify: space-between);
+  background-color: $color-gray-700;
+  border-radius: $border-radius-8;
+  padding: 0.75rem 1.25rem;
+
+  .profileHeader {
+    @include flexbox($justify: space-between, $align: center);
+    padding-block: 0.25rem;
+    margin-bottom: 0.5rem;
+
+    > h2 {
+      font-size: $text-20;
+    }
+
+    > button {
+      border: 1px solid $color-white;
+      border-radius: $border-radius-8;
+      padding: 0.25rem 1rem;
+    }
+  }
+
+  .deleteBtn {
+    font-size: $text-14;
+    text-align: right;
+    color: $color-gray-400;
+  }
+}
