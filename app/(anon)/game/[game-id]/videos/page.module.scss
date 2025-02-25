@@ -1,0 +1,16 @@
+@use 'utils' as *;
+
+.videoContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  column-gap: 22px;
+  row-gap: 16px;
+  justify-content: center;
+  width: 100%;
+}
+
+.statusInfo {
+  height: 100%;
+  text-align: center;
+  align-content: center;
+}
