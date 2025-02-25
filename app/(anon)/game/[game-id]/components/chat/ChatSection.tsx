@@ -32,7 +32,9 @@ const ChatSection = () => {
             onChange={(e) => setValue(e.target.value)}
             placeholder="채팅을 입력하세요."
           />
-          <div className={styles.iconArrowUp}>
+          <div
+            className={`${styles.iconArrowUp} ${value ? styles.active : styles.inactive}`}
+          >
             <Icon id="arrow-up" width={11.15} height={12.6} />
           </div>
         </div>
