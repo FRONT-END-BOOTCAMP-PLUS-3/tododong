@@ -1,0 +1,32 @@
+@use 'utils' as *;
+
+.container {
+  padding: 20px 12px;
+
+  h2 {
+    font-size: $text-28;
+    font-weight: 600;
+    margin-right: 114px;
+  }
+
+  @include flexbox($justify: space-between, $align: center);
+}
+
+.customPrev,
+.customNext {
+  width: 26px;
+  height: 26px;
+
+  background: $color-gray-800;
+  border-radius: $border-radius-circle;
+
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
