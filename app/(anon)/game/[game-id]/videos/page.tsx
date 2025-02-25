@@ -4,7 +4,7 @@ import styles from './page.module.scss';
 import YoutubeVideoCard from './components/YoutubeVideoCard';
 import { fetcher } from '@/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
   ChannelData,
   Video,
@@ -25,8 +25,8 @@ const Videos = () => {
   const [gameData, setGameData] = useState<GameDataDto | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const pathname = usePathname();
-  const gameId = pathname.split('/')[2];
+  const params = useParams();
+  const gameId = params['game-id'];
 
   // 랜더링될 때 url의 [game-id] params로 게임 데이터 불러오기
   useEffect(() => {
@@ -44,8 +44,7 @@ const Videos = () => {
             body: JSON.stringify({
               gameId,
             }),
-          },
-          setIsLoading
+          }
         );
         setGameData(response);
       } catch (error) {
@@ -60,9 +59,7 @@ const Videos = () => {
   const fetchYoutubeVideos = async (query: string) => {
     try {
       const videoData = await fetcher<VideoData>(
-        `${process.env.NEXT_PUBLIC_YOUTUBE_SEARCH_URL}?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=48&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`,
-        undefined,
-        setIsLoading
+        `${process.env.NEXT_PUBLIC_YOUTUBE_SEARCH_URL}?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=48&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
       );
       const videos = videoData.items;
 
@@ -97,8 +94,10 @@ const Videos = () => {
     const query = `${gameData.home.name} ${gameData.away.name} highlights`;
 
     const fetchVideos = async () => {
+      setIsLoading(true);
       const videos = await fetchYoutubeVideos(query);
       setVideos(videos);
+      setIsLoading(false);
     };
 
     fetchVideos();
@@ -131,10 +130,13 @@ const Videos = () => {
     [isLoading, displayMoreVideos]
   );
 
+  if (isLoading) return <div style={{ textAlign: 'center' }}>로딩중...</div>;
+  if (!gameData) return null;
+
   return (
     <section>
-      <h2 className="srOnly">{`${gameData?.game.date} ${gameData?.home.name} vs ${gameData?.away.name} 동영상`}</h2>
-      {gameData?.game.status !== 'final' ? (
+      <h2 className="srOnly">{`${gameData.game.date} ${gameData.home.name} vs ${gameData.away.name} 동영상`}</h2>
+      {gameData.game.status !== 'final' ? (
         <div className={styles.statusInfo}>
           <p>경기 종료 후 업데이트 됩니다.</p>
         </div>
