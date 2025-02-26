@@ -137,13 +137,9 @@ const Videos = () => {
     <section>
       <h2 className="srOnly">{`${gameData.game.date} ${gameData.home.name} vs ${gameData.away.name} 동영상`}</h2>
       {gameData.game.status !== 'final' ? (
-        <div className={styles.statusInfo}>
-          <p>경기 종료 후 업데이트 됩니다.</p>
-        </div>
+        <p className={styles.statusInfo}>경기 종료 후 업데이트 됩니다.</p>
       ) : videos.length === 0 ? (
-        <div className={styles.statusInfo}>
-          <p>추후 업데이트 예정입니다.</p>
-        </div>
+        <p className={styles.statusInfo}>추후 업데이트 예정입니다.</p>
       ) : (
         <ul className={styles.videoContainer}>
           {videos.slice(0, countVideos).map((video, index) => (
