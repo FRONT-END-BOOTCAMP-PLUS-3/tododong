@@ -1,0 +1,54 @@
+@use 'utils' as *;
+
+.card {
+  padding: 60px 80px 32px;
+  width: 620px;
+  background-color: $color-gray-800;
+  border-radius: $border-radius-20;
+}
+
+.game {
+  @include flexbox($justify: space-between, $align: center);
+  margin-bottom: 40px;
+}
+
+.status {
+  @include flexbox($justify: center, $align: center, $gap: 24px);
+
+  p {
+    text-align: center;
+    font-size: $text-36;
+  }
+
+  .date,
+  .time {
+    display: block;
+  }
+
+  .date {
+    font-size: $text-20;
+  }
+
+  .time {
+    font-size: $text-30;
+  }
+}
+
+.links {
+  @include flexbox($justify: center, $gap: 20px);
+
+  a {
+    padding: 8px 0;
+    width: 140px;
+    border: 1px solid $color-white;
+    border-radius: $border-radius-8;
+    text-align: center;
+    font-size: $text-20;
+    color: $color-white;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $color-gray-600;
+    }
+  }
+}
