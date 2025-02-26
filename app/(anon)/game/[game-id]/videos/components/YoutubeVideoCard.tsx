@@ -13,7 +13,7 @@ type YoutubeVideoCardProps = {
 
 const YoutubeVideoCard = ({ data }: YoutubeVideoCardProps) => {
   return (
-    <div className={styles.videoCard}>
+    <article className={styles.videoCard}>
       <Link href={`https://www.youtube.com/watch?v=${data.id.videoId}`}>
         <Image
           src={data.snippet.thumbnails.medium.url}
@@ -43,7 +43,7 @@ const YoutubeVideoCard = ({ data }: YoutubeVideoCardProps) => {
           <p className={styles.channelTitle}>{data.snippet.channelTitle}</p>
         </Link>
       </div>
-    </div>
+    </article>
   );
 };
 
