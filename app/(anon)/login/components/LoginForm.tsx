@@ -2,7 +2,7 @@
 
 import AuthInput from '@/components/auth-input/AuthInput';
 import Icon from '@/components/icon/Icon';
-import React, { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { loginProc } from '../actions/loginProc';
 import styles from './LoginForm.module.scss';
 
@@ -26,6 +26,11 @@ const LoginForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // form 제출 시 input이 비워지는데, formData 상태는 초기화되지 않아서 직접 초기화
+  useEffect(() => {
+    if (!pending) setFormData({ email: '', password: '' });
+  }, [pending]);
+
   /* -------------------------------- rendering ------------------------------- */
   return (
     <form action={formAction} aria-label="로그인" className={styles.form}>
@@ -45,7 +50,7 @@ const LoginForm = () => {
       />
 
       {/* 오류 메세지 */}
-      {state.message && (
+      {state?.message && (
         <div role="alert" className={styles.message}>
           <Icon id="info" width={16} color="#fa2f2f" aria-hidden />
           {state.message}
