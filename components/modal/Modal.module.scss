@@ -3,7 +3,7 @@
 .overlay {
   background-color: rgba($color-gray-700, 0.2);
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   z-index: 9999;
   position: fixed;
   top: 50%;
@@ -39,8 +39,7 @@
     &:first-child {
       border: 1px solid $color-white;
       &:hover {
-        background-color: $color-white;
-        color: $color-black;
+        background-color: $color-gray-600;
       }
     }
     &:last-child {
