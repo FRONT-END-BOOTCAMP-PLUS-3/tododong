@@ -36,12 +36,14 @@ const formatDescription = (text: string) => {
 
 const Timeline = ({ type, event }: TimelineProps) => {
   const isMadeShot = event.statistics?.find(
-    (item) => item.type === 'fieldgoal'
+    (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
   )?.made;
   const points = isMadeShot
     ? `${
         event.statistics?.length
-          ? event.statistics.find((item) => item.type === 'fieldgoal')?.points
+          ? event.statistics.find(
+              (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
+            )?.points
           : 0
       } POINT`
     : '';
