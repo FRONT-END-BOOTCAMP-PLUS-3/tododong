@@ -57,9 +57,7 @@ const PlayByPlay = () => {
 
   if (isLoading) return <div>로딩 중...</div>;
   if (!playByPlayData || playByPlayData.game.status === 'scheduled') {
-    return (
-      <div className={styles.statusInfo}>경기 시작 후 업데이트 됩니다.</div>
-    );
+    return <p className={styles.statusInfo}>경기 시작 후 업데이트 됩니다.</p>;
   }
 
   const currentQuarterData = playByPlayData.quarters[currentQuarter - 1];
