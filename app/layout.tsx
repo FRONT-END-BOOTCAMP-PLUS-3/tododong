@@ -1,5 +1,6 @@
 import '@/styles/globals.scss';
 import styles from './layout.module.scss';
+import Footer from '@/components/footer/Footer';
 
 export const metadata = {
   title: '토도동',
@@ -34,7 +35,10 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
