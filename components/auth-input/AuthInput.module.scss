@@ -4,9 +4,20 @@
   @include flexbox($align: center);
   width: 100%;
   height: 56px;
-  padding: 0.5rem;
   border-radius: $border-radius-8;
   border: 1px solid $color-border;
+  position: relative;
+  padding: 0.5rem;
+
+  > label {
+    @include absolute($left: 0.5rem);
+    transition: all 0.2s ease-in;
+    color: $color-gray-600;
+  }
+  .updating {
+    font-size: $text-12;
+    translate: 0 -0.875rem;
+  }
 
   &.isInvalid {
     border-color: $color-red;
@@ -24,18 +35,15 @@
     flex-grow: 1;
     height: 100%;
     color: $color-white;
+    padding-top: 0.5rem;
 
     &:focus {
       outline: none;
     }
 
-    &::placeholder {
-      transition: all 0.2s ease-in;
-    }
-
-    &:focus::placeholder {
+    &:focus + label {
       font-size: $text-12;
-      translate: 0 -0.625rem;
+      translate: 0 -0.875rem;
     }
 
     &:disabled {

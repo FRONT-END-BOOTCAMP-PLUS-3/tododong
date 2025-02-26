@@ -2,28 +2,27 @@ import { InputHTMLAttributes } from 'react';
 import styles from './AuthInput.module.scss';
 
 type AuthInputProps = {
-  name: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  label: string;
   isInvalid?: boolean;
   children?: React.ReactElement;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const AuthInput = ({
   name,
+  label,
   onChange,
   onBlur,
   isInvalid = false,
   children,
+  value,
   ...restProps
 }: AuthInputProps) => {
   return (
     <div
       className={`${styles.inputWrapper} ${isInvalid ? styles.isInvalid : ''}`}
     >
-      <label htmlFor={name} className="srOnly">
-        {name}
-      </label>
       <input
         id={name}
         name={name}
@@ -33,6 +32,9 @@ const AuthInput = ({
         aria-required
         {...restProps}
       />
+      <label htmlFor={name} className={value ? styles.updating : ''}>
+        {label}
+      </label>
       {children}
     </div>
   );
