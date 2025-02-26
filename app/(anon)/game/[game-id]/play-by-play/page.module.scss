@@ -1,0 +1,46 @@
+@use 'utils' as *;
+
+.section {
+  width: 100%;
+
+  > table {
+    margin: 0 auto;
+  }
+}
+
+.quarterBtnContainer {
+  @include flexbox(
+    $direction: row,
+    $justify: center,
+    $align: center,
+    $gap: 16px
+  );
+
+  padding-bottom: 12px;
+
+  > button {
+    padding: 12px 24px;
+
+    &.active {
+      box-shadow: inset 0 0 0 1px $color-primary;
+      border-radius: $border-radius-8;
+      color: $color-primary;
+    }
+  }
+}
+
+.tableHeaderTeam {
+  width: 400px;
+  min-width: 240px;
+}
+
+.tableHeaderTimeAndScore {
+  width: 60px;
+  min-width: 60px;
+}
+
+.statusInfo {
+  height: 100%;
+  text-align: center;
+  align-content: center;
+}
