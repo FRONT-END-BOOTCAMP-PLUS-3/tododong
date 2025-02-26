@@ -3,7 +3,7 @@
 .inputWrapper {
   @include flexbox($align: center);
   width: 100%;
-  height: 56px;
+  height: 3.5rem;
   padding: 0.5rem;
   border-radius: $border-radius-8;
   border: 1px solid $color-border;
@@ -21,7 +21,7 @@
   }
 
   > input {
-    flex-grow: 1;
+    width: 100%;
     height: 100%;
     color: $color-white;
 
