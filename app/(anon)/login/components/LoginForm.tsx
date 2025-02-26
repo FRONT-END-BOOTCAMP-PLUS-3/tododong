@@ -31,14 +31,14 @@ const LoginForm = () => {
     <form action={formAction} aria-label="로그인" className={styles.form}>
       <AuthInput
         type="email"
-        placeholder="이메일"
+        label="이메일"
         name="email"
         value={formData.email}
         onChange={handleInputChange}
       />
       <AuthInput
         type="password"
-        placeholder="비밀번호"
+        label="비밀번호"
         name="password"
         value={formData.password}
         onChange={handleInputChange}

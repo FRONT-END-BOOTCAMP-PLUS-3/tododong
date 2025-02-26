@@ -205,13 +205,14 @@ const SignupForm = () => {
   // prettier-ignore
   const inputOptions: (InputHTMLAttributes<HTMLInputElement> & {
     name: FormDataKeys,
+    label: string,
     children?: React.ReactElement;
   })[] = [
-    { type: 'email', placeholder: '이메일', name: 'email', disabled: isEmailSent },
-    { type: 'text', placeholder: '인증코드', name: 'authCode', disabled: isVerified },
-    { type: 'password', placeholder: '비밀번호', name: 'password', onBlur: handleBlur },
-    { type: 'password', placeholder: '비밀번호 확인', name: 'passwordCheck', onBlur: handleBlur },
-    { type: 'text', placeholder: '닉네임', name: 'nickName', onBlur: handleBlur },
+    { type: 'email', label: '이메일', name: 'email', disabled: isEmailSent },
+    { type: 'text', label: '인증코드', name: 'authCode', disabled: isVerified },
+    { type: 'password', label: '비밀번호', name: 'password', onBlur: handleBlur },
+    { type: 'password', label: '비밀번호 확인', name: 'passwordCheck', onBlur: handleBlur },
+    { type: 'text', label: '닉네임', name: 'nickName', onBlur: handleBlur },
   ];
 
   // input 오른쪽 버튼(+시간)을 렌더링하는 함수
