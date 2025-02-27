@@ -5,13 +5,14 @@ $viewport-max-width: $width-desktop-large;
 // 배경색
 $background-color: $color-bg;
 // 폰트
-$base-font-family: 'Pretendard Variable', sans-serif;
+$base-font-family: Pretendard;
 $font-color: $color-white;
 
 body {
   font-family: $base-font-family;
   line-height: normal;
   margin: 0 auto;
+  min-height: 100vh;
   max-width: $viewport-max-width;
   background-color: $background-color;
   color: $font-color;

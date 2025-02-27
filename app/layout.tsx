@@ -1,5 +1,6 @@
 import '@/styles/globals.scss';
 import styles from './layout.module.scss';
+import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 
 export const metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Header />
         {children}
         <Footer />
       </body>
