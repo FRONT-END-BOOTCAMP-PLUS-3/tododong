@@ -20,6 +20,10 @@ $viewport-max-width: $width-desktop-large;
   address {
     font-style: normal;
   }
+}
+
+.termWrapper {
+  @include flexbox($gap: 32px);
 
   button {
     color: inherit;
@@ -29,11 +33,11 @@ $viewport-max-width: $width-desktop-large;
   a {
     color: inherit;
     text-decoration: none;
-  }
-}
 
-.termWrapper {
-  @include flexbox($gap: 32px);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .loginLink {
