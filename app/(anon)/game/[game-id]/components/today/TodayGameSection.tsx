@@ -14,7 +14,7 @@ import TodayGameCard from './TodayGameCard';
 
 const dto = [
   {
-    id: 14903,
+    id: 14901,
     game: {
       startTime: '10:00 AM KST',
       status: 'scheduled',
@@ -31,7 +31,7 @@ const dto = [
     },
   },
   {
-    id: 14904,
+    id: 14902,
     game: {
       startTime: '09:00 AM KST',
       status: 'live',
@@ -82,7 +82,7 @@ const dto = [
     },
   },
   {
-    id: 14903,
+    id: 14905,
     game: {
       startTime: '10:00 AM KST',
       status: 'scheduled',
@@ -99,7 +99,7 @@ const dto = [
     },
   },
   {
-    id: 14904,
+    id: 14906,
     game: {
       startTime: '09:00 AM KST',
       status: 'live',
@@ -151,8 +151,8 @@ const TodayGameSection = () => {
         centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
         className={`swiper ${totalCards.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
       >
-        {totalCards.map((data, index) => (
-          <SwiperSlide key={index}>
+        {totalCards.map((data) => (
+          <SwiperSlide key={data.id}>
             <TodayGameCard data={data} />
           </SwiperSlide>
         ))}
