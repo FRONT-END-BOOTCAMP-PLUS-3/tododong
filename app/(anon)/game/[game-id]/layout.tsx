@@ -20,10 +20,10 @@ const GameLayout = async ({
       <div className={styles.container}>
         <div>
           <GameStatusSection />
-          <main className={styles.gamePageMain}>
+          <div className={styles.gamePageMain}>
             <GamePageNav gameId={gameId} />
             {children}
-          </main>
+          </div>
         </div>
         <ChatSection />
       </div>
