@@ -13,6 +13,7 @@ import { Swiper as SwiperClass } from 'swiper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useDateStore from '@/stores/dateStore';
 import Icon from '@/components/icon/Icon';
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
 
@@ -62,6 +63,8 @@ const DatePicker = () => {
   const [selectedDate, setSelectedDate] = useState(today);
   const [dates, setDates] = useState<Date[]>(() => generateDates(today));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  useBodyScrollLock(isCalendarOpen);
 
   const updateDate = useCallback(
     (date: Date) => {
@@ -238,10 +241,7 @@ const DatePicker = () => {
           centeredSlides={true} // 가운데 정렬
           onSlideChange={() => {
             if (!swiperRef.current) return;
-
-            const index = swiperRef.current.activeIndex;
-            const date = dates[index];
-
+            const date = dates[swiperRef.current.activeIndex];
             updateDate(date);
           }}
         >
