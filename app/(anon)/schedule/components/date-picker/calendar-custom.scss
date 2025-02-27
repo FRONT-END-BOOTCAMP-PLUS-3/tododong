@@ -64,13 +64,13 @@
   color: $color-white;
 }
 
-.react-calendar__tile--active,
 .react-calendar__tile--now,
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:disabled {
   background: none;
 }
 
+.react-calendar__tile--active,
 .react-calendar__tile:enabled:focus {
   border-radius: $border-radius-8;
   background-color: $color-gray-700;
