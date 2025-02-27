@@ -60,6 +60,8 @@ const PlayByPlay = () => {
 
   const currentQuarterData = playByPlayData.quarters[currentQuarter - 1];
 
+  console.log(currentQuarterData);
+
   return (
     <section className={styles.section}>
       <h2 className="srOnly">{`${playByPlayData?.game.date} ${playByPlayData?.home.name} vs ${playByPlayData?.away.name} 실시간 중계`}</h2>
@@ -92,13 +94,19 @@ const PlayByPlay = () => {
         </thead>
         <tbody>
           {currentQuarterData
-            ? currentQuarterData.events.map((event) => {
-                const type =
-                  event.statistics?.[0]?.team.id === playByPlayData.home.id
-                    ? 'home'
-                    : 'away';
-                return <Timeline key={event.id} type={type} event={event} />;
-              })
+            ? currentQuarterData.events
+                .sort(
+                  (a, b) =>
+                    new Date(b.created).getTime() -
+                    new Date(a.created).getTime()
+                )
+                .map((event) => {
+                  const type =
+                    event.statistics?.[0]?.team.id === playByPlayData.home.id
+                      ? 'home'
+                      : 'away';
+                  return <Timeline key={event.id} type={type} event={event} />;
+                })
             : null}
         </tbody>
       </table>

@@ -21,6 +21,7 @@ export interface EventDto {
   description: string;
   away_points?: number;
   home_points?: number;
+  created: string;
   statistics?: {
     made?: boolean;
     points?: number;
