@@ -20,47 +20,45 @@ type GameDataDto = {
 };
 
 const Videos = () => {
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [videos, setVideos] = useState<Video[] | null>([]);
   const [countVideos, setCountVideos] = useState<number>(12);
   const [gameData, setGameData] = useState<GameDataDto | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const params = useParams();
   const gameId = params['game-id'];
 
-  // 랜더링될 때 url의 [game-id] params로 게임 데이터 불러오기
-  useEffect(() => {
-    if (!gameId) return;
+  // 게임 데이터 불러오는 함수
+  const fetchGameData = useCallback(async (id: string) => {
+    try {
+      const gameData = await fetcher<GameDataDto>(
+        `/api/game/${id}/videos`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+        setIsLoading
+      );
 
-    const fetchGameData = async () => {
-      try {
-        const response = await fetcher<GameDataDto>(
-          `/api/game/${gameId}/videos`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              gameId,
-            }),
-          }
-        );
-        setGameData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchGameData();
-  }, [gameId]);
+      return gameData;
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   // 동영상 데이터를 불러오는 함수
   const fetchYoutubeVideos = async (query: string) => {
     try {
       const videoData = await fetcher<VideoData>(
-        `${process.env.NEXT_PUBLIC_YOUTUBE_SEARCH_URL}?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=48&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
+        `${process.env.NEXT_PUBLIC_YOUTUBE_SEARCH_URL}?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=48&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`,
+        {},
+        setIsLoading
       );
+
+      if (videoData.items.length === 0) return null;
+
       const videos = videoData.items;
 
       // 채널 ID 추출 후 채널 썸네일 가져오기
@@ -68,7 +66,9 @@ const Videos = () => {
         ...new Set(videos.map((video) => video.snippet.channelId)),
       ];
       const channelData = await fetcher<ChannelData>(
-        `${process.env.NEXT_PUBLIC_YOUTUBE_CHANNELS_URL}?part=snippet&id=${channelIds.join(',')}&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
+        `${process.env.NEXT_PUBLIC_YOUTUBE_CHANNELS_URL}?part=snippet&id=${channelIds.join(',')}&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`,
+        {},
+        setIsLoading
       );
       const channelImage: { [key: string]: string } = {};
       channelData.items.forEach((channel) => {
@@ -83,30 +83,34 @@ const Videos = () => {
     } catch (error) {
       console.error(error);
 
-      return [];
+      return null;
     }
   };
 
-  // 게임 데이터가 있고, 게임 상태가 'final'일 때 동영상 불러오기
   useEffect(() => {
-    if (!gameData || gameData.game.status !== 'final') return;
+    if (!gameId) return;
 
-    const query = `${gameData.home.name} ${gameData.away.name} highlights`;
+    const fetch = async () => {
+      const gameData = await fetchGameData(gameId);
+      setGameData(gameData);
 
-    const fetchVideos = async () => {
-      setIsLoading(true);
+      // 게임 상태가 'final'일 때 동영상 불러오기
+      if (gameData.game.status !== 'final') return;
+
+      const query = `${gameData.home.name} ${gameData.away.name} 하이라이트`;
       const videos = await fetchYoutubeVideos(query);
       setVideos(videos);
-      setIsLoading(false);
     };
 
-    fetchVideos();
-  }, [gameData]);
+    fetch();
+  }, [gameId, fetchGameData]);
 
   // 동영상을 추가로 렌더링하는 함수
   const displayMoreVideos = useCallback(() => {
+    if (!videos) return null;
+
     setCountVideos((prev) => Math.min(prev + 8, videos.length));
-  }, [videos.length]);
+  }, [videos]);
 
   // 마지막 동영상이 보일 때 추가로 동영상 렌더링
   const observer = useRef<IntersectionObserver | null>(null);
@@ -131,15 +135,14 @@ const Videos = () => {
   );
 
   if (isLoading) return <div style={{ textAlign: 'center' }}>로딩중...</div>;
-  if (!gameData) return null;
+  if (!videos)
+    return <p className={styles.statusInfo}>추후 업데이트 예정입니다.</p>;
 
   return (
     <section>
       <h2 className="srOnly">{`${gameData.game.date} ${gameData.home.name} vs ${gameData.away.name} 동영상`}</h2>
-      {gameData.game.status !== 'final' ? (
+      {gameData?.game.status !== 'final' ? (
         <p className={styles.statusInfo}>경기 종료 후 업데이트 됩니다.</p>
-      ) : videos.length === 0 ? (
-        <p className={styles.statusInfo}>추후 업데이트 예정입니다.</p>
       ) : (
         <ul className={styles.videoContainer}>
           {videos.slice(0, countVideos).map((video, index) => (
