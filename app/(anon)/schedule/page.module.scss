@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .cardWrapper {
-  margin-top: 60px;
+  margin-block: 60px 80px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
