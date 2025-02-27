@@ -33,13 +33,10 @@ const PlayByPlay = () => {
         const response = await fetcher<PlayByPlayDto>(
           `/api/game/${gameId}/play-by-play`,
           {
-            method: 'POST',
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              gameId,
-            }),
           },
           setIsLoading
         );
