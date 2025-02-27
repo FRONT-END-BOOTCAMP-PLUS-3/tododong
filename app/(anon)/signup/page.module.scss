@@ -5,7 +5,7 @@
     $direction: column,
     $justify: center,
     $align: center,
-    $gap: 20px
+    $gap: 1.25rem
   );
   margin: 0 auto;
   max-width: 400px;
@@ -13,6 +13,10 @@
 
   .logo {
     margin-bottom: 1.5rem;
+    > img {
+      width: 8.75rem;
+      height: 5.5625rem;
+    }
   }
 
   .loginLink {
