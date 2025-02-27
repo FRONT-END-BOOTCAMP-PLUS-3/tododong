@@ -6,8 +6,16 @@
 }
 
 .monthNavigation {
-  @include flexbox($align: center, $gap: 24px);
+  @include flexbox($align: center, $gap: 12px);
   font-size: $text-32;
+}
+
+.arrowBtn {
+  padding: 10px;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .calendarBtn {
@@ -31,7 +39,7 @@
 .calendar {
   position: absolute;
   z-index: 999;
-  top: 56px;
+  top: 128px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -83,6 +91,9 @@
   margin: 0 auto;
   width: 632px;
   text-align: center;
+}
+
+.swiperSlide {
   cursor: pointer;
 }
 

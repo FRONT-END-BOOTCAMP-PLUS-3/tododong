@@ -39,17 +39,17 @@ const gamesByDate = [
   { date: '2025-02-24', games: 8 },
 ];
 
-const generateDates = (startDate: Date, range: number = 60) => {
-  const start = dayjs(startDate).subtract(range, 'day'); // startDate - 60일
-  const end = dayjs(startDate).add(range, 'day'); // startDate + 60일
+const generateDates = (date: Date) => {
+  const start = dayjs(date).startOf('month'); // 해당 월의 1일
+  const end = dayjs(date).endOf('month'); // 해당 월의 마지막 날
   const dates = [];
 
   for (
-    let date = start;
-    date.isBefore(end) || date.isSame(end, 'day');
-    date = date.add(1, 'day')
+    let d = start;
+    d.isBefore(end) || d.isSame(end, 'day');
+    d = d.add(1, 'day')
   ) {
-    dates.push(date.toDate());
+    dates.push(d.toDate());
   }
 
   return dates;
@@ -72,20 +72,15 @@ const DatePicker = () => {
   );
 
   const updateDates = (date: Date) => {
-    setDates((prev) => {
-      if (date < prev[0]) return [...generateDates(date), ...prev].flat();
-      if (date > prev[prev.length - 1])
-        return [...prev, ...generateDates(date)].flat();
-      return prev;
-    });
+    setDates(generateDates(date));
   };
 
-  // 한 달 단위로 날짜 이동하는 함수
+  // 달 이동하는 함수
   const changeDateByMonth = (direction: 'prev' | 'next') => {
-    const date = dayjs(selectedDate)
-      .add(direction === 'prev' ? -1 : 1, 'month')
-      .startOf('month')
-      .toDate();
+    const date =
+      direction === 'prev'
+        ? dayjs(selectedDate).subtract(1, 'month').endOf('month').toDate() // 이전 달은 31일로
+        : dayjs(selectedDate).add(1, 'month').startOf('month').toDate(); // 다음 달은 1일로
 
     updateDate(date);
     updateDates(date);
@@ -115,6 +110,7 @@ const DatePicker = () => {
   // 오늘 날짜 선택(오늘 버튼)
   const handleSelectToday = () => {
     updateDate(today);
+    updateDates(today);
     setIsCalendarOpen(false); // 달력 닫기
   };
 
@@ -136,11 +132,17 @@ const DatePicker = () => {
       <div className={styles.wrapper}>
         {/* 달 이동 */}
         <div className={styles.monthNavigation}>
-          <button onClick={() => changeDateByMonth('prev')}>
+          <button
+            onClick={() => changeDateByMonth('prev')}
+            className={styles.arrowBtn}
+          >
             <Icon id="left" width={6.55} height={11.15} />
           </button>
           {dayjs(selectedDate).format('YYYY.MM')}
-          <button onClick={() => changeDateByMonth('next')}>
+          <button
+            onClick={() => changeDateByMonth('next')}
+            className={styles.arrowBtn}
+          >
             <Icon id="right" width={6.55} height={11.15} />
           </button>
         </div>
@@ -215,7 +217,17 @@ const DatePicker = () => {
 
       {/* 날짜 Swiper */}
       <div className={styles.swiper}>
-        <button onClick={() => changeDateByDay('prev')}>
+        <button
+          onClick={() => changeDateByDay('prev')}
+          className={`${styles.arrowBtn} ${
+            dayjs(selectedDate).isSame(
+              dayjs(selectedDate).startOf('month'),
+              'day'
+            )
+              ? styles.hidden
+              : ''
+          }`}
+        >
           <Icon id="left" width={6.55} height={11.15} />
         </button>
         <Swiper
@@ -231,11 +243,6 @@ const DatePicker = () => {
             const date = dates[index];
 
             updateDate(date);
-
-            // 선택한 날짜가 dates 배열의 앞에서 또는 뒤에서 열 번째일 경우 dates 재설정
-            if (index === 10 || index === dates.length - 10) {
-              setDates(generateDates(date));
-            }
           }}
         >
           {dates.map((date, index) => (
@@ -244,17 +251,6 @@ const DatePicker = () => {
               className={styles.swiperSlide}
               onClick={() => {
                 updateDate(date);
-
-                const firstDate = dates[0];
-                const lastDate = dates[dates.length - 1];
-
-                // 선택한 날짜가 dates 배열의 앞에서 또는 뒤에서 열 번째일 경우 dates 재설정
-                if (
-                  dayjs(date).diff(firstDate, 'day') <= 10 ||
-                  dayjs(lastDate).diff(date, 'day') <= 10
-                ) {
-                  setDates(generateDates(date));
-                }
               }}
             >
               <div className={styles.day}>{dayjs(date).format('dd')}</div>
@@ -266,7 +262,17 @@ const DatePicker = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button onClick={() => changeDateByDay('next')}>
+        <button
+          onClick={() => changeDateByDay('next')}
+          className={`${styles.arrowBtn} ${
+            dayjs(selectedDate).isSame(
+              dayjs(selectedDate).endOf('month'),
+              'day'
+            )
+              ? styles.hidden
+              : ''
+          }`}
+        >
           <Icon id="right" width={6.55} height={11.15} />
         </button>
       </div>
