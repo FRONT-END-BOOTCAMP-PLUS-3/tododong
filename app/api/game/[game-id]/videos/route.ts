@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const POST = async (req: NextRequest) => {
-  const { gameId } = await req.json();
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: Promise<{ 'game-id': string }> }
+) => {
+  const slug = await params;
+  const gameId = slug['game-id'];
 
   const result = {
-    game: { id: gameId, status: 'live', date: '2025-02-21' },
+    game: { id: gameId, status: 'final', date: '2025-02-21' },
     home: {
       name: 'Indiana Pacers',
     },
