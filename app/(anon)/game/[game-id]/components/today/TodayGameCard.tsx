@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
 import styles from './TodayGameCard.module.scss';
+import Link from 'next/link';
 
 const TodayGameCard = ({ data }) => {
   if (data === null)
@@ -15,28 +17,36 @@ const TodayGameCard = ({ data }) => {
 
   return (
     <article className={styles.container}>
-      <div className={styles.gameStatus}>
-        <span>{getTime(data.game.startTime)}</span>
-        <GameStatusTag size="sm" status={data.game.status} />
-      </div>
-      <div className={styles.teamStatus}>
-        <div>
-          <div className={styles.logo}>
-            <img src={data.away.logo} alt={data.away.nickname} />
-          </div>
-          <p>{data.away.nickname}</p>
+      <Link href={`/game/${data.id}/videos`}>
+        <div className={styles.gameStatus}>
+          <span>{getTime(data.game.startTime)}</span>
+          <GameStatusTag size="sm" status={data.game.status} />
         </div>
-        <p>{data.away.points}</p>
-      </div>
-      <div className={styles.teamStatus}>
-        <div>
-          <div className={styles.logo}>
-            <img src={data.home.logo} alt={data.home.nickname} />
+        <div className={styles.teamStatus}>
+          <div>
+            <Image
+              width={24}
+              height={24}
+              src={data.away.logo}
+              alt={data.away.nickname}
+            />
+            <span>{data.away.nickname}</span>
           </div>
-          <p>{data.home.nickname}</p>
+          <span>{data.away.points}</span>
         </div>
-        <p>{data.home.points}</p>
-      </div>
+        <div className={styles.teamStatus}>
+          <div>
+            <Image
+              width={24}
+              height={24}
+              src={data.home.logo}
+              alt={data.home.nickname}
+            />
+            <span>{data.home.nickname}</span>
+          </div>
+          <span>{data.home.points}</span>
+        </div>
+      </Link>
     </article>
   );
 };
