@@ -3,7 +3,7 @@
 import styles from './Footer.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import Icon from '../icon/Icon';
@@ -11,7 +11,6 @@ import Modal from '../modal/Modal';
 
 const Footer = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const clearUser = useAuthStore((state) => state.clearUser);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +22,7 @@ const Footer = () => {
   const handleModalConfirm = () => {
     clearUser();
     setIsModalOpen(false);
-    router.push('/');
+    location.reload();
   };
 
   return (
