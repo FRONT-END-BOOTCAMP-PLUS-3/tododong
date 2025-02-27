@@ -4,6 +4,7 @@ import styles from './DatePicker.module.scss';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './calendar-custom.scss';
+import { Value } from 'react-calendar/dist/esm/shared/types.js';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,9 +13,6 @@ import { Swiper as SwiperClass } from 'swiper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useDateStore from '@/stores/useDateStore';
 import Icon from '@/components/icon/Icon';
-
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
 
