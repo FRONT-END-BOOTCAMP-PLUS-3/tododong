@@ -70,7 +70,7 @@ const Header = () => {
             {isProfileOpen && <ProfileCard onBtnClick={handleModalBtnClick} />}
           </>
         ) : (
-          <Link role="button" href="/login" className={styles.loginBtn}>
+          <Link href="/login" className={styles.loginBtn}>
             로그인
           </Link>
         )}

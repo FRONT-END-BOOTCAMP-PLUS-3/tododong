@@ -38,6 +38,10 @@
     font-size: $text-14;
     font-weight: 500;
     text-decoration: none;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
   }
 }
 
