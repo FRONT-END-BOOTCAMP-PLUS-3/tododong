@@ -133,6 +133,8 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
                 const isSelected = sortState.key === index;
                 return (
                   <th
+                    scope="col"
+                    role="button"
                     key={header}
                     className={isSelected ? styles.isSelected : ''}
                     onClick={() => handleSortState(index)}
