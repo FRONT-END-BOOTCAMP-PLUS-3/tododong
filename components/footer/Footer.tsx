@@ -16,8 +16,8 @@ const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 로그인, 회원가입 페이지에서는 footer 렌더링 X
-  const hideHeaderRoutes = ['/login', '/signup'];
-  if (hideHeaderRoutes.includes(pathname)) return null;
+  const hideFooterRoutes = ['/login', '/signup'];
+  if (hideFooterRoutes.includes(pathname)) return null;
 
   const handleModalConfirm = () => {
     clearUser();
