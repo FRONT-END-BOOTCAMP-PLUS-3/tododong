@@ -4,8 +4,10 @@
   position: fixed;
   width: 100%;
   max-width: $width-desktop-large;
-  @include flexbox($justify: space-between, $align: center);
   padding-block: 0.25rem;
+  background-color: $color-bg;
+  z-index: 9998;
+  @include flexbox($justify: space-between, $align: center);
 
   > a {
     > img {
@@ -32,7 +34,7 @@
 
   .loginBtn {
     background-color: $color-primary;
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: $border-radius-4;
     color: $color-white;
     font-size: $text-14;
