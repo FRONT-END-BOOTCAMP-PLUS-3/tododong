@@ -10,7 +10,7 @@ import { PlayByPlayDto } from './mockDataDto';
 const QUARTERS = ['1Q', '2Q', '3Q', '4Q'];
 
 const PlayByPlay = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [playByPlayData, setPlayByPlayData] = useState<PlayByPlayDto | null>(
     null
   );
@@ -40,15 +40,13 @@ const PlayByPlay = () => {
             body: JSON.stringify({
               gameId,
             }),
-          }
+          },
+          setIsLoading
         );
         setPlayByPlayData(response);
         setcurrentQuarter(response.quarters.length);
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
