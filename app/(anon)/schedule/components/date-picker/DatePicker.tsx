@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Swiper as SwiperClass } from 'swiper';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useDateStore from '@/stores/useDateStore';
+import useDateStore from '@/stores/dateStore';
 import Icon from '@/components/icon/Icon';
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
