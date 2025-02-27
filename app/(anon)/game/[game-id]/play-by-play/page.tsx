@@ -21,6 +21,7 @@ const PlayByPlay = () => {
 
   // 쿼터 버튼 클릭 시
   const handleQuarterBtnClick = (quarter: number) => {
+    if (quarter === currentQuarter) return;
     setcurrentQuarter(quarter);
   };
 
