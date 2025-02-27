@@ -10,6 +10,11 @@
   border-radius: $border-radius-8;
 
   @include flexbox($direction: column, $gap: 8px);
+
+  > a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 .nodata {
