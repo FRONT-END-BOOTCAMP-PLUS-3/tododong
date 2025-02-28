@@ -1,0 +1,52 @@
+@use 'utils' as *;
+
+.overlay {
+  background-color: rgba($color-gray-700, 0.2);
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: flex;
+}
+
+.dialog {
+  @include flexbox($direction: column, $gap: 1.75rem, $align: center);
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  translate: -50% -50%;
+  background-color: $color-gray-900;
+  outline: none;
+  border-radius: $border-radius-8;
+  justify-content: center;
+  align-items: center;
+  padding-block: 0.75rem;
+  width: 440px;
+  text-align: center;
+}
+
+.buttonWrapper {
+  @include flexbox($gap: 2rem);
+
+  > button {
+    width: 8.75rem;
+    height: 3rem;
+    border-radius: $border-radius-8;
+
+    &:first-child {
+      border: 1px solid $color-white;
+      &:hover {
+        background-color: $color-gray-600;
+      }
+    }
+    &:last-child {
+      background-color: $color-primary;
+      &:hover {
+        background-color: $color-primary-hover;
+      }
+    }
+  }
+}

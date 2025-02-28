@@ -11,11 +11,15 @@
     font-size: $text-12;
     color: $color-white;
     background-color: $color-primary;
-    min-width: 72px;
+    min-width: 4.5rem;
     padding-inline: 0.9375rem;
     height: 100%;
     border-radius: $border-radius-8;
     margin-left: 0.5rem;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
 
     &:disabled {
       background-color: $bgcolor-disabled;
@@ -36,7 +40,7 @@
     $bgcolor-disabled: $color-gray-600;
 
     background-color: $color-primary;
-    height: 48px;
+    height: 3rem;
     width: 100%;
     border-radius: $border-radius-8;
 
