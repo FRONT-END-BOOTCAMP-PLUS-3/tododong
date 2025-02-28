@@ -81,7 +81,7 @@ const dto = [
       points: 56,
     },
   },
-  {
+  /* {
     id: 14905,
     game: {
       startTime: '10:00 AM KST',
@@ -114,7 +114,7 @@ const dto = [
       logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Brooklyn_Nets_newlogo.svg/130px-Brooklyn_Nets_newlogo.svg.png',
       points: 56,
     },
-  },
+  }, */
 ];
 
 const TodayGameSection = () => {
@@ -151,8 +151,8 @@ const TodayGameSection = () => {
         centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
         className={`swiper ${totalCards.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
       >
-        {totalCards.map((data) => (
-          <SwiperSlide key={data.id}>
+        {totalCards.map((data, index) => (
+          <SwiperSlide key={data?.id ?? index}>
             <TodayGameCard data={data} />
           </SwiperSlide>
         ))}
