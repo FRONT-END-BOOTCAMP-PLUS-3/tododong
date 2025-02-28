@@ -34,6 +34,8 @@
 .matchScheduled {
   text-align: center;
 
+  white-space: nowrap;
+
   > p:last-child {
     font-size: $text-28;
     font-weight: 500;
