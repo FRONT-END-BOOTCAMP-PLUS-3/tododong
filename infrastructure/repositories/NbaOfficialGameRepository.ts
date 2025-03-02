@@ -85,48 +85,39 @@ interface Game {
 }
 
 interface GameDate {
-  gameDate: string; // 게임 날짜 (예: "10/04/2024 00:00:00")
-  games: Game[]; // 해당 날짜에 진행되는 게임들
+  gameDate: string;
+  games: Game[];
 }
 
 export class NbaOfficialGameRpository implements GameRepository {
   async findAll(): Promise<games[]> {
     const url = process.env.NEXT_PUBLIC_NBA_SEASON_SCHEDULE_URL;
 
-    const response = await fetch(url as string, {
-      headers: {
-        Host: 'https://tododong.com',
-        Connection: 'keep-alive',
-        Accept: 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0',
-        Referer: 'https://tododong.com',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'en-US,en;q=0.9',
-      },
-    });
-
+    const response = await fetch(url as string);
     const result = await response.json();
 
     const games = result.leagueSchedule.gameDates.flatMap(
       (gameDate: GameDate) =>
-        gameDate.games.map((game: Game) => {
-          const homeTeam = game.homeTeam;
-          const awayTeam = game.awayTeam;
+        gameDate.games
+          .filter((game: Game) => game.gameLabel === '')
+          .map((game: Game) => {
+            const homeTeam = game.homeTeam;
+            const awayTeam = game.awayTeam;
 
-          return {
-            id: game.gameId,
-            season: parseInt(result.leagueSchedule.seasonYear),
-            status: game.gameStatus,
-            arena_name: game.arenaName,
-            away_team_id: awayTeam.teamId.toString(),
-            away_team_periods: [],
-            away_team_score: awayTeam.score,
-            home_team_id: homeTeam.teamId.toString(),
-            home_team_periods: [],
-            home_team_score: homeTeam.score,
-            start_time: game.gameDateTimeUTC,
-          };
-        })
+            return {
+              id: game.gameId,
+              season: parseInt(result.leagueSchedule.seasonYear),
+              status: game.gameStatus,
+              arena_name: game.arenaName,
+              away_team_id: awayTeam.teamId.toString(),
+              away_team_periods: [],
+              away_team_score: awayTeam.score,
+              home_team_id: homeTeam.teamId.toString(),
+              home_team_periods: [],
+              home_team_score: homeTeam.score,
+              start_time: game.gameDateTimeUTC,
+            };
+          })
     );
 
     return games;

@@ -47,7 +47,6 @@ export class DfGameRepository implements GameRepository {
         });
       });
 
-      //   await Promise.all(upsertGames);
       await prisma.$transaction(upsertGames);
     } catch (error) {
       console.error(error);

@@ -1,11 +1,10 @@
 import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
 import { NbaOfficialGameRpository } from '@/infrastructure/repositories/NbaOfficialGameRepository';
 
-export const MigrateScheduleToLocalUsecase = async (
+export const migrateScheduleToLocalUsecase = async (
   externalRepository: NbaOfficialGameRpository,
   localRepository: DfGameRepository
 ): Promise<void> => {
   const games = await externalRepository.findAll();
-
-  await localRepository.saveGames([games[0]]);
+  await localRepository.saveGames(games);
 };
