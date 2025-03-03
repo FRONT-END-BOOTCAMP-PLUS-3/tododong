@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Chatroom {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  gameId    String
+  game      Game      @relation(fields: [gameId], references: [id])
+  messages  Message[]
+
+  @@map("chatrooms")
+}
+
+model Game {
+  id                          String     @id
+  season                      Int
+  status                      Int
+  arenaName                   String     @map("arena_name")
+  awayTeamId                  String     @map("away_team_id")
+  awayTeamPeriods             Int[]      @map("away_team_periods")
+  awayTeamScore               Int        @map("away_team_score")
+  homeTeamId                  String     @map("home_team_id")
+  homeTeamPeriods             Int[]      @map("home_team_periods")
+  homeTeamScore               Int        @map("home_team_score")
+  startTime                   DateTime   @map("start_time")
+  chatrooms                   Chatroom[]
+  teamsGamesAwayTeamIdToTeams Team       @relation("gamesAwayTeamIdToTeams", fields: [awayTeamId], references: [id])
+  teamsGamesHomeTeamIdToTeams Team       @relation("gamesHomeTeamIdToTeams", fields: [homeTeamId], references: [id])
+
+  @@map("games")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  chatroomId String   @map("chatroom_id")
+  userId     String   @map("user_id")
+  message    String
+  createdAt  DateTime @default(now()) @map("created_at")
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@map("messages")
+}
+
+model Team {
+  id                          String @id
+  name                        String
+  code                        String
+  city                        String
+  logo                        String
+  conference                  String
+  gamesGamesAwayTeamIdToTeams Game[] @relation("gamesAwayTeamIdToTeams")
+  gamesGamesHomeTeamIdToTeams Game[] @relation("gamesHomeTeamIdToTeams")
+
+  @@map("teams")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  nickname  String    @unique
+  email     String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  password  String
+  messages  Message[]
+
+  @@map("users")
+}
