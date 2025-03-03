@@ -1,6 +1,6 @@
-import { games } from '@prisma/client';
+import { Game } from '@prisma/client';
 
 export interface GameRepository {
-  findAll: () => Promise<games[]>;
-  saveGames?: (games: games[]) => Promise<void>;
+  findAll: () => Promise<Game[]>;
+  saveGames?: (games: Game[]) => Promise<void>;
 }

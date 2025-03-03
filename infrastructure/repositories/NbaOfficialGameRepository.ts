@@ -1,5 +1,5 @@
 import { GameRepository } from '@/domain/repositories/GameRepository';
-import { games } from '@prisma/client';
+import { Game } from '@prisma/client';
 
 interface Broadcaster {
   broadcasterScope?: string;
@@ -13,7 +13,7 @@ interface Broadcaster {
   broadcasterTeamId?: number;
 }
 
-interface Game {
+interface GameDetail {
   gameId: string;
   gameCode: string;
   gameStatus: number;
@@ -86,11 +86,11 @@ interface Game {
 
 interface GameDate {
   gameDate: string;
-  games: Game[];
+  games: GameDetail[];
 }
 
 export class NbaOfficialGameRpository implements GameRepository {
-  async findAll(): Promise<games[]> {
+  async findAll(): Promise<Game[]> {
     const url = process.env.NEXT_PUBLIC_NBA_SEASON_SCHEDULE_URL;
 
     const response = await fetch(url as string);
@@ -99,8 +99,8 @@ export class NbaOfficialGameRpository implements GameRepository {
     const games = result.leagueSchedule.gameDates.flatMap(
       (gameDate: GameDate) =>
         gameDate.games
-          .filter((game: Game) => game.gameLabel === '')
-          .map((game: Game) => {
+          .filter((game: GameDetail) => game.gameLabel === '')
+          .map((game: GameDetail) => {
             const homeTeam = game.homeTeam;
             const awayTeam = game.awayTeam;
 
@@ -108,14 +108,14 @@ export class NbaOfficialGameRpository implements GameRepository {
               id: game.gameId,
               season: parseInt(result.leagueSchedule.seasonYear),
               status: game.gameStatus,
-              arena_name: game.arenaName,
-              away_team_id: awayTeam.teamId.toString(),
-              away_team_periods: [],
-              away_team_score: awayTeam.score,
-              home_team_id: homeTeam.teamId.toString(),
-              home_team_periods: [],
-              home_team_score: homeTeam.score,
-              start_time: game.gameDateTimeUTC,
+              arenaName: game.arenaName,
+              awayTeamId: awayTeam.teamId.toString(),
+              awayTeamPeriods: [],
+              awayTeamScore: awayTeam.score,
+              homeTeamid: homeTeam.teamId.toString(),
+              homeTeamPeriods: [],
+              homeTeamScore: homeTeam.score,
+              startTime: game.gameDateTimeUTC,
             };
           })
     );
