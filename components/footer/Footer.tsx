@@ -1,29 +1,30 @@
-'use client';
-
-import styles from './Footer.module.scss';
+import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { useAuthStore } from '@/stores/authStore';
 import Icon from '../icon/Icon';
-import Modal from '../modal/Modal';
+import styles from './Footer.module.scss';
+import LogoutButton from './LogoutButton';
 
-const Footer = () => {
-  const pathname = usePathname();
-  const user = useAuthStore((state) => state.user);
-  const clearUser = useAuthStore((state) => state.clearUser);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface UserDto {
+  email: string;
+  nickname: string;
+}
+interface JwtPayloadIwthUserDto extends jwt.JwtPayload, UserDto {}
 
-  // 로그인, 회원가입 페이지에서는 footer 렌더링 X
-  const hideFooterRoutes = ['/login', '/signup'];
-  if (hideFooterRoutes.includes(pathname)) return null;
+const Footer = async ({ pathname }: { pathname: string }) => {
+  const hideHeaderRoutes = ['/login', '/signup'];
+  if (hideHeaderRoutes.includes(pathname)) return null;
 
-  const handleModalConfirm = () => {
-    clearUser();
-    setIsModalOpen(false);
-    location.reload();
-  };
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
+
+  let userInfo;
+  if (accessToken) {
+    userInfo = jwt.verify(
+      accessToken,
+      process.env.JWT_SECRET as string
+    ) as JwtPayloadIwthUserDto;
+  }
 
   return (
     <>
@@ -45,57 +46,46 @@ const Footer = () => {
           </div>
           <ul className={styles.termWrapper}>
             <li>
-              {user ? (
-                <button onClick={() => setIsModalOpen(true)}>로그아웃</button>
+              {userInfo ? (
+                <LogoutButton />
               ) : (
-                <Link href="/login" className={styles.loginLink}>
+                <a href="/login" className={styles.loginLink}>
                   로그인
-                </Link>
+                </a>
               )}
             </li>
             <li>
-              <Link href="">이용약관</Link>
+              <a href="">이용약관</a>
             </li>
             <li>
-              <Link href="">광고문의</Link>
+              <a href="">광고문의</a>
             </li>
             <li>
-              <Link href="">개인정보처리방침</Link>
+              <a href="">개인정보처리방침</a>
             </li>
             <li>
-              <Link href="">공지사항</Link>
+              <a href="">공지사항</a>
             </li>
           </ul>
           <ul className={styles.socialList}>
             <li>
-              <Link href="">
+              <a href="">
                 <Icon id="facebook" width={24} color="#000" />
-              </Link>
+              </a>
             </li>
             <li>
-              <Link href="">
+              <a href="">
                 <Icon id="instagram" width={24} color="#000" />
-              </Link>
+              </a>
             </li>
             <li>
-              <Link href="https://github.com/FRONT-END-BOOTCAMP-PLUS-3/tododong/tree/main">
+              <a href="https://github.com/FRONT-END-BOOTCAMP-PLUS-3/tododong/tree/main">
                 <Icon id="github" width={24} color="#000" />
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
       </footer>
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-          }}
-          onConfirm={handleModalConfirm}
-        >
-          <p>로그아웃 하시겠습니까?</p>
-        </Modal>
-      )}
     </>
   );
 };
