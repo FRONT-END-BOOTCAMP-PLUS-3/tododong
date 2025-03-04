@@ -12,6 +12,10 @@ interface UserDto {
 interface JwtPayloadIwthUserDto extends jwt.JwtPayload, UserDto {}
 
 const Header = async ({ pathname }: { pathname: string }) => {
+  // 로그인, 회원가입 페이지에서는 header 렌더링 X
+  const hideHeaderRoutes = ['/login', '/signup'];
+  if (hideHeaderRoutes.includes(pathname)) return null;
+
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('access_token')?.value;
 
@@ -22,10 +26,6 @@ const Header = async ({ pathname }: { pathname: string }) => {
       process.env.JWT_SECRET as string
     ) as JwtPayloadIwthUserDto;
   }
-
-  // 로그인, 회원가입 페이지에서는 header 렌더링 X
-  const hideHeaderRoutes = ['/login', '/signup'];
-  if (hideHeaderRoutes.includes(pathname)) return null;
 
   return (
     <>
