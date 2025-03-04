@@ -7,7 +7,7 @@
     width: 900px;
     @include flexbox($direction: column, $gap: 16px);
 
-    > main {
+    > div {
       width: 100%;
       height: auto;
 
