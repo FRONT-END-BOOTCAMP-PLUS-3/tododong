@@ -112,7 +112,7 @@ export class NbaOfficialGameRpository implements GameRepository {
               awayTeamId: awayTeam.teamId.toString(),
               awayTeamPeriods: [],
               awayTeamScore: awayTeam.score,
-              homeTeamid: homeTeam.teamId.toString(),
+              homeTeamId: homeTeam.teamId.toString(),
               homeTeamPeriods: [],
               homeTeamScore: homeTeam.score,
               startTime: game.gameDateTimeUTC,
