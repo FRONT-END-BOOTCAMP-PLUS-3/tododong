@@ -19,15 +19,9 @@ const BoxScore = () => {
 
     const fetchBoxscore = async () => {
       try {
-        setIsLoading(true);
         const response = await fetcher<BoxscoreDto>(
           `/api/game/${gameId}/box-score`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
+          {},
           setIsLoading
         );
         setBoxscoreData(response);
