@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from './utils/auth';
 
@@ -6,25 +5,28 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-pathname', request.nextUrl.pathname);
 
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value || null;
+  const accessToken = request.cookies.get('access_token')?.value || null;
 
   if (!accessToken) {
-    return NextResponse.next({
+    const response = NextResponse.next({
       request: {
         headers: requestHeaders,
       },
     });
+
+    return response;
   }
 
   const decoded = await verifyToken(accessToken);
 
   if (!decoded) {
-    return NextResponse.next({
+    const response = NextResponse.next({
       request: {
         headers: requestHeaders,
       },
     });
+
+    return response;
   }
 
   requestHeaders.set(
@@ -32,9 +34,16 @@ export async function middleware(request: NextRequest) {
     Buffer.from(JSON.stringify(decoded)).toString('base64')
   );
 
-  return NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   });
+  response.cookies.set('access_token', accessToken, {
+    httpOnly: true,
+    sameSite: 'strict',
+    maxAge: 1 * 60, // 1분
+  });
+
+  return response;
 }
