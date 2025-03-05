@@ -15,7 +15,6 @@
     "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
     "jose": "^6.0.8",
-    "jsonwebtoken": "^9.0.2",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
