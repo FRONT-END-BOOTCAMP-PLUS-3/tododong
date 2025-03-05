@@ -53,7 +53,7 @@ export class DfGameRepository implements GameRepository {
     } catch (error) {
       console.error(error);
     } finally {
-      await prisma.$disconnect();
+      await this.prisma.$disconnect();
     }
   }
 }
