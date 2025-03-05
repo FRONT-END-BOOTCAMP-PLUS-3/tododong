@@ -52,4 +52,16 @@ export class DfGameRepository implements GameRepository {
       console.error(error);
     }
   }
+
+  async findById(id: string): Promise<Game | null> {
+    try {
+      const game = await this.prisma.game.findUnique({ where: { id } });
+      return game;
+    } catch (error) {
+      console.error(error);
+      throw new Error('게임 데이터 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
 }
