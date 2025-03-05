@@ -20,7 +20,7 @@ model Chatroom {
 model Game {
   id                          String     @id
   season                      Int
-  status                      Int
+  status                      String
   arenaName                   String     @map("arena_name")
   awayTeamId                  String     @map("away_team_id")
   awayTeamPeriods             Int[]      @map("away_team_periods")
@@ -28,7 +28,8 @@ model Game {
   homeTeamId                  String     @map("home_team_id")
   homeTeamPeriods             Int[]      @map("home_team_periods")
   homeTeamScore               Int        @map("home_team_score")
-  startTime                   DateTime   @map("start_time")
+  date                        String
+  startTime                   String     @map("start_time")
   chatrooms                   Chatroom[]
   teamsGamesAwayTeamIdToTeams Team       @relation("gamesAwayTeamIdToTeams", fields: [awayTeamId], references: [id])
   teamsGamesHomeTeamIdToTeams Team       @relation("gamesHomeTeamIdToTeams", fields: [homeTeamId], references: [id])

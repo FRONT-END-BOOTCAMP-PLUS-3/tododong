@@ -99,7 +99,10 @@ export class NbaOfficialGameRpository implements GameRepository {
     const games = result.leagueSchedule.gameDates.flatMap(
       (gameDate: GameDate) =>
         gameDate.games
-          .filter((game: GameDetail) => game.gameLabel === '')
+          .filter(
+            (game: GameDetail) =>
+              game.gameLabel === '' || game.gameLabel.includes('NBA Cup')
+          )
           .map((game: GameDetail) => {
             const homeTeam = game.homeTeam;
             const awayTeam = game.awayTeam;
@@ -107,12 +110,12 @@ export class NbaOfficialGameRpository implements GameRepository {
             return {
               id: game.gameId,
               season: parseInt(result.leagueSchedule.seasonYear),
-              status: game.gameStatus,
+              status: game.gameStatus.toString(),
               arenaName: game.arenaName,
               awayTeamId: awayTeam.teamId.toString(),
               awayTeamPeriods: [],
               awayTeamScore: awayTeam.score,
-              homeTeamid: homeTeam.teamId.toString(),
+              homeTeamId: homeTeam.teamId.toString(),
               homeTeamPeriods: [],
               homeTeamScore: homeTeam.score,
               startTime: game.gameDateTimeUTC,
