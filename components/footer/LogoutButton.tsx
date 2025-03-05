@@ -6,8 +6,8 @@ import styles from './LogoutButton.module.scss';
 
 const LogoutButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalConfirm = () => {
-    // 로그아웃 로직 추가
+  const handleModalConfirm = async () => {
+    await fetch('/api/logout', { method: 'POST' });
     setIsModalOpen(false);
     location.reload();
   };
