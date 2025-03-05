@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import Icon from '../icon/Icon';
 import styles from './Footer.module.scss';
@@ -15,16 +15,11 @@ const Footer = async ({ pathname }: { pathname: string }) => {
   const hideHeaderRoutes = ['/login', '/signup'];
   if (hideHeaderRoutes.includes(pathname)) return null;
 
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  let userInfo;
-  if (accessToken) {
-    userInfo = jwt.verify(
-      accessToken,
-      process.env.JWT_SECRET as string
-    ) as JwtPayloadIwthUserDto;
-  }
+  const headersList = await headers();
+  const userInfoHeader = headersList.get('x-user-info');
+  const userInfo = userInfoHeader
+    ? JSON.parse(Buffer.from(userInfoHeader, 'base64').toString('utf-8'))
+    : null;
 
   return (
     <>

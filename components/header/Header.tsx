@@ -1,31 +1,17 @@
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import UserDropDown from './UserDropDown';
 
-interface UserDto {
-  email: string;
-  nickname: string;
-}
-
-interface JwtPayloadIwthUserDto extends jwt.JwtPayload, UserDto {}
-
 const Header = async ({ pathname }: { pathname: string }) => {
-  // 로그인, 회원가입 페이지에서는 header 렌더링 X
   const hideHeaderRoutes = ['/login', '/signup'];
   if (hideHeaderRoutes.includes(pathname)) return null;
 
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  let userInfo;
-  if (accessToken) {
-    userInfo = jwt.verify(
-      accessToken,
-      process.env.JWT_SECRET as string
-    ) as JwtPayloadIwthUserDto;
-  }
+  const headersList = await headers();
+  const userInfoHeader = headersList.get('x-user-info');
+  const userInfo = userInfoHeader
+    ? JSON.parse(Buffer.from(userInfoHeader, 'base64').toString('utf-8'))
+    : null;
 
   return (
     <>
