@@ -47,6 +47,10 @@ const PlayByPlay = () => {
         );
         setPlayByPlayData(response);
         setcurrentQuarter(findCurrentQuarter(response.game.events));
+
+        if (response.game.status !== 'live') {
+          clearInterval(intervalfetch);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -55,13 +59,13 @@ const PlayByPlay = () => {
     fetchPlayByPlayData();
     setIsLoading(false);
 
-    const interval = setInterval(() => {
+    const intervalfetch = setInterval(() => {
       fetchPlayByPlayData();
     }, 10000);
 
     // 언마운트될 때 정리
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalfetch);
     };
   }, [gameId]);
 
