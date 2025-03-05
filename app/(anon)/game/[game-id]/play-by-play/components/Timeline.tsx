@@ -1,8 +1,10 @@
-import { EventDto } from '../mockDataDto';
+import { EventDto } from '@/application/usecases/game/play-by-play/dto/PlaybyplayDto';
+// import { EventDto } from '../mockDataDto';
 import styles from './Timeline.module.scss';
 
 type TimelineProps = {
   type?: string;
+  // event: EventDto;
   event: EventDto;
 };
 
@@ -11,8 +13,14 @@ const formatClockToElapsedTime = (
   clock: string,
   timePerQuater: string = '12:00'
 ) => {
+  const match = clock.match(/PT(\d+)M(\d+\.\d+)S/);
+  if (!match) {
+    throw new Error('Invalid duration format');
+  }
+
+  const currentMinute = parseInt(match[1], 10);
+  const currentSecond = parseInt(match[2]);
   const [minutes, seconds] = timePerQuater.split(':').map(Number);
-  const [currentMinute, currentSecond] = clock.split(':').map(Number);
 
   const totalSeconds = minutes * 60 + seconds;
   const currentSeconds = currentMinute * 60 + currentSecond;
@@ -35,19 +43,13 @@ const formatDescription = (text: string) => {
 };
 
 const Timeline = ({ type, event }: TimelineProps) => {
-  const isMadeShot = event.statistics?.find(
-    (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
-  )?.made;
-  const points = isMadeShot
-    ? `${
-        event.statistics?.length
-          ? event.statistics.find(
-              (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
-            )?.points
-          : 0
-      } POINT`
-    : '';
-  const score = isMadeShot ? `${event.away_points} - ${event.home_points}` : '';
+  const isMadeShot = event.shotResult === 'Made';
+
+  const points =
+    isMadeShot && event.actionType === 'freethrow'
+      ? '1 POINT'
+      : `${parseInt(event.actionType)} POINT`;
+  const score = isMadeShot ? `${event.scoreAway} - ${event.scoreHome}` : '';
 
   return (
     <tr className={styles.timeline}>
