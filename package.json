@@ -12,8 +12,9 @@
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "@tanstack/react-query": "^5.66.7",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
+    "jose": "^6.0.8",
     "jsonwebtoken": "^9.0.2",
     "next": "15.1.7",
     "react": "^19.0.0",
