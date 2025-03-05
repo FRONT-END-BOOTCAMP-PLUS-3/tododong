@@ -110,7 +110,7 @@ export class NbaOfficialGameRpository implements GameRepository {
             return {
               id: game.gameId,
               season: parseInt(result.leagueSchedule.seasonYear),
-              status: game.gameStatus,
+              status: game.gameStatus.toString(),
               arenaName: game.arenaName,
               awayTeamId: awayTeam.teamId.toString(),
               awayTeamPeriods: [],

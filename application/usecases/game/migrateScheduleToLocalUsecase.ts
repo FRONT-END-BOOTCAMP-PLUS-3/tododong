@@ -7,8 +7,28 @@ export const migrateScheduleToLocalUsecase = async (
 ): Promise<void> => {
   const games = await externalRepository.findAll();
 
+  // status 문자열로 변환
   // UTC → 한국 시간 (KST, UTC+9) 변환 후 날짜 필드 추가
-  const gamesWithDate = games.map((game) => {
+  const processedGames = games.map((game) => {
+    let gameStatus = '';
+
+    switch (game.status) {
+      case '1':
+        gameStatus = 'scheduled';
+        break;
+
+      case '2':
+        gameStatus = 'live';
+        break;
+
+      case '3':
+        gameStatus = 'final';
+        break;
+
+      default:
+        break;
+    }
+
     const startTimeUTC = new Date(game.startTime);
 
     let year = startTimeUTC.getUTCFullYear();
@@ -41,10 +61,11 @@ export const migrateScheduleToLocalUsecase = async (
 
     return {
       ...game,
+      status: gameStatus,
       startTime: startTimeKST,
       date: dateKST,
     };
   });
 
-  await localRepository.saveGames(gamesWithDate);
+  await localRepository.saveGames(processedGames);
 };

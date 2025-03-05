@@ -20,7 +20,7 @@ model Chatroom {
 model Game {
   id                          String     @id
   season                      Int
-  status                      Int
+  status                      String
   arenaName                   String     @map("arena_name")
   awayTeamId                  String     @map("away_team_id")
   awayTeamPeriods             Int[]      @map("away_team_periods")
