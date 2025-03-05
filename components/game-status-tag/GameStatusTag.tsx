@@ -1,8 +1,9 @@
 import styles from './GameStatusTag.module.scss';
+import GameStatus from '@/types/game-status';
 
 type GameStatusTagProps = {
   size: 'sm' | 'lg';
-  status: 'live' | 'final' | 'scheduled';
+  status: GameStatus;
 };
 
 const statusTextMap = {

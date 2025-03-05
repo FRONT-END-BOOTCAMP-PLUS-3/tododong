@@ -1,0 +1,12 @@
+@use 'utils' as *;
+
+.boxScoreContainer {
+  @include flexbox($direction: column, $gap: 24);
+  width: 100%;
+}
+
+.scheduledGame {
+  height: 100%;
+  align-content: center;
+  text-align: center;
+}

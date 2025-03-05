@@ -5,21 +5,40 @@ $viewport-max-width: $width-desktop-large;
 // 배경색
 $background-color: $color-bg;
 // 폰트
-$base-font-family: pretendard;
+$base-font-family: Pretendard;
 $font-color: $color-white;
 
 body {
   font-family: $base-font-family;
   line-height: normal;
   margin: 0 auto;
+  min-height: 100vh;
   max-width: $viewport-max-width;
   background-color: $background-color;
   color: $font-color;
 }
 
+input,
+textarea,
+select,
 button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: $base-font-family;
   color: $font-color;
   cursor: pointer;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: $font-color !important;
 }
 
 :disabled {

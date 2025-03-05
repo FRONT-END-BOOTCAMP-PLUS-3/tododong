@@ -1,0 +1,51 @@
+@use 'utils' as *;
+
+.form {
+  .mailTime {
+    color: $color-secondary;
+  }
+
+  .inputBtn {
+    $bgcolor-disabled: $color-gray-600;
+
+    font-size: $text-12;
+    color: $color-white;
+    background-color: $color-primary;
+    min-width: 4.5rem;
+    padding-inline: 0.9375rem;
+    height: 100%;
+    border-radius: $border-radius-8;
+    margin-left: 0.5rem;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+
+    &:disabled {
+      background-color: $bgcolor-disabled;
+    }
+  }
+
+  width: 100%;
+  @include flexbox($direction: column, $justify: center, $gap: 1rem);
+
+  .message {
+    @include flexbox($align: center, $gap: 0.5rem);
+    color: $color-red;
+    font-size: $text-14;
+    margin-top: 0.5rem;
+  }
+
+  > button {
+    $bgcolor-disabled: $color-gray-600;
+
+    background-color: $color-primary;
+    height: 3rem;
+    width: 100%;
+    border-radius: $border-radius-8;
+
+    &:disabled {
+      background-color: $bgcolor-disabled;
+    }
+  }
+}

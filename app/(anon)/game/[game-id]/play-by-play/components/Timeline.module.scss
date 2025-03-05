@@ -1,0 +1,48 @@
+@use 'utils' as *;
+
+.timeline {
+  font-size: $text-14;
+  border-bottom: 1px solid $color-gray-800;
+}
+
+.description {
+  padding: 8px 24px;
+
+  .point {
+    font-size: $text-18;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: $color-primary;
+  }
+
+  span {
+    display: block;
+  }
+}
+
+.home {
+  text-align: left;
+}
+
+.away {
+  text-align: right;
+}
+
+.timeAndScore {
+  text-align: center;
+  align-content: center;
+
+  .time {
+    display: block;
+    font-size: $text-12;
+    color: $color-gray-300;
+    letter-spacing: -1px;
+  }
+
+  .score {
+    display: block;
+    font-size: $text-16;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+}
