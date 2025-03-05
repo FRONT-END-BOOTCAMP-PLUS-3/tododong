@@ -20,8 +20,9 @@ const UserDropDown = ({
     setModalAction(action);
   };
 
-  const handleModalConfirm = () => {
+  const handleModalConfirm = async () => {
     if (modalAction === 'logout') {
+      await fetch('/api/logout', { method: 'POST' });
       location.reload();
     }
     if (modalAction === 'delete') {
