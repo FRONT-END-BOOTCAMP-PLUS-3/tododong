@@ -106,8 +106,7 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
           width={40}
           height={40}
         />
-        <span>{data.city}</span>
-        <span>{data.name}</span>
+        <span>{`${data.city} ${data.name}`}</span>
       </div>
       {/* 기록 테이블 */}
       <div className={styles.table}>
