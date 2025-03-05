@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import styles from './BoxScoreTable.module.scss';
 import Image from 'next/image';
+import {
+  StatisticsDto,
+  TeamDto,
+} from '@/application/usecases/game/box-score/dto/boxscoreDto';
 
 // Box Score 테이블 헤더
 const BOX_SCORE_TABLE_HEADER = [
@@ -29,43 +33,8 @@ const BOX_SCORE_TABLE_HEADER = [
   '+/-',
 ];
 
-type BoxScoreData = {
-  player: {
-    firstname: string;
-    lastname: string;
-  };
-  records: {
-    points: number;
-    min: string;
-    fgm: number;
-    fga: number;
-    fgp: string;
-    ftm: number;
-    fta: number;
-    ftp: string;
-    tpm: number;
-    tpa: number;
-    tpp: string;
-    offReb: number;
-    defReb: number;
-    totReb: number;
-    assists: number;
-    pFouls: number;
-    steals: number;
-    turnovers: number;
-    blocks: number;
-    plusMinus: string;
-  };
-};
-
 type BoxScoreTable = {
-  data: {
-    name: string;
-    nickname: string;
-    code: string;
-    logo: string;
-    boxScore: BoxScoreData[];
-  };
+  data: TeamDto;
   visitor: boolean;
 };
 
@@ -79,7 +48,7 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
     key: null,
     descending: true,
   });
-  const [sortedData, setSortedData] = useState(data.boxScore ?? []);
+  const [sortedData, setSortedData] = useState(data.players ?? []);
 
   // 정렬 기준을 저장하는 함수
   const handleSortState = (index: number) => {
@@ -93,34 +62,51 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
   };
 
   // 정렬된 데이터를 반환하는 함수
-  const getSortedData = (data: BoxScoreData[], sortState: SortState) => {
+  const getSortedData = (data: StatisticsDto[], sortState: SortState) => {
     // 정렬 기준이 없는 경우 기존 데이터 반환
     if (sortState.key === null) return data;
 
-    // 값을 숫자로 변환 후 정렬
     return [...data].sort((a, b) => {
-      const aValue = Number(Object.values(a.records)[sortState.key! - 1]);
-      const bValue = Number(Object.values(b.records)[sortState.key! - 1]);
+      const aValue = Object.values(a)[sortState.key!] ?? 0;
+      const bValue = Object.values(b)[sortState.key!] ?? 0;
 
-      return sortState.descending ? bValue - aValue : aValue - bValue;
+      // 정렬 기준이 출전 시간일 경우 분, 초로 구분해서 정렬
+      if (
+        sortState.key === 2 &&
+        BOX_SCORE_TABLE_HEADER[sortState.key] === '출전\n시간'
+      ) {
+        const [aMin, aSec] = aValue.split(':').map(Number);
+        const [bMin, bSec] = bValue.split(':').map(Number);
+
+        if (aMin !== bMin) {
+          return sortState.descending ? bMin - aMin : aMin - bMin;
+        }
+
+        return sortState.descending ? bSec - aSec : aSec - bSec;
+      }
+
+      return sortState.descending
+        ? Number(bValue) - Number(aValue)
+        : Number(aValue) - Number(bValue);
     });
   };
 
   useEffect(() => {
-    setSortedData(getSortedData(data.boxScore, sortState));
-  }, [data.boxScore, sortState]);
+    setSortedData(getSortedData(data.players, sortState));
+  }, [data.players, sortState]);
 
   return (
     <section className={styles.boxScore}>
       {/* 팀 명 */}
       <div className={styles.teamTitle}>
+        <span className="srOnly">{visitor ? '원정 팀' : '홈 팀'}</span>
         <Image
           src={data.logo}
           alt={`${data.name} 로고`}
           width={40}
           height={40}
         />
-        <span className="srOnly">{visitor ? '원정 팀' : '홈 팀'}</span>
+        <span>{data.city}</span>
         <span>{data.name}</span>
       </div>
       {/* 기록 테이블 */}
@@ -147,14 +133,19 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
           </thead>
           {/* 기록 데이터 */}
           <tbody className={styles.tableBody}>
-            {sortedData.map((data, index) => (
-              <tr key={index}>
-                <td>{`${data.player.firstname} ${data.player.lastname}`}</td>
-                {Object.values(data.records).map((item, idx) => (
-                  <td key={idx}>{item}</td>
-                ))}
-              </tr>
-            ))}
+            {sortedData.map((data) => {
+              const playerData = Object.entries(data)
+                .filter(([key]) => key !== 'name')
+                .map(([, item]) => item);
+              return (
+                <tr key={data.name}>
+                  <td>{data.name}</td>
+                  {playerData.map((item, index) => (
+                    <td key={index}>{item}</td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

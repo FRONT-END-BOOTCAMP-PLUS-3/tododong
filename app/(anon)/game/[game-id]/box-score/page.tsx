@@ -1,348 +1,51 @@
+'use client';
+
 import styles from './page.module.scss';
 import BoxScoreTable from './components/BoxScoreTable';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { fetcher } from '@/utils';
+import { BoxscoreDto } from '@/application/usecases/game/box-score/dto/boxscoreDto';
 
 const BoxScore = () => {
-  const dto = {
-    game: { id: '14902', status: 'live' },
-    home: {
-      name: 'Indiana Pacers',
-      nickname: 'Pacers',
-      code: 'IND',
-      logo: 'https:\/\/upload.wikimedia.org\/wikipedia\/fr\/thumb\/c\/cf\/Pacers_de_l%27Indiana_logo.svg\/1180px-Pacers_de_l%27Indiana_logo.svg.png',
-      data: [
-        {
-          player: { firstname: 'A', lastname: 'Siakam' },
-          boxScore: {
-            points: 10,
-            min: '5',
-            fgm: 3,
-            fga: 8,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 5,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'B', lastname: 'Siakam' },
-          boxScore: {
-            points: 15,
-            min: '20',
-            fgm: 6,
-            fga: 8,
-            fgp: '38.5',
-            ftm: 4,
-            fta: 6,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'C', lastname: 'Siakam' },
-          boxScore: {
-            points: 10,
-            min: '20',
-            fgm: 4,
-            fga: 7,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 5,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-      ],
-    },
-    away: {
-      name: 'Memphis Grizzlies',
-      nickname: 'Grizzlies',
-      code: 'MEM',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Memphis_Grizzlies.svg/1200px-Memphis_Grizzlies.svg.png',
-      data: [
-        {
-          player: { firstname: 'P', lastname: 'Siakam' },
-          boxScore: {
-            points: 20,
-            min: '20',
-            fgm: 8,
-            fga: 10,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 4,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'PP', lastname: 'Siakam' },
-          boxScore: {
-            points: 5,
-            min: '10',
-            fgm: 4,
-            fga: 9,
-            fgp: '37.5',
-            ftm: 1,
-            fta: 2,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'Pascal', lastname: 'Siakam' },
-          boxScore: {
-            points: 30,
-            min: '30',
-            fgm: 5,
-            fga: 8,
-            fgp: '37.5',
-            ftm: 10,
-            fta: 11,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-      ],
-    },
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [boxscoreData, setBoxscoreData] = useState<BoxscoreDto>();
 
-  const testDto = {
-    game: { id: '14902', status: 'live' },
-    home: {
-      name: 'Indiana Pacers',
-      nickname: 'Pacers',
-      code: 'IND',
-      logo: 'https:\/\/upload.wikimedia.org\/wikipedia\/fr\/thumb\/c\/cf\/Pacers_de_l%27Indiana_logo.svg\/1180px-Pacers_de_l%27Indiana_logo.svg.png',
-      boxScore: [
-        {
-          player: { firstname: 'A', lastname: 'Siakam' },
-          records: {
-            points: 10,
-            min: '5',
-            fgm: 3,
-            fga: 8,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 5,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'B', lastname: 'Siakam' },
-          records: {
-            points: 15,
-            min: '20',
-            fgm: 6,
-            fga: 8,
-            fgp: '38.5',
-            ftm: 4,
-            fta: 6,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'C', lastname: 'Siakam' },
-          records: {
-            points: 10,
-            min: '20',
-            fgm: 4,
-            fga: 7,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 5,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-      ],
-    },
-    away: {
-      name: 'Memphis Grizzlies',
-      nickname: 'Grizzlies',
-      code: 'MEM',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Memphis_Grizzlies.svg/1200px-Memphis_Grizzlies.svg.png',
-      boxScore: [
-        {
-          player: { firstname: 'P', lastname: 'Siakam' },
-          records: {
-            points: 20,
-            min: '20',
-            fgm: 8,
-            fga: 10,
-            fgp: '37.5',
-            ftm: 3,
-            fta: 4,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'PP', lastname: 'Siakam' },
-          records: {
-            points: 5,
-            min: '10',
-            fgm: 4,
-            fga: 9,
-            fgp: '37.5',
-            ftm: 1,
-            fta: 2,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-        {
-          player: { firstname: 'Pascal', lastname: 'Siakam' },
-          records: {
-            points: 30,
-            min: '30',
-            fgm: 5,
-            fga: 8,
-            fgp: '37.5',
-            ftm: 10,
-            fta: 11,
-            ftp: '60.0',
-            tpm: 0,
-            tpa: 2,
-            tpp: '0',
-            offReb: 1,
-            defReb: 1,
-            totReb: 2,
-            assists: 1,
-            pFouls: 3,
-            steals: 0,
-            turnovers: 1,
-            blocks: 0,
-            plusMinus: '-3',
-          },
-        },
-      ],
-    },
-  };
+  const params = useParams();
+  const gameId = params['game-id'];
 
-  if (dto.game.status === 'scheduled') {
+  useEffect(() => {
+    if (!gameId) return;
+
+    const fetchBoxscore = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetcher<BoxscoreDto>(
+          `/api/game/${gameId}/box-score`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+          setIsLoading
+        );
+        setBoxscoreData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchBoxscore();
+  }, [gameId]);
+
+  if (isLoading) return <div style={{ textAlign: 'center' }}>로딩중...</div>;
+  if (!boxscoreData) {
+    return (
+      <div className={styles.scheduledGame}>추후 업데이트 예정입니다.</div>
+    );
+  }
+  if (boxscoreData.game.status === 1) {
     return (
       <div className={styles.scheduledGame}>경기 시작 후 업데이트 됩니다.</div>
     );
@@ -351,9 +54,9 @@ const BoxScore = () => {
   return (
     <div className={styles.boxScoreContainer}>
       {/* 원정 팀 */}
-      <BoxScoreTable data={testDto.away} visitor={true} />
+      <BoxScoreTable data={boxscoreData.awayTeam} visitor={true} />
       {/* 홈 팀 */}
-      <BoxScoreTable data={testDto.home} visitor={false} />
+      <BoxScoreTable data={boxscoreData.homeTeam} visitor={false} />
     </div>
   );
 };
