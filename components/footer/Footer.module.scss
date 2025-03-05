@@ -4,18 +4,13 @@
 $viewport-max-width: $width-desktop-large;
 
 .footer {
-  margin-left: calc((100% - 100vw) / 2);
-  width: 100vw;
-  background-color: $color-gray-200;
-}
-
-.footerInner {
   @include flexbox($direction: column, $gap: 44px);
   margin: 0 auto;
   padding: 50px 0;
-  max-width: $viewport-max-width;
+  width: $viewport-max-width;
+  background-color: $color-bg;
   font-size: $text-13;
-  color: $color-black;
+  color: $color-white;
 
   address {
     font-style: normal;
