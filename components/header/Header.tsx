@@ -13,7 +13,7 @@ const Header = async ({ pathname }: { pathname: string }) => {
   if (hideHeaderRoutes.includes(pathname)) return null;
 
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value || '';
+  const accessToken = cookieStore.get('accessToken')?.value || '';
 
   let userInfo;
 

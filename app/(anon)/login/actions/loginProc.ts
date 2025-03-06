@@ -38,7 +38,7 @@ export async function loginProc(
     const cookieStore = await cookies();
 
     cookieStore.set({
-      name: 'access_token',
+      name: 'accessToken',
       value: accessToken,
       httpOnly: true,
       // secure: process.env.NODE_ENV === 'production',

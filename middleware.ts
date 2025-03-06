@@ -4,7 +4,7 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-pathname', request.nextUrl.pathname);
 
-  const accessToken = request.cookies.get('access_token')?.value || null;
+  const accessToken = request.cookies.get('accessToken')?.value || null;
 
   const response = NextResponse.next({
     request: {
@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
   });
 
   if (accessToken) {
-    response.cookies.set('access_token', accessToken, {
+    response.cookies.set('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'strict',
       maxAge: 1 * 60, // 1분
