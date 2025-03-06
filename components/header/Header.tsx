@@ -1,3 +1,4 @@
+import { UserInfo } from '@/types/user-info';
 import { verifyToken } from '@/utils/auth';
 import { JWTPayload } from 'jose';
 import { cookies } from 'next/headers';
@@ -5,10 +6,6 @@ import Image from 'next/image';
 import styles from './Header.module.scss';
 import UserDropDown from './UserDropDown';
 
-interface UserInfo {
-  email: string;
-  nickname: string;
-}
 interface JWTPayloadIwthUserInfo extends JWTPayload, UserInfo {}
 
 const Header = async ({ pathname }: { pathname: string }) => {

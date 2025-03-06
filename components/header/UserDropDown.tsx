@@ -1,5 +1,6 @@
 'use client';
 
+import { UserInfo } from '@/types/user-info';
 import { useState } from 'react';
 import Icon from '../icon/Icon';
 import Modal from '../modal/Modal';
@@ -8,11 +9,7 @@ import styles from './UserDropDown.module.scss';
 
 export type ModalAction = '' | 'logout' | 'delete';
 
-const UserDropDown = ({
-  userInfo,
-}: {
-  userInfo: { nickname: string; email: string };
-}) => {
+const UserDropDown = ({ userInfo }: { userInfo: UserInfo }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [modalAction, setModalAction] = useState<ModalAction>('');
 
