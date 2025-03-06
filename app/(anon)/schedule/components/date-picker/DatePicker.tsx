@@ -48,8 +48,9 @@ const DatePicker = () => {
   useEffect(() => {
     const fetchScheduledGames = async () => {
       try {
-        const response =
-          await fetcher<ScheduledGameCountDto[]>('/api/schedule');
+        const response = await fetcher<ScheduledGameCountDto[]>(
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
+        );
 
         setScheduledGameCounts(response);
       } catch (error) {

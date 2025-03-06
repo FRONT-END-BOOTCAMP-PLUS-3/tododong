@@ -19,7 +19,7 @@ const Schedule = () => {
     const fetchScheduledGames = async () => {
       try {
         const response = await fetcher<ScheduledGameDto[]>(
-          `/api/schedule/${date}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule/${date}`,
           {},
           setIsLoading
         );
