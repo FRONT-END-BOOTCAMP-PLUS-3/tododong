@@ -39,7 +39,7 @@ const BoxScore = () => {
       <div className={styles.scheduledGame}>추후 업데이트 예정입니다.</div>
     );
   }
-  if (boxscoreData.game.status === 1) {
+  if (boxscoreData.game.status === 'scheduled') {
     return (
       <div className={styles.scheduledGame}>경기 시작 후 업데이트 됩니다.</div>
     );

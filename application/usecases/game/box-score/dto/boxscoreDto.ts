@@ -33,7 +33,7 @@ export interface TeamDto {
 export interface BoxscoreDto {
   game: {
     id: string;
-    status: number;
+    status: string;
   };
   homeTeam: TeamDto;
   awayTeam: TeamDto;
