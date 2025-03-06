@@ -13,6 +13,18 @@ export class DfGameRepository implements GameRepository {
     return await this.prisma.game.findMany();
   }
 
+  async findByDate(date: string): Promise<Game[]> {
+    try {
+      const games = await this.prisma.game.findMany({ where: { date } });
+      return games;
+    } catch (error) {
+      console.error(error);
+      throw new Error('게임 데이터 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
   // 저장 또는 업데이트하는 함수
   async saveGames(games: Game[]): Promise<void> {
     try {
