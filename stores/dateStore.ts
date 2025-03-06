@@ -1,7 +1,8 @@
 import { create } from 'zustand';
+import dayjs from 'dayjs';
 
 type State = {
-  date: Date;
+  date: string;
 };
 
 type Action = {
@@ -9,8 +10,8 @@ type Action = {
 };
 
 const useDateStore = create<State & Action>((set) => ({
-  date: new Date(),
-  setDate: (date: Date) => set({ date }),
+  date: dayjs().format('YYYY-MM-DD'), // 오늘 날짜 'yyyy-mm-dd' 형태로 초기화
+  setDate: (date: Date) => set({ date: dayjs(date).format('YYYY-MM-DD') }),
 }));
 
 export default useDateStore;
