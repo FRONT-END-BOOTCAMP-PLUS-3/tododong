@@ -12,33 +12,12 @@ import 'swiper/css';
 import { Swiper as SwiperClass } from 'swiper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useDateStore from '@/stores/dateStore';
+import { fetcher } from '@/utils';
 import Icon from '@/components/icon/Icon';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
+import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
-
-const gamesByDate = [
-  { date: '2025-02-05', games: 2 },
-  { date: '2025-02-06', games: 2 },
-  { date: '2025-02-07', games: 2 },
-  { date: '2025-02-08', games: 2 },
-  { date: '2025-02-09', games: 2 },
-  { date: '2025-02-10', games: 2 },
-  { date: '2025-02-11', games: 1 },
-  { date: '2025-02-12', games: 3 },
-  { date: '2025-02-13', games: 1 },
-  { date: '2025-02-14', games: 0 },
-  { date: '2025-02-15', games: 2 },
-  { date: '2025-02-16', games: 1 },
-  { date: '2025-02-17', games: 3 },
-  { date: '2025-02-18', games: 1 },
-  { date: '2025-02-19', games: 0 },
-  { date: '2025-02-20', games: 2 },
-  { date: '2025-02-21', games: 1 },
-  { date: '2025-02-22', games: 3 },
-  { date: '2025-02-23', games: 0 },
-  { date: '2025-02-24', games: 8 },
-];
 
 const generateDates = (date: Date) => {
   const start = dayjs(date).startOf('month'); // 해당 월의 1일
@@ -57,12 +36,29 @@ const generateDates = (date: Date) => {
 };
 
 const DatePicker = () => {
-  const { setDate } = useDateStore();
+  const setDate = useDateStore((state) => state.setDate);
   const swiperRef = useRef<SwiperClass | null>(null);
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
   const [dates, setDates] = useState<Date[]>(() => generateDates(today));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [scheduledGameCounts, setScheduledGameCounts] =
+    useState<ScheduledGameCountDto[]>();
+
+  useEffect(() => {
+    const fetchScheduledGames = async () => {
+      try {
+        const response =
+          await fetcher<ScheduledGameCountDto[]>('/api/schedule');
+
+        setScheduledGameCounts(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchScheduledGames();
+  }, []);
 
   useBodyScrollLock(isCalendarOpen);
 
@@ -180,10 +176,10 @@ const DatePicker = () => {
               minDetail="year" // 10년 단위 연도 숨기기
               tileContent={({ date, view }) => {
                 const isToday = dayjs(date).isSame(dayjs(), 'day');
-                const gameSchedule = gamesByDate.find((schedule) =>
+                const gameSchedule = scheduledGameCounts?.find((schedule) =>
                   dayjs(schedule.date).isSame(dayjs(date), 'day')
                 );
-                const isDisabled = gameSchedule?.games === 0;
+                const isDisabled = !gameSchedule;
                 return (
                   <>
                     {view === 'month' && isToday && <span>오늘</span>}
@@ -192,7 +188,7 @@ const DatePicker = () => {
                         className={`${styles.gameSchedule} ${isDisabled ? styles.disabled : ''}`}
                       >
                         <span className="srOnly">경기 수</span>
-                        {gameSchedule?.games}
+                        {gameSchedule ? gameSchedule.gameCount : 0}
                       </div>
                     )}
                   </>
@@ -200,10 +196,10 @@ const DatePicker = () => {
               }}
               tileDisabled={({ date, view }) => {
                 if (view === 'month') {
-                  const gameSchedule = gamesByDate.find((schedule) =>
+                  const gameSchedule = scheduledGameCounts?.find((schedule) =>
                     dayjs(schedule.date).isSame(dayjs(date), 'day')
                   );
-                  return gameSchedule?.games === 0; // 경기 수가 0이면 비활성화
+                  return !gameSchedule;
                 }
                 return false;
               }}
