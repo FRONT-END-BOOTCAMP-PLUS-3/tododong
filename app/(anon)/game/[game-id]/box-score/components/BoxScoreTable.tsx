@@ -133,9 +133,12 @@ const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
           {/* 기록 데이터 */}
           <tbody className={styles.tableBody}>
             {sortedData.map((data) => {
-              const playerData = Object.entries(data)
-                .filter(([key]) => key !== 'name')
-                .map(([, item]) => item);
+              // const playerData = Object.entries(data)
+              //   .filter(([key]) => key !== 'name')
+              //   .map(([, item]) => item);
+              const playerData = Object.keys(data)
+                .filter((key) => key !== 'name')
+                .map((key) => data[key as keyof StatisticsDto]);
               return (
                 <tr key={data.name}>
                   <td>{data.name}</td>
