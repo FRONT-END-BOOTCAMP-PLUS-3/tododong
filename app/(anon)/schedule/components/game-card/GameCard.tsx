@@ -9,8 +9,8 @@ type GameCardProps = {
   gameStatus: GameStatus;
   startTime: { date: string; time: string };
   teams: {
-    homeTeam: { nickname: string; logoSrc: string; score: number };
-    awayTeam: { nickname: string; logoSrc: string; score: number };
+    homeTeam: { name: string; logoSrc: string; score: number };
+    awayTeam: { name: string; logoSrc: string; score: number };
   };
 };
 
@@ -18,7 +18,7 @@ const GameCard = ({ gameId, gameStatus, startTime, teams }: GameCardProps) => {
   return (
     <article className={styles.card}>
       <div className={styles.game}>
-        <Team logoSrc={teams.awayTeam.logoSrc} name={teams.awayTeam.nickname} />
+        <Team logoSrc={teams.awayTeam.logoSrc} name={teams.awayTeam.name} />
         <div className={styles.status}>
           {gameStatus === 'scheduled' ? (
             <p>
@@ -33,7 +33,7 @@ const GameCard = ({ gameId, gameStatus, startTime, teams }: GameCardProps) => {
             </>
           )}
         </div>
-        <Team logoSrc={teams.homeTeam.logoSrc} name={teams.homeTeam.nickname} />
+        <Team logoSrc={teams.homeTeam.logoSrc} name={teams.homeTeam.name} />
       </div>
       <div className={styles.links}>
         <Link href={`/game/${gameId}/videos`}>영상</Link>
