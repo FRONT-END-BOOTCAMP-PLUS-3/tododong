@@ -1,17 +1,32 @@
-import { headers } from 'next/headers';
+import { verifyToken } from '@/utils/auth';
+import { JWTPayload } from 'jose';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import UserDropDown from './UserDropDown';
+
+interface UserInfo {
+  email: string;
+  nickname: string;
+}
+interface JWTPayloadIwthUserInfo extends JWTPayload, UserInfo {}
 
 const Header = async ({ pathname }: { pathname: string }) => {
   const hideHeaderRoutes = ['/login', '/signup'];
   if (hideHeaderRoutes.includes(pathname)) return null;
 
-  const headersList = await headers();
-  const userInfoHeader = headersList.get('x-user-info');
-  const userInfo = userInfoHeader
-    ? JSON.parse(Buffer.from(userInfoHeader, 'base64').toString('utf-8'))
-    : null;
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value || '';
+
+  let userInfo;
+
+  if (accessToken) {
+    const decoded = (await verifyToken(
+      accessToken
+    )) as JWTPayloadIwthUserInfo | null;
+
+    userInfo = decoded;
+  }
 
   return (
     <>
