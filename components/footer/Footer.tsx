@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Icon from '../icon/Icon';
 import styles from './Footer.module.scss';
 import LogoutButton from './LogoutButton';
+import ActionLink from '../action-link/ReturnUrlLink';
 
 const Footer = async ({ pathname }: { pathname: string }) => {
   const hideHeaderRoutes = ['/login', '/signup'];
@@ -38,9 +39,13 @@ const Footer = async ({ pathname }: { pathname: string }) => {
             {userInfo ? (
               <LogoutButton />
             ) : (
-              <a href="/login" className={styles.loginLink}>
+              <ActionLink
+                href="/login"
+                pathname={pathname}
+                className={styles.loginLink}
+              >
                 로그인
-              </a>
+              </ActionLink>
             )}
           </li>
           <li>

@@ -3,6 +3,7 @@ import { verifyToken } from '@/utils/auth';
 import { JWTPayload } from 'jose';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
+import ActionLink from '../action-link/ReturnUrlLink';
 import styles from './Header.module.scss';
 import UserDropDown from './UserDropDown';
 
@@ -35,9 +36,13 @@ const Header = async ({ pathname }: { pathname: string }) => {
         {userInfo ? (
           <UserDropDown userInfo={userInfo} />
         ) : (
-          <a href="/login" className={styles.loginBtn}>
+          <ActionLink
+            href="/login"
+            pathname={pathname}
+            className={styles.loginBtn}
+          >
             로그인
-          </a>
+          </ActionLink>
         )}
       </header>
 

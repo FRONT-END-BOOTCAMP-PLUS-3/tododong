@@ -20,6 +20,9 @@ export async function loginProc(
     };
   }
 
+  // 쿠키 저장소를 가져온다. (await를 사용)
+  const cookieStore = await cookies();
+
   try {
     // /api/login 엔드포인트에 POST 요청
     const resData = await fetcher<{ accessToken: string }>(
@@ -33,9 +36,6 @@ export async function loginProc(
 
     // /api/login 엔드포인트가 JWT 토큰을 JSON 형식({ accessToken: string })으로 반환한다고 가정
     const { accessToken } = resData;
-
-    // 쿠키 저장소를 가져온다. (await를 사용)
-    const cookieStore = await cookies();
 
     cookieStore.set({
       name: 'accessToken',
@@ -54,7 +54,11 @@ export async function loginProc(
     };
   }
 
-  const redirectUrl = '/';
+  // 쿠키에 returnUrl 이 있는지 확인
+  const returnUrl = cookieStore.get('returnUrl')?.value;
+
+  // returnUrl이 있는 경우 디코딩 후 리다이렉트
+  const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : '/';
 
   // 로그인 성공 시 메인 페이지로 리다이렉트
   redirect(redirectUrl);
