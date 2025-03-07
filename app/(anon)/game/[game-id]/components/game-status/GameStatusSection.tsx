@@ -34,17 +34,17 @@ const GameStatusSection = () => {
       </div>
       {dto.game.status === 'scheduled' ? (
         <div className={styles.matchScheduled}>
-          <p>{dto.game.arena}</p>
-          <p>{dto.game.startDate}</p>
-          <p>{dto.game.startTime}</p>
+          <p aria-label="경기장">{dto.game.arena}</p>
+          <p aria-label="경기 시작일">{dto.game.startDate}</p>
+          <p aria-label="경기 시작 시간">{dto.game.startTime}</p>
         </div>
       ) : (
         <div>
           <div className={styles.matchStatus}>
             {/* date.start가 현재 일시와 동일하거나 그 이상이면 'live', 이전이면 '예정' end보다 이후면 '종료',*/}
-            <p>{dto.away.points}</p>
+            <p aria-label="어웨이팀 점수">{dto.away.points}</p>
             <GameStatusTag size="lg" status={dto.game.status} />
-            <p>{dto.home.points}</p>
+            <p aria-label="홈팀 점수">{dto.home.points}</p>
           </div>
           <table className={styles.matchTable}>
             <thead>
