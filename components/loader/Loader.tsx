@@ -8,10 +8,10 @@ type LoaderProps = {
 
 const Loader = ({ className, size }: LoaderProps) => {
   return (
-    <div className={`${styles.loaderContainer} ${className}`}>
+    <div className={`${styles.loader} ${className}`}>
       <Image
         src="/loader.png"
-        className={styles.loader}
+        className={styles.spinner}
         width={size || 52}
         height={size || 52}
         alt="로딩 이미지"

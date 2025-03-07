@@ -9,10 +9,10 @@
   }
 }
 
-.loaderContainer {
+.loader {
   @include flexbox($justify: center, $align: center);
 }
 
-.loader {
+.spinner {
   animation: rotate 3s linear infinite;
 }
