@@ -1,10 +1,8 @@
 import { EventDto } from '@/application/usecases/game/play-by-play/dto/PlaybyplayDto';
-// import { EventDto } from '../mockDataDto';
 import styles from './Timeline.module.scss';
 
 type TimelineProps = {
   type?: string;
-  // event: EventDto;
   event: EventDto;
 };
 
