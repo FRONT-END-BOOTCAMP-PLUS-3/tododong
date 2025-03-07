@@ -43,13 +43,7 @@ const Header = () => {
     <>
       <header className={styles.header}>
         <Link href="/" aria-label="홈으로 이동">
-          <Image
-            src="/logo_header.png"
-            alt=""
-            width={76}
-            height={60}
-            priority
-          />
+          <Image src="/logo_sm.png" alt="" width={76} height={60} priority />
         </Link>
 
         {user ? (

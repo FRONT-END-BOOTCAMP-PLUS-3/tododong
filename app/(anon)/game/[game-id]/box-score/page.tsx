@@ -19,15 +19,9 @@ const BoxScore = () => {
 
     const fetchBoxscore = async () => {
       try {
-        setIsLoading(true);
         const response = await fetcher<BoxscoreDto>(
           `/api/game/${gameId}/box-score`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
+          {},
           setIsLoading
         );
         setBoxscoreData(response);
@@ -45,7 +39,7 @@ const BoxScore = () => {
       <div className={styles.scheduledGame}>추후 업데이트 예정입니다.</div>
     );
   }
-  if (boxscoreData.game.status === 1) {
+  if (boxscoreData.game.status === 'scheduled') {
     return (
       <div className={styles.scheduledGame}>경기 시작 후 업데이트 됩니다.</div>
     );

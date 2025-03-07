@@ -52,7 +52,7 @@ export const readBoxscoreUsecase = async (
 ): Promise<BoxscoreDto> => {
   try {
     const statistics = await statisticsRepository.findById(gameId);
-    const game = await gameRepository.findById(gameId);
+    const game = await gameRepository.findById?.(gameId);
 
     if (!game) {
       throw new Error(`게임(${gameId}) 정보가 없습니다.`);
