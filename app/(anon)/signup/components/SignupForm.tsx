@@ -21,6 +21,7 @@ const messagePhrase = {
   password: '영문자, 숫자, 특수문자를 포함한 8~20자를 입력하세요.',
   passwordCheck: '비밀번호가 일치하지 않습니다.',
   nickname: '한글, 영어, 숫자로 된 2~8자 닉네임을 입력하세요.',
+  duplicatedEmail: '이미 가입된 이메일입니다.',
   duplicatedNickName: '이미 사용 중인 닉네임입니다.',
 };
 
@@ -113,6 +114,9 @@ const SignupForm = () => {
     } else setMessages((prev) => ({ ...prev, email: '' }));
 
     try {
+      // input 비활성화
+      setIsEmailSent(true);
+
       // 인증 요청
       await fetcher('/api/signup/verify', {
         method: 'POST',
@@ -122,16 +126,26 @@ const SignupForm = () => {
         body: JSON.stringify({ email: formData.email }),
       });
 
-      // 타이머 시작 및 input 비활성화
-      setIsEmailSent(true);
+      // 타이머 시작
       setMailTime(120);
+      alert('인증번호가 발송되었습니다.');
+
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
         setMailTime((prev) => prev - 1);
       }, 1000);
       // 에러
-    } catch (error) {
-      console.error(error);
+    } catch (err: unknown) {
+      setIsEmailSent(false);
+      setMailTime(0);
+      if (err instanceof Error) {
+        if (err.message === '이미 가입된 이메일입니다.')
+          setMessages((prev) => ({
+            ...prev,
+            email: messagePhrase.duplicatedEmail,
+          }));
+        console.error(err.message);
+      }
     }
   };
 
@@ -154,9 +168,8 @@ const SignupForm = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setMailTime(0);
       setIsVerified(true);
-      // 에러
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      if (err instanceof Error) console.error(err.message);
     }
   };
 
