@@ -1,5 +1,12 @@
 import GameStatus from '@/types/game-status';
 
+interface TeamDto {
+  name: string;
+  logoSrc: string;
+  score: number;
+  isWinner: boolean;
+}
+
 export interface ScheduledGameDto {
   gameId: string;
   gameStatus: GameStatus;
@@ -8,17 +15,7 @@ export interface ScheduledGameDto {
     time: string;
   };
   teams: {
-    homeTeam: {
-      name: string;
-      logoSrc: string;
-      score: number;
-      isWinner: boolean;
-    };
-    awayTeam: {
-      name: string;
-      logoSrc: string;
-      score: number;
-      isWinner: boolean;
-    };
+    homeTeam: TeamDto;
+    awayTeam: TeamDto;
   };
 }
