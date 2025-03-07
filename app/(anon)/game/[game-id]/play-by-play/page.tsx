@@ -21,7 +21,7 @@ const findCurrentQuarter = (data: Array<EventDto[]>) => {
 };
 
 const PlayByPlay = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => true);
   const [playByPlayData, setPlayByPlayData] = useState<PlaybyplayDto | null>(
     null
   );
@@ -42,9 +42,7 @@ const PlayByPlay = () => {
     const fetchPlayByPlayData = async () => {
       try {
         const response = await fetcher<PlaybyplayDto>(
-          `/api/game/${gameId}/play-by-play`,
-          {},
-          setIsLoading
+          `/api/game/${gameId}/play-by-play`
         );
         setPlayByPlayData(response);
         setcurrentQuarter(findCurrentQuarter(response.game.events));
@@ -57,6 +55,7 @@ const PlayByPlay = () => {
       }
     };
     fetchPlayByPlayData();
+    setIsLoading(false);
 
     const intervalFetch = setInterval(() => {
       fetchPlayByPlayData();
@@ -76,9 +75,6 @@ const PlayByPlay = () => {
   const currentQuarterData = [
     ...playByPlayData.game.events[currentQuarter - 1],
   ].reverse();
-
-  console.log(currentQuarterData);
-  // console.log(currentQuarterData.map((item) => item.description));
 
   return (
     <section className={styles.section}>
