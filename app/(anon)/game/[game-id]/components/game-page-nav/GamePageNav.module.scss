@@ -16,15 +16,7 @@
 }
 
 .active {
-  all: unset;
-  cursor: pointer;
-
-  position: relative;
-  padding: 8px 4px;
-
   border-bottom: 2px solid $color-white;
-
-  font-size: $text-18;
 
   &:focus-visible {
     outline: auto;
