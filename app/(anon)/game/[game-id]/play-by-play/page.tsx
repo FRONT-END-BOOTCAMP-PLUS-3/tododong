@@ -43,7 +43,8 @@ const PlayByPlay = () => {
       try {
         const response = await fetcher<PlaybyplayDto>(
           `/api/game/${gameId}/play-by-play`,
-          {}
+          {},
+          setIsLoading
         );
         setPlayByPlayData(response);
         setcurrentQuarter(findCurrentQuarter(response.game.events));
@@ -55,9 +56,7 @@ const PlayByPlay = () => {
         console.error(error);
       }
     };
-    setIsLoading(true);
     fetchPlayByPlayData();
-    setIsLoading(false);
 
     const intervalfetch = setInterval(() => {
       fetchPlayByPlayData();
