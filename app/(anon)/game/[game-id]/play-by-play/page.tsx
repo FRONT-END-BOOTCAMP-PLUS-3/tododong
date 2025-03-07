@@ -77,6 +77,9 @@ const PlayByPlay = () => {
     ...playByPlayData.game.events[currentQuarter - 1],
   ].reverse();
 
+  console.log(currentQuarterData);
+  // console.log(currentQuarterData.map((item) => item.description));
+
   return (
     <section className={styles.section}>
       <h2 className="srOnly">{`${playByPlayData?.game.date} ${playByPlayData?.homeTeam.name} vs ${playByPlayData?.awayTeam.name} 실시간 중계`}</h2>
