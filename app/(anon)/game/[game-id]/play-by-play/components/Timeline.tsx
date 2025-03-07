@@ -33,13 +33,6 @@ const formatClockToElapsedTime = (
   return `${formattedMinutes} : ${formattedSeconds}`;
 };
 
-// 괄호 기준으로 문자열을 분리하는 함수
-const formatDescription = (text: string) => {
-  return text
-    .split(/(\(.*?\))/)
-    .map((item, index) => <span key={index}>{item}</span>);
-};
-
 const Timeline = ({ type, event }: TimelineProps) => {
   const isMadeShot = event.shotResult === 'Made';
 
@@ -55,7 +48,7 @@ const Timeline = ({ type, event }: TimelineProps) => {
         {type === 'away' && (
           <>
             {isMadeShot && <span className={styles.point}>{points}</span>}
-            {formatDescription(event.description)}
+            {event.descriptionKor}
           </>
         )}
       </td>
@@ -71,7 +64,7 @@ const Timeline = ({ type, event }: TimelineProps) => {
         {type === 'home' && (
           <>
             {isMadeShot && <span className={styles.point}>{points}</span>}
-            {formatDescription(event.description)}
+            {event.descriptionKor}
           </>
         )}
       </td>

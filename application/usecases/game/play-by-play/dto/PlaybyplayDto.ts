@@ -9,6 +9,7 @@ export interface EventDto {
   scoreHome: string;
   shotResult: string | null;
   description: string;
+  descriptionKor: string;
   playerName: string | null;
   edited: string;
 }
