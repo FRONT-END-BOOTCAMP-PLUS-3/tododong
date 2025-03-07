@@ -17,6 +17,8 @@
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "swiper": "^11.2.4",
     "zustand": "^5.0.3"
   },
@@ -28,7 +30,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "prettier": "^3.5.1",
-    "prisma": "^6.4.0",
+    "prisma": "^6.4.1",
     "sass": "^1.85.0",
     "typescript": "^5"
   }
