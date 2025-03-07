@@ -21,7 +21,7 @@ const GameCard = ({ gameId, gameStatus, startTime, teams }: GameCardProps) => {
         <Team logoSrc={teams.awayTeam.logoSrc} name={teams.awayTeam.name} />
         <div className={styles.status}>
           {gameStatus === 'scheduled' ? (
-            <p>
+            <p className={styles.scheduled}>
               <span className={styles.date}>{startTime.date}</span>
               <span className={styles.time}>{startTime.time}</span>
             </p>
