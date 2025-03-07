@@ -168,7 +168,9 @@ const SignupForm = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setMailTime(0);
       setIsVerified(true);
+      alert('인증 성공');
     } catch (err) {
+      alert('인증 코드가 일치하지 않습니다.');
       if (err instanceof Error) console.error(err.message);
     }
   };

@@ -1,6 +1,6 @@
 import { VerificationCodeRepository } from '@/domain/repositories/VerificationCodeRepository';
 import { prisma } from '@/utils/prisma';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, VerificationCode } from '@prisma/client';
 
 export default class PrVerificationCodeRepository
   implements VerificationCodeRepository
@@ -40,6 +40,20 @@ export default class PrVerificationCodeRepository
       });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
+    } finally {
+      this.#prisma.$disconnect();
+    }
+  }
+
+  async findByEmail(email: string): Promise<VerificationCode | null> {
+    try {
+      const code = await this.#prisma.verificationCode.findUnique({
+        where: { email: email },
+      });
+      return code;
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
+      return null;
     } finally {
       this.#prisma.$disconnect();
     }
