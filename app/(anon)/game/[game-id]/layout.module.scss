@@ -4,7 +4,7 @@
   @include flexbox($justify: space-between, $gap: 16px);
 
   > div {
-    width: 900px;
+    min-width: 900px;
     @include flexbox($direction: column, $gap: 16px);
 
     > div {
