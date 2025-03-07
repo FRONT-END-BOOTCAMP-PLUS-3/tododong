@@ -17,7 +17,10 @@ export default class PrUserRepository implements UserRepository {
         },
       });
 
-      return user || null;
+      return user;
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
+      return null;
     } finally {
       this.#prisma.$disconnect();
     }
