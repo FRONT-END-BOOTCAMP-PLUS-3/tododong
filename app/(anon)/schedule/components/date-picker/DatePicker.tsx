@@ -36,10 +36,14 @@ const generateDates = (date: Date) => {
 };
 
 const DatePicker = () => {
+  const date = useDateStore((state) => state.date);
   const setDate = useDateStore((state) => state.setDate);
   const swiperRef = useRef<SwiperClass | null>(null);
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
+  const storedDate = localStorage.getItem('date-storage');
+  const selectedDate = storedDate
+    ? new Date(JSON.parse(storedDate).state.date)
+    : new Date(date);
   const [dates, setDates] = useState<Date[]>(() => generateDates(today));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [scheduledGameCounts, setScheduledGameCounts] =
@@ -52,7 +56,7 @@ const DatePicker = () => {
           `${process.env.NEXT_PUBLIC_API_URL}/schedule`
         );
 
-        setScheduledGameCounts(response);
+        setScheduledGameCounts([...response]);
       } catch (error) {
         console.error(error);
       }
@@ -65,7 +69,6 @@ const DatePicker = () => {
 
   const updateDate = useCallback(
     (date: Date) => {
-      setSelectedDate(date);
       setDate(date);
     },
     [setDate]
