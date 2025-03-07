@@ -1,5 +1,8 @@
-import styles from './Loader.module.scss';
+'use client';
+
 import Image from 'next/image';
+import { useLayoutEffect } from 'react';
+import styles from './Loader.module.scss';
 
 type LoaderProps = {
   className?: string;
@@ -7,6 +10,31 @@ type LoaderProps = {
 };
 
 const Loader = ({ className, size }: LoaderProps) => {
+  // 로딩 시작, 완료를 알려줌
+  // https://aoa.gitbook.io/skymimo/aoa-2018/2018-aria/loading
+  useLayoutEffect(() => {
+    const loadingStartElement = document.getElementById('loading-start');
+    const loadingEndElement = document.getElementById('loading-end');
+
+    if (loadingStartElement) {
+      loadingStartElement.innerHTML = '<p class="srOnly">로딩중...</p>';
+      loadingStartElement.setAttribute('role', 'alert');
+    }
+
+    return () => {
+      if (loadingStartElement) {
+        loadingStartElement.innerHTML = '';
+        loadingStartElement.removeAttribute('role');
+      }
+      if (loadingEndElement) {
+        loadingEndElement.innerHTML = '<p class="srOnly">로딩완료</p>';
+        setTimeout(() => {
+          loadingEndElement.innerHTML = '';
+        }, 1000);
+      }
+    };
+  }, []);
+
   return (
     <div className={`${styles.loader} ${className}`}>
       <Image
