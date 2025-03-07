@@ -1,7 +1,8 @@
 import '@/styles/globals.scss';
-import styles from './layout.module.scss';
+// import styles from './layout.module.scss';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import { headers } from 'next/headers';
 
 export const metadata = {
   title: '토도동',
@@ -21,11 +22,14 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const headerPathname = headersList.get('x-pathname') || '';
+
   return (
     <html lang="ko-KR">
       <head>
@@ -37,9 +41,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Header />
+        <Header pathname={headerPathname} />
         {children}
-        <Footer />
+        <Footer pathname={headerPathname} />
       </body>
     </html>
   );

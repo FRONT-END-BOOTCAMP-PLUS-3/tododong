@@ -29,6 +29,7 @@ export class DfGameRepository implements GameRepository {
             homeTeamId: game.homeTeamId,
             homeTeamPeriods: game.homeTeamPeriods,
             homeTeamScore: game.homeTeamScore,
+            date: game.date,
             startTime: game.startTime,
           },
           create: {
@@ -42,6 +43,7 @@ export class DfGameRepository implements GameRepository {
             homeTeamId: game.homeTeamId,
             homeTeamPeriods: game.homeTeamPeriods,
             homeTeamScore: game.homeTeamScore,
+            date: game.date,
             startTime: game.startTime,
           },
         });
@@ -50,6 +52,20 @@ export class DfGameRepository implements GameRepository {
       await prisma.$transaction(upsertGames);
     } catch (error) {
       console.error(error);
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  async findById(id: string): Promise<Game | null> {
+    try {
+      const game = await this.prisma.game.findUnique({ where: { id } });
+      return game;
+    } catch (error) {
+      console.error(error);
+      throw new Error('게임 데이터 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
     }
   }
 }
