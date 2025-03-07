@@ -15,7 +15,7 @@ const ReturnUrlLink = ({
   pathname,
   ...restProps
 }: ReturnUrlLinkProps) => {
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
