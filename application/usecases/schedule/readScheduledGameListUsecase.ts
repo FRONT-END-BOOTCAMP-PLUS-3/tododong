@@ -3,7 +3,7 @@ import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository
 import { ScheduledGameDto } from './dto/ScheduledGameDto';
 import GameStatus from '@/types/game-status';
 
-export const ScheduledGameListUsecase = async (
+export const readScheduledGameListUsecase = async (
   date: string,
   gameRepository: DfGameRepository,
   teamRepository: DfTeamRepository

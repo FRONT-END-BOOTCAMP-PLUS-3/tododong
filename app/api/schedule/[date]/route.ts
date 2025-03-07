@@ -1,4 +1,4 @@
-import { ScheduledGameListUsecase } from '@/application/usecases/schedule/ScheduledGameListUsecase';
+import { readScheduledGameListUsecase } from '@/application/usecases/schedule/readScheduledGameListUsecase';
 import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
 import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,7 +12,7 @@ export const GET = async (
     const gameRepository = new DfGameRepository();
     const teamRepository = new DfTeamRepository();
 
-    const result = await ScheduledGameListUsecase(
+    const result = await readScheduledGameListUsecase(
       date,
       gameRepository,
       teamRepository
