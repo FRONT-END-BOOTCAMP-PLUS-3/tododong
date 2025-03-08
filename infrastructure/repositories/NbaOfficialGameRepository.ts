@@ -1,4 +1,4 @@
-import { GameRepository } from '@/domain/repositories/GameRepository';
+import { ReadonlyGameRepository } from '@/domain/repositories/GameRepository';
 import { Game } from '@prisma/client';
 
 interface Broadcaster {
@@ -89,7 +89,7 @@ interface GameDate {
   games: GameDetail[];
 }
 
-export class NbaOfficialGameRpository implements GameRepository {
+export class NbaOfficialGameRpository implements ReadonlyGameRepository {
   async findAll(): Promise<Game[]> {
     const url = process.env.NEXT_PUBLIC_NBA_SEASON_SCHEDULE_URL;
 

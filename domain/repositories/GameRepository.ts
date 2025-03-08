@@ -1,7 +1,10 @@
 import { Game } from '@prisma/client';
 
-export interface GameRepository {
+export interface ReadonlyGameRepository {
   findAll: () => Promise<Game[]>;
-  findById?: (id: string) => Promise<Game | null>;
-  saveGames?: (games: Game[]) => Promise<void>;
+}
+
+export interface GameRepository extends ReadonlyGameRepository {
+  findById: (id: string) => Promise<Game | null>;
+  saveGames: (games: Game[]) => Promise<void>;
 }
