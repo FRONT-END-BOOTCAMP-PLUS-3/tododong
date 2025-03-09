@@ -3,6 +3,7 @@
 import styles from './page.module.scss';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
@@ -10,8 +11,13 @@ import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledG
 import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
 
 const Schedule = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
+  const initialDate = searchParams.get('date')
+    ? new Date(searchParams.get('date')!)
+    : today;
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [scheduledGames, setScheduledGames] = useState<ScheduledGameDto[]>();
   const [scheduledGameCounts, setScheduledGameCounts] = useState<
     ScheduledGameCountDto[]
@@ -48,6 +54,7 @@ const Schedule = () => {
       }
     };
 
+    router.push(`?date=${dayjs(selectedDate).format('YYYY-MM-DD')}`);
     fetchScheduledGames();
   }, [selectedDate]);
 
