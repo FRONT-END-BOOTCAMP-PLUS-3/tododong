@@ -10,7 +10,7 @@ import 'dayjs/locale/ko';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Swiper as SwiperClass } from 'swiper';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useDateStore from '@/stores/dateStore';
 import { fetcher } from '@/utils';
 import Icon from '@/components/icon/Icon';
@@ -41,9 +41,11 @@ const DatePicker = () => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const today = new Date();
   const storedDate = localStorage.getItem('date-storage');
-  const selectedDate = storedDate
-    ? new Date(JSON.parse(storedDate).state.date)
-    : new Date(date);
+  const selectedDate = useMemo(() => {
+    return storedDate
+      ? new Date(JSON.parse(storedDate).state.date)
+      : new Date(date);
+  }, [storedDate, date]);
   const [dates, setDates] = useState<Date[]>(() => generateDates(today));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [scheduledGameCounts, setScheduledGameCounts] =
