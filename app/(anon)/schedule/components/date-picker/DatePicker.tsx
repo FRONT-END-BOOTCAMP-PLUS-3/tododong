@@ -46,7 +46,7 @@ const DatePicker = () => {
       ? new Date(JSON.parse(storedDate).state.date)
       : new Date(date);
   }, [storedDate, date]);
-  const [dates, setDates] = useState<Date[]>(() => generateDates(today));
+  const [dates, setDates] = useState<Date[]>(() => generateDates(selectedDate));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [scheduledGameCounts, setScheduledGameCounts] =
     useState<ScheduledGameCountDto[]>();
