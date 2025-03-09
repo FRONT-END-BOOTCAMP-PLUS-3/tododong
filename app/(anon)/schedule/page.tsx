@@ -24,7 +24,7 @@ const Schedule = () => {
   >([]);
 
   useEffect(() => {
-    const fetchScheduledGames = async () => {
+    const fetchScheduledGameCounts = async () => {
       try {
         const response = await fetcher<ScheduledGameCountDto[]>(
           `${process.env.NEXT_PUBLIC_API_URL}/schedule`
@@ -36,7 +36,7 @@ const Schedule = () => {
       }
     };
 
-    fetchScheduledGames();
+    fetchScheduledGameCounts();
   }, []);
 
   useEffect(() => {
