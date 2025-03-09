@@ -10,71 +10,29 @@ import 'dayjs/locale/ko';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Swiper as SwiperClass } from 'swiper';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useDateStore from '@/stores/dateStore';
-import { fetcher } from '@/utils';
+import { useEffect, useRef, useState } from 'react';
+import { generateDates } from '@/utils';
 import Icon from '@/components/icon/Icon';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
 
-const generateDates = (date: Date) => {
-  const start = dayjs(date).startOf('month'); // 해당 월의 1일
-  const end = dayjs(date).endOf('month'); // 해당 월의 마지막 날
-  const dates = [];
-
-  for (
-    let d = start;
-    d.isBefore(end) || d.isSame(end, 'day');
-    d = d.add(1, 'day')
-  ) {
-    dates.push(d.toDate());
-  }
-
-  return dates;
+type DatePickerProps = {
+  selectedDate: Date;
+  scheduledGameCounts: ScheduledGameCountDto[];
+  onDateChange: (date: Date) => void;
 };
 
-const DatePicker = () => {
-  const date = useDateStore((state) => state.date);
-  const setDate = useDateStore((state) => state.setDate);
+const DatePicker = ({
+  selectedDate,
+  scheduledGameCounts,
+  onDateChange,
+}: DatePickerProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
-  const today = new Date();
-  const storedDate = localStorage.getItem('date-storage');
-  const selectedDate = useMemo(() => {
-    return storedDate
-      ? new Date(JSON.parse(storedDate).state.date)
-      : new Date(date);
-  }, [storedDate, date]);
   const [dates, setDates] = useState<Date[]>(() => generateDates(selectedDate));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [scheduledGameCounts, setScheduledGameCounts] =
-    useState<ScheduledGameCountDto[]>();
-
-  useEffect(() => {
-    const fetchScheduledGames = async () => {
-      try {
-        const response = await fetcher<ScheduledGameCountDto[]>(
-          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
-        );
-
-        setScheduledGameCounts([...response]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchScheduledGames();
-  }, []);
-
   useBodyScrollLock(isCalendarOpen);
-
-  const updateDate = useCallback(
-    (date: Date) => {
-      setDate(date);
-    },
-    [setDate]
-  );
 
   const updateDates = (date: Date) => {
     setDates(generateDates(date));
@@ -87,7 +45,7 @@ const DatePicker = () => {
         ? dayjs(selectedDate).subtract(1, 'month').endOf('month').toDate() // 이전 달은 31일로
         : dayjs(selectedDate).add(1, 'month').startOf('month').toDate(); // 다음 달은 1일로
 
-    updateDate(date);
+    onDateChange(date);
     updateDates(date);
   };
 
@@ -97,7 +55,7 @@ const DatePicker = () => {
       .add(direction === 'prev' ? -1 : 1, 'day')
       .toDate();
 
-    updateDate(date);
+    onDateChange(date);
   };
 
   // 날짜 선택
@@ -107,20 +65,14 @@ const DatePicker = () => {
     const date = Array.isArray(value) ? value[0] : value;
     if (!date) return;
 
-    updateDate(date);
+    onDateChange(date);
     updateDates(date);
-    setIsCalendarOpen(false); // 달력 닫기
+    handleCloseCalendar();
   };
 
-  // 오늘 날짜 선택(오늘 버튼)
-  const handleSelectToday = () => {
-    updateDate(today);
-    updateDates(today);
-    setIsCalendarOpen(false); // 달력 닫기
-  };
-
+  // 달력 닫기
   const handleCloseCalendar = () => {
-    setIsCalendarOpen(false); // 달력 닫기
+    setIsCalendarOpen(false);
   };
 
   useEffect(() => {
@@ -210,7 +162,10 @@ const DatePicker = () => {
                 return false;
               }}
             />
-            <button className={styles.todayBtn} onClick={handleSelectToday}>
+            <button
+              className={styles.todayBtn}
+              onClick={() => handleSelectDate(new Date())}
+            >
               오늘
             </button>
             <button className={styles.closeBtn} onClick={handleCloseCalendar}>
@@ -244,7 +199,7 @@ const DatePicker = () => {
           onSlideChange={() => {
             if (!swiperRef.current) return;
             const date = dates[swiperRef.current.activeIndex];
-            updateDate(date);
+            onDateChange(date);
           }}
         >
           {dates.map((date, index) => (
@@ -252,7 +207,7 @@ const DatePicker = () => {
               key={index}
               className={styles.swiperSlide}
               onClick={() => {
-                updateDate(date);
+                onDateChange(date);
               }}
             >
               <div className={styles.day}>{dayjs(date).format('dd')}</div>

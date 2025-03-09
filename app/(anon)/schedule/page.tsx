@@ -1,24 +1,45 @@
 'use client';
 
 import styles from './page.module.scss';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import useDateStore from '@/stores/dateStore';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
 import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
+import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
 
 const Schedule = () => {
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(today);
   const [scheduledGames, setScheduledGames] = useState<ScheduledGameDto[]>();
-  const date = useDateStore((state) => state.date);
+  const [scheduledGameCounts, setScheduledGameCounts] = useState<
+    ScheduledGameCountDto[]
+  >([]);
 
   useEffect(() => {
-    if (!date) return;
+    const fetchScheduledGames = async () => {
+      try {
+        const response = await fetcher<ScheduledGameCountDto[]>(
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
+        );
+
+        setScheduledGameCounts([...response]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchScheduledGames();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedDate) return;
 
     const fetchScheduledGames = async () => {
       try {
         const response = await fetcher<ScheduledGameDto[]>(
-          `${process.env.NEXT_PUBLIC_API_URL}/schedule/${date}`
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(selectedDate).format('YYYY-MM-DD')}`
         );
 
         setScheduledGames(response);
@@ -28,11 +49,15 @@ const Schedule = () => {
     };
 
     fetchScheduledGames();
-  }, [date]);
+  }, [selectedDate]);
 
   return (
     <>
-      <DatePicker />
+      <DatePicker
+        selectedDate={selectedDate}
+        scheduledGameCounts={scheduledGameCounts}
+        onDateChange={setSelectedDate}
+      />
       <main>
         {scheduledGames && scheduledGames.length > 0 ? (
           <div className={styles.cardWrapper}>
