@@ -22,6 +22,7 @@ const Schedule = () => {
   const [scheduledGameCounts, setScheduledGameCounts] = useState<
     ScheduledGameCountDto[]
   >([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
     const fetchScheduledGameCounts = async () => {
@@ -56,7 +57,13 @@ const Schedule = () => {
     if (searchParams.get('date') !== formattedDate) {
       router.push(`?date=${formattedDate}`);
     }
-    fetchScheduledGames(selectedDate);
+    const fetchData = async () => {
+      if (isInitialLoading) setIsInitialLoading(true);
+      await fetchScheduledGames(selectedDate);
+      setIsInitialLoading(false);
+    };
+
+    fetchData();
   }, [selectedDate, fetchScheduledGames]);
 
   // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
@@ -80,7 +87,9 @@ const Schedule = () => {
         onDateChange={setSelectedDate}
       />
       <main>
-        {scheduledGames && scheduledGames.length > 0 ? (
+        {isInitialLoading ? (
+          <div className={styles.schedulePrompt}>로딩 중...</div>
+        ) : scheduledGames && scheduledGames.length > 0 ? (
           <div className={styles.cardWrapper}>
             {scheduledGames.map((game) => (
               <GameCard
