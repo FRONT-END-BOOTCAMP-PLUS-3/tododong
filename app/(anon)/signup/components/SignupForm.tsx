@@ -45,6 +45,7 @@ const SignupForm = () => {
     nickname: '',
   });
   const [isEmailSent, setIsEmailSent] = useState(false);
+  const [isEmailSending, setIsEmailSending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mailTime, setMailTime] = useState(0);
@@ -115,17 +116,20 @@ const SignupForm = () => {
       setIsEmailSent(true);
 
       // 인증 요청
-      await fetcher('/api/signup/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      await fetcher(
+        '/api/signup/verify',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: formData.email }),
         },
-        body: JSON.stringify({ email: formData.email }),
-      });
+        setIsEmailSending
+      );
 
       // 타이머 시작
       setMailTime(120);
-      alert('인증번호가 발송되었습니다.');
 
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
@@ -242,9 +246,14 @@ const SignupForm = () => {
             type="button"
             className={styles.inputBtn}
             onClick={handleSendBtnClick}
-            disabled={isVerified}
+            disabled={isVerified || isEmailSending}
+            aria-live="assertive"
           >
-            {isEmailSent ? '이메일 변경' : '인증요청'}
+            {isEmailSending
+              ? '발송중...'
+              : isEmailSent
+                ? '이메일 변경'
+                : '인증요청'}
           </button>
         </>
       );
