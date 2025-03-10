@@ -15,7 +15,17 @@ export class DfGameRepository implements GameRepository {
 
   async findByDate(date: string): Promise<Game[]> {
     try {
-      const games = await this.prisma.game.findMany({ where: { date } });
+      const games = await this.prisma.game.findMany({
+        where: { date },
+        orderBy: [
+          {
+            startTime: 'asc',
+          },
+          {
+            id: 'asc',
+          },
+        ],
+      });
       return games;
     } catch (error) {
       console.error(error);
