@@ -19,7 +19,10 @@ export default class PrUserRepository implements UserRepository {
 
       return user;
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
       return null;
     } finally {
       this.#prisma.$disconnect();
@@ -36,7 +39,10 @@ export default class PrUserRepository implements UserRepository {
 
       return user;
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
       return null;
     } finally {
       this.#prisma.$disconnect();
@@ -47,7 +53,10 @@ export default class PrUserRepository implements UserRepository {
     try {
       await this.#prisma.user.create({ data: userInfo });
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
     } finally {
       this.#prisma.$disconnect();
     }

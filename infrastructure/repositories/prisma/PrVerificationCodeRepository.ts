@@ -17,7 +17,10 @@ export default class PrVerificationCodeRepository
         where: { email: email },
       });
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
     } finally {
       this.#prisma.$disconnect();
     }
@@ -39,7 +42,10 @@ export default class PrVerificationCodeRepository
         },
       });
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
     } finally {
       this.#prisma.$disconnect();
     }
@@ -52,7 +58,10 @@ export default class PrVerificationCodeRepository
       });
       return code;
     } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
       return null;
     } finally {
       this.#prisma.$disconnect();
