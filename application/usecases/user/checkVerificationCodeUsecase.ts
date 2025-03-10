@@ -1,9 +1,9 @@
 import { VerificationCodeRepository } from '@/domain/repositories/VerificationCodeRepository';
-import checkVerificationCodeDto from './dto/checkVerificationCodeDto';
+import CheckVerificationCodeDto from './dto/CheckVerificationCodeDto';
 
 export const checkVerificationCodeUsecase = async (
   verificationCodeRepository: VerificationCodeRepository,
-  dto: checkVerificationCodeDto
+  dto: CheckVerificationCodeDto
 ) => {
   const verificationCode = await verificationCodeRepository.findByEmail(
     dto.email

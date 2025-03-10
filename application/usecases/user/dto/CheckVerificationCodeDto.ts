@@ -1,4 +1,4 @@
-export default interface checkVerificationCodeDto {
+export default interface CheckVerificationCodeDto {
   email: string;
   code: string;
 }
