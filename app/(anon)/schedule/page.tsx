@@ -9,6 +9,7 @@ import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
 import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
 import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
+import Loader from '@/components/loader/Loader';
 
 const Schedule = () => {
   const router = useRouter();
@@ -44,6 +45,7 @@ const Schedule = () => {
       const response = await fetcher<ScheduledGameDto[]>(
         `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
       );
+      console.log(response);
       setScheduledGames(response);
     } catch (error) {
       console.error(error);
@@ -88,7 +90,7 @@ const Schedule = () => {
       />
       <main>
         {isInitialLoading ? (
-          <div className={styles.schedulePrompt}>로딩 중...</div>
+          <Loader className={styles.loader} />
         ) : scheduledGames && scheduledGames.length > 0 ? (
           <div className={styles.cardWrapper}>
             {scheduledGames.map((game) => (

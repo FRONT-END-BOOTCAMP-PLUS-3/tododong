@@ -1,13 +1,16 @@
 @use 'utils' as *;
 
 .cardWrapper {
-  margin-top: 60px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   width: 100%;
   min-height: calc(100vh - 180px);
   place-content: start;
+}
+
+.loader {
+  height: calc(100vh - 180px);
 }
 
 .schedulePrompt {
