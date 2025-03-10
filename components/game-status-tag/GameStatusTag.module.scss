@@ -3,6 +3,8 @@
 .tag {
   display: inline-block;
   border-radius: $border-radius-4;
+  white-space: pre;
+  text-align: center;
 }
 
 .sm {
