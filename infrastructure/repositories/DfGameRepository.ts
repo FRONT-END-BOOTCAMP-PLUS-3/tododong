@@ -90,4 +90,27 @@ export class DfGameRepository implements GameRepository {
       await this.prisma.$disconnect();
     }
   }
+
+  async updateTodayGames(games: Game[]): Promise<void> {
+    try {
+      const updateTodayGames = games.map((game) => {
+        return this.prisma.game.update({
+          where: { id: game.id },
+          data: {
+            status: game.status,
+            awayTeamPeriods: game.awayTeamPeriods,
+            awayTeamScore: game.awayTeamScore,
+            homeTeamPeriods: game.homeTeamPeriods,
+            homeTeamScore: game.homeTeamScore,
+          },
+        });
+      });
+
+      await this.prisma.$transaction(updateTodayGames);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
 }
