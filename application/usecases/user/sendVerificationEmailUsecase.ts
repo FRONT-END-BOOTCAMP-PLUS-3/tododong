@@ -23,7 +23,11 @@ export const sendVerificationEmailUsecase = async (
 
     const code = Math.random().toString(36).substring(2, 8);
 
-    await verificationCodeRepository.createOne({ email, code });
+    await verificationCodeRepository.createOne({
+      email,
+      code,
+      expiresAt: new Date(Date.now() + 2 * 60 * 1000),
+    });
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,

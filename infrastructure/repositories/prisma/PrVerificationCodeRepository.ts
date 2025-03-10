@@ -26,20 +26,10 @@ export default class PrVerificationCodeRepository
     }
   }
 
-  async createOne({
-    email,
-    code,
-  }: {
-    email: string;
-    code: string;
-  }): Promise<void> {
+  async createOne(verificationCode: VerificationCode): Promise<void> {
     try {
       await this.#prisma.verificationCode.create({
-        data: {
-          email,
-          code,
-          expiresAt: new Date(Date.now() + 2 * 60 * 1000), // 2분 후 만료
-        },
+        data: verificationCode,
       });
     } catch (err: unknown) {
       if (err instanceof Error) {
