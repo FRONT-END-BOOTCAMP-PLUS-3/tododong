@@ -89,6 +89,29 @@ interface GameDate {
   games: GameDetail[];
 }
 
+interface TodayGameDetail {
+  gameId: string;
+  gameStatus: number;
+  gameTimeUTC: string;
+  homeTeam: {
+    teamId: number;
+    score: number;
+    periods: { period: number; score: number }[];
+  };
+  awayTeam: {
+    teamId: number;
+    score: number;
+    periods: { period: number; score: number }[];
+  };
+}
+
+interface Scoreboard {
+  scoreboard: {
+    gameDate: string;
+    games: TodayGameDetail[];
+  };
+}
+
 export class NbaOfficialGameRpository implements GameRepository {
   async findAll(): Promise<Game[]> {
     const url = process.env.NEXT_PUBLIC_NBA_SEASON_SCHEDULE_URL;
@@ -121,6 +144,32 @@ export class NbaOfficialGameRpository implements GameRepository {
               startTime: game.gameDateTimeUTC,
             };
           })
+    );
+
+    return games;
+  }
+
+  async findTodayGame(): Promise<Game[]> {
+    const url = process.env.NEXT_PUBLIC_NBA_TODAYS_SCOREBOARD_URL;
+
+    const response = await fetch(url as string);
+    const data: Scoreboard = await response.json();
+
+    const games: Game[] = data.scoreboard.games.map(
+      (game: TodayGameDetail) => ({
+        id: game.gameId,
+        season: 0,
+        status: game.gameStatus.toString(),
+        arenaName: '',
+        awayTeamId: game.awayTeam.teamId.toString(),
+        awayTeamPeriods: game.awayTeam.periods.map((p) => p.score),
+        awayTeamScore: game.awayTeam.score,
+        homeTeamId: game.homeTeam.teamId.toString(),
+        homeTeamPeriods: game.homeTeam.periods.map((p) => p.score),
+        homeTeamScore: game.homeTeam.score,
+        date: '',
+        startTime: game.gameTimeUTC,
+      })
     );
 
     return games;
