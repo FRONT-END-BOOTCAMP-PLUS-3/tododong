@@ -10,6 +10,10 @@ export const checkVerificationCodeUsecase = async (
   );
   if (!verificationCode) return null;
 
-  if (dto.code === verificationCode.code) return true;
-  else return false;
+  if (dto.code === verificationCode.code) {
+    const now = new Date();
+    const expiresAt = verificationCode.expiresAt;
+
+    return expiresAt.getTime() >= now.getTime();
+  } else return false;
 };
