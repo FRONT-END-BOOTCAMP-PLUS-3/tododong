@@ -1,4 +1,7 @@
-import { mockData } from '@/app/(anon)/game/[game-id]/play-by-play/mockData';
+import { readPlaybyplayUsecase } from '@/application/usecases/game/play-by-play/readPlaybyplayUsecase';
+import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
+import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
+import { NbaOfficialPlaybyPlayRpository } from '@/infrastructure/repositories/NbaOfficialPlaybyplayRepository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (
@@ -8,12 +11,16 @@ export const GET = async (
   const slug = await params;
   const gameId = slug['game-id'];
 
-  console.log(gameId);
+  const playbyplayRepository = new NbaOfficialPlaybyPlayRpository();
+  const teamRepository = new DfTeamRepository();
+  const gameRepository = new DfGameRepository();
 
-  const result = mockData;
-
-  //   await new Promise((resolve) => setTimeout(resolve, 1000));
-  //   return NextResponse.json({ error: '로그인 실패' }, { status: 400 });
+  const result = await readPlaybyplayUsecase(
+    gameId,
+    gameRepository,
+    teamRepository,
+    playbyplayRepository
+  );
 
   return NextResponse.json(result, { status: 200 });
 };

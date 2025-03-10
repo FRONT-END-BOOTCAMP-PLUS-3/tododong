@@ -1,12 +1,13 @@
 import styles from './YoutubeVideoCard.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
-import { VideoSnippet } from '@/application/usecases/game/videos/dto/videoDto';
+import { YoutubeVideoSnippet } from '@/application/usecases/game/videos/dto/YoutubeVideosDto';
+import { decodeText } from '@/utils/decodeText';
 
 type YoutubeVideoCardProps = {
   data: {
     id: { videoId: string };
-    snippet: VideoSnippet;
+    snippet: YoutubeVideoSnippet;
     channelImage: string;
   };
 };
@@ -26,7 +27,7 @@ const YoutubeVideoCard = ({ data }: YoutubeVideoCardProps) => {
       </Link>
       <div className={styles.details}>
         <Link href={`https://www.youtube.com/watch?v=${data.id.videoId}`}>
-          <h3 className={styles.title}>{data.snippet.title}</h3>
+          <h3 className={styles.title}>{decodeText(data.snippet.title)}</h3>
         </Link>
         <Link
           href={`https://www.youtube.com/channel/${data.snippet.channelId}`}

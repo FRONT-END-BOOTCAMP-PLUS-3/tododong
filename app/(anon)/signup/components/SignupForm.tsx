@@ -3,7 +3,6 @@
 import AuthInput from '@/components/auth-input/AuthInput';
 import Icon from '@/components/icon/Icon';
 import { fetcher, formatTime } from '@/utils';
-import { useRouter } from 'next/navigation';
 import { FocusEvent, InputHTMLAttributes, useRef, useState } from 'react';
 import styles from './SignupForm.module.scss';
 
@@ -21,12 +20,11 @@ const messagePhrase = {
   password: '영문자, 숫자, 특수문자를 포함한 8~20자를 입력하세요.',
   passwordCheck: '비밀번호가 일치하지 않습니다.',
   nickname: '한글, 영어, 숫자로 된 2~8자 닉네임을 입력하세요.',
+  duplicatedEmail: '이미 가입된 이메일입니다.',
   duplicatedNickName: '이미 사용 중인 닉네임입니다.',
 };
 
 const SignupForm = () => {
-  const router = useRouter();
-
   /* ----------------------------------- refs ---------------------------------- */
   const timerRef = useRef<NodeJS.Timeout>(null);
 
@@ -47,6 +45,7 @@ const SignupForm = () => {
     nickname: '',
   });
   const [isEmailSent, setIsEmailSent] = useState(false);
+  const [isEmailSending, setIsEmailSending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mailTime, setMailTime] = useState(0);
@@ -113,25 +112,41 @@ const SignupForm = () => {
     } else setMessages((prev) => ({ ...prev, email: '' }));
 
     try {
-      // 인증 요청
-      await fetcher('/api/signup/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: formData.email }),
-      });
-
-      // 타이머 시작 및 input 비활성화
+      // input 비활성화
       setIsEmailSent(true);
+
+      // 인증 요청
+      await fetcher(
+        '/api/signup/verify',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: formData.email }),
+        },
+        setIsEmailSending
+      );
+
+      // 타이머 시작
       setMailTime(120);
+
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
         setMailTime((prev) => prev - 1);
       }, 1000);
       // 에러
-    } catch (error) {
-      console.error(error);
+    } catch (err: unknown) {
+      setIsEmailSent(false);
+      setMailTime(0);
+      if (err instanceof Error) {
+        if (err.message === '이미 가입된 이메일입니다.')
+          setMessages((prev) => ({
+            ...prev,
+            email: messagePhrase.duplicatedEmail,
+          }));
+        console.error(err.message);
+      }
     }
   };
 
@@ -154,9 +169,10 @@ const SignupForm = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setMailTime(0);
       setIsVerified(true);
-      // 에러
-    } catch (error) {
-      console.error(error);
+      alert('인증 성공');
+    } catch (err) {
+      alert('인증 코드가 일치하지 않습니다.');
+      if (err instanceof Error) console.error(err.message);
     }
   };
 
@@ -181,7 +197,7 @@ const SignupForm = () => {
         setIsLoading
       );
       // 성공 시 이동
-      router.push('/');
+      location.href = '/login';
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.message === '닉네임 중복')
@@ -189,6 +205,7 @@ const SignupForm = () => {
             ...prev,
             nickname: messagePhrase.duplicatedNickName,
           }));
+        console.error(err.message);
       }
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
@@ -229,9 +246,14 @@ const SignupForm = () => {
             type="button"
             className={styles.inputBtn}
             onClick={handleSendBtnClick}
-            disabled={isVerified}
+            disabled={isVerified || isEmailSending}
+            aria-live="assertive"
           >
-            {isEmailSent ? '이메일 변경' : '인증요청'}
+            {isEmailSending
+              ? '발송중...'
+              : isEmailSent
+                ? '이메일 변경'
+                : '인증요청'}
           </button>
         </>
       );
