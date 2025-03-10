@@ -2,7 +2,7 @@ import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { prisma } from '@/utils/prisma';
 import { Team, PrismaClient } from '@prisma/client';
 
-export class DfTeamRepository implements TeamRepository {
+export class PrTeamRepository implements TeamRepository {
   private prisma: PrismaClient;
 
   constructor() {
