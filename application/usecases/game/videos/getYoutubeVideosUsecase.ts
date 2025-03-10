@@ -1,15 +1,15 @@
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
 import {
   YoutubeChannel,
   YoutubeVideoDto,
   YoutubeVideosWithChannelDto,
 } from './dto/YoutubeVideosDto';
+import { GameRepository } from '@/domain/repositories/GameRepository';
+import { TeamRepository } from '@/domain/repositories/TeamRepository';
 
 export const getYoutubeVideosUsecase = async (
   gameId: string,
-  gameRepository: DfGameRepository,
-  teamRepository: DfTeamRepository
+  gameRepository: GameRepository,
+  teamRepository: TeamRepository
 ): Promise<YoutubeVideosWithChannelDto> => {
   const game = await gameRepository.findById(gameId);
   if (!game) {
