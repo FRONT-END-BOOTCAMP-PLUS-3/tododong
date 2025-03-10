@@ -28,7 +28,7 @@ export const sendVerificationEmailUsecase = async (
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: '회원가입 인증 코드',
+      subject: '[토도동] 회원가입 인증 코드',
       text: `인증 코드: ${code} (2분 내 입력해주세요)`,
     });
   } catch (err) {
