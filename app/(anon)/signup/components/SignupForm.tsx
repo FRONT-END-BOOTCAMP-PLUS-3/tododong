@@ -3,7 +3,6 @@
 import AuthInput from '@/components/auth-input/AuthInput';
 import Icon from '@/components/icon/Icon';
 import { fetcher, formatTime } from '@/utils';
-import { useRouter } from 'next/navigation';
 import { FocusEvent, InputHTMLAttributes, useRef, useState } from 'react';
 import styles from './SignupForm.module.scss';
 
@@ -26,8 +25,6 @@ const messagePhrase = {
 };
 
 const SignupForm = () => {
-  const router = useRouter();
-
   /* ----------------------------------- refs ---------------------------------- */
   const timerRef = useRef<NodeJS.Timeout>(null);
 
@@ -196,7 +193,7 @@ const SignupForm = () => {
         setIsLoading
       );
       // 성공 시 이동
-      router.push('/');
+      location.href = '/login';
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.message === '닉네임 중복')
@@ -204,6 +201,7 @@ const SignupForm = () => {
             ...prev,
             nickname: messagePhrase.duplicatedNickName,
           }));
+        console.error(err.message);
       }
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
