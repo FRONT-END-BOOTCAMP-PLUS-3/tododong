@@ -70,7 +70,7 @@ model VerificationCode {
   email     String   @unique
   code      String
   createdAt DateTime @default(now()) @map("created_at")
-  expiresAt DateTime @default(now()) @map("updated_at")
+  expiresAt DateTime @default(now()) @map("expires_at")
 
   @@map("verification_codes")
 }
