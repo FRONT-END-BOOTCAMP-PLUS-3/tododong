@@ -7,44 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Chatroom {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  gameId    String
-  game      Game      @relation(fields: [gameId], references: [id])
-  messages  Message[]
-
-  @@map("chatrooms")
-}
-
 model Game {
-  id                          String     @id
+  id                          String    @id
   season                      Int
   status                      String
-  arenaName                   String     @map("arena_name")
-  awayTeamId                  String     @map("away_team_id")
-  awayTeamPeriods             Int[]      @map("away_team_periods")
-  awayTeamScore               Int        @map("away_team_score")
-  homeTeamId                  String     @map("home_team_id")
-  homeTeamPeriods             Int[]      @map("home_team_periods")
-  homeTeamScore               Int        @map("home_team_score")
+  arenaName                   String    @map("arena_name")
+  awayTeamId                  String    @map("away_team_id")
+  awayTeamPeriods             Int[]     @map("away_team_periods")
+  awayTeamScore               Int       @map("away_team_score")
+  homeTeamId                  String    @map("home_team_id")
+  homeTeamPeriods             Int[]     @map("home_team_periods")
+  homeTeamScore               Int       @map("home_team_score")
   date                        String
-  startTime                   String     @map("start_time")
-  chatrooms                   Chatroom[]
-  teamsGamesAwayTeamIdToTeams Team       @relation("gamesAwayTeamIdToTeams", fields: [awayTeamId], references: [id])
-  teamsGamesHomeTeamIdToTeams Team       @relation("gamesHomeTeamIdToTeams", fields: [homeTeamId], references: [id])
+  startTime                   String    @map("start_time")
+  teamsGamesAwayTeamIdToTeams Team      @relation("gamesAwayTeamIdToTeams", fields: [awayTeamId], references: [id])
+  teamsGamesHomeTeamIdToTeams Team      @relation("gamesHomeTeamIdToTeams", fields: [homeTeamId], references: [id])
+  Message                     Message[]
 
   @@map("games")
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
-  chatroomId String   @map("chatroom_id")
-  userId     String   @map("user_id")
-  message    String
-  createdAt  DateTime @default(now()) @map("created_at")
-  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  gameId    String   @map("game_id")
+  userId    String   @map("user_id")
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+  game      Game     @relation(fields: [gameId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("messages")
 }
@@ -73,4 +63,14 @@ model User {
   messages  Message[]
 
   @@map("users")
+}
+
+model VerificationCode {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  code      String
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @default(now()) @map("expires_at")
+
+  @@map("verification_codes")
 }

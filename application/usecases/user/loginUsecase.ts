@@ -1,6 +1,6 @@
 import UserRepository from '@/domain/repositories/UserRepository';
 import { generateAccessToken } from '@/utils/auth';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 import LoginUserDto from './dto/LoginUserDto';
 
 export async function loginUsecase(
@@ -17,7 +17,7 @@ export async function loginUsecase(
   }
 
   // 2. 비밀번호 검증
-  const isValidPassword = await bcrypt.compare(password, user.password);
+  const isValidPassword = await bcryptjs.compare(password, user.password);
   // 2-1. 비밀번호가 일치하지 않을 때 오류 반환
   if (!isValidPassword) {
     throw new Error('Invalid email or password');
