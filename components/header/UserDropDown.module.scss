@@ -1,0 +1,17 @@
+@use 'utils' as *;
+
+.userDropDown {
+  @include flexbox($justify: center, $align: center, $gap: 0.5rem);
+  > span {
+    color: $color-primary;
+  }
+
+  > button {
+    @include flexbox($justify: center, $align: center);
+    padding: 0.625rem;
+
+    use {
+      color: $color-primary;
+    }
+  }
+}

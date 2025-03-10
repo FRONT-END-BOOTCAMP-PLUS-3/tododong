@@ -2,8 +2,6 @@ import { InputHTMLAttributes } from 'react';
 import styles from './AuthInput.module.scss';
 
 type AuthInputProps = {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label: string;
   isInvalid?: boolean;
   children?: React.ReactElement;
@@ -27,6 +25,7 @@ const AuthInput = ({
         id={name}
         name={name}
         onChange={onChange}
+        onInput={onChange}
         onBlur={onBlur}
         required
         aria-required

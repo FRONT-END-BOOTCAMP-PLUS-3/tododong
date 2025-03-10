@@ -19,11 +19,6 @@ $viewport-max-width: $width-desktop-large;
 .termWrapper {
   @include flexbox($gap: 32px);
 
-  button {
-    color: inherit;
-    font-size: inherit;
-  }
-
   a {
     color: inherit;
     text-decoration: none;

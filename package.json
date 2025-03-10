@@ -12,7 +12,9 @@
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "@tanstack/react-query": "^5.66.7",
+    "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
+    "jose": "^6.0.8",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
@@ -22,13 +24,15 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "prettier": "^3.5.1",
-    "prisma": "^6.4.0",
+    "prisma": "^6.4.1",
     "sass": "^1.85.0",
     "typescript": "^5"
   }

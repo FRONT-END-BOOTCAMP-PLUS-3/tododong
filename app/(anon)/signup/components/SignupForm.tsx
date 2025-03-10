@@ -12,7 +12,7 @@ type FormDataKeys =
   | 'authCode'
   | 'password'
   | 'passwordCheck'
-  | 'nickName';
+  | 'nickname';
 
 // 유효성 검사 실패 문구
 const messagePhrase = {
@@ -20,7 +20,7 @@ const messagePhrase = {
   authCode: '정확한 인증코드를 입력하세요.',
   password: '영문자, 숫자, 특수문자를 포함한 8~20자를 입력하세요.',
   passwordCheck: '비밀번호가 일치하지 않습니다.',
-  nickName: '한글, 영어, 숫자로 된 2~8자 닉네임을 입력하세요.',
+  nickname: '한글, 영어, 숫자로 된 2~8자 닉네임을 입력하세요.',
   duplicatedNickName: '이미 사용 중인 닉네임입니다.',
 };
 
@@ -36,7 +36,7 @@ const SignupForm = () => {
     authCode: '',
     password: '',
     passwordCheck: '',
-    nickName: '',
+    nickname: '',
   });
   // 유효성 검사 메세지
   const [messages, setMessages] = useState<Record<FormDataKeys, string>>({
@@ -44,7 +44,7 @@ const SignupForm = () => {
     authCode: '',
     password: '',
     passwordCheck: '',
-    nickName: '',
+    nickname: '',
   });
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -74,7 +74,7 @@ const SignupForm = () => {
       case 'passwordCheck':
         // password와 일치
         return value === formData.password;
-      case 'nickName':
+      case 'nickname':
         // 한글, 영어만 가능 2~8자
         return /^[가-힣a-zA-Z0-9]{2,8}$/.test(value);
       default:
@@ -175,7 +175,7 @@ const SignupForm = () => {
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
-            nickName: formData.nickName,
+            nickname: formData.nickname,
           }),
         },
         setIsLoading
@@ -187,7 +187,7 @@ const SignupForm = () => {
         if (err.message === '닉네임 중복')
           setMessages((prev) => ({
             ...prev,
-            nickName: messagePhrase.duplicatedNickName,
+            nickname: messagePhrase.duplicatedNickName,
           }));
       }
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -212,7 +212,7 @@ const SignupForm = () => {
     { type: 'text', label: '인증코드', name: 'authCode', disabled: isVerified },
     { type: 'password', label: '비밀번호', name: 'password', onBlur: handleBlur },
     { type: 'password', label: '비밀번호 확인', name: 'passwordCheck', onBlur: handleBlur },
-    { type: 'text', label: '닉네임', name: 'nickName', onBlur: handleBlur },
+    { type: 'text', label: '닉네임', name: 'nickname', onBlur: handleBlur },
   ];
 
   // input 오른쪽 버튼(+시간)을 렌더링하는 함수

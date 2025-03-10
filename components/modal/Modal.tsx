@@ -96,7 +96,7 @@ const Modal = ({
             {...restProps}
           >
             <Image
-              src="/logo_header.png"
+              src="/logo_sm.png"
               alt="토도동 로고"
               width={76}
               height={60}

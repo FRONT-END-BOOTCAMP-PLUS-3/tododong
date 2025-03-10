@@ -1,7 +1,8 @@
 import '@/styles/globals.scss';
-import styles from './layout.module.scss';
+// import styles from './layout.module.scss';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import { headers } from 'next/headers';
 
 export const metadata = {
   title: '토도동',
@@ -19,27 +20,33 @@ export const metadata = {
       },
     ],
   },
+  link: [
+    {
+      rel: 'stylesheet',
+      as: 'style',
+      crossOrigin: 'anonymous',
+      href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
+    },
+  ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const headerPathname = headersList.get('x-pathname') || '';
+
   return (
     <html lang="ko-KR">
-      <head>
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-        />
-      </head>
       <body>
-        <Header />
+        <Header pathname={headerPathname} />
         {children}
-        <Footer />
+        <Footer pathname={headerPathname} />
+
+        <div id="loading-start" aria-live="assertive"></div>
+        <div id="loading-end" aria-live="assertive"></div>
       </body>
     </html>
   );
