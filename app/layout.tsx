@@ -20,6 +20,14 @@ export const metadata = {
       },
     ],
   },
+  link: [
+    {
+      rel: 'stylesheet',
+      as: 'style',
+      crossOrigin: 'anonymous',
+      href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
+    },
+  ],
 };
 
 export default async function RootLayout({
@@ -32,18 +40,13 @@ export default async function RootLayout({
 
   return (
     <html lang="ko-KR">
-      <head>
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-        />
-      </head>
       <body>
         <Header pathname={headerPathname} />
         {children}
         <Footer pathname={headerPathname} />
+
+        <div id="loading-start" aria-live="assertive"></div>
+        <div id="loading-end" aria-live="assertive"></div>
       </body>
     </html>
   );
