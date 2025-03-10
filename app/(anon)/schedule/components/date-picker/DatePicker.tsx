@@ -85,7 +85,7 @@ const DatePicker = ({
   }, [selectedDate, dates]);
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.wrapper}>
         {/* 달 이동 */}
         <div className={styles.monthNavigation}>
@@ -233,7 +233,7 @@ const DatePicker = ({
           <Icon id="right" width={6.55} height={11.15} />
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

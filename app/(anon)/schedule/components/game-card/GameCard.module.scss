@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .card {
-  padding-block: 60px 32px;
+  padding: 60px 30px 32px;
   width: 620px;
   background-color: $color-gray-800;
   border-radius: $border-radius-20;
