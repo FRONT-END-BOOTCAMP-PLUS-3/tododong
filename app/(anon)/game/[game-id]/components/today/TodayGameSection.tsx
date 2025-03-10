@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import styles from './TodayGameSection.module.scss';
 import './swiper.scss';
@@ -11,6 +11,7 @@ import { Navigation } from 'swiper/modules';
 
 import Icon from '@/components/icon/Icon';
 import TodayGameCard from './TodayGameCard';
+import { NavigationOptions } from 'swiper/types';
 
 const dto = [
   {
@@ -81,7 +82,7 @@ const dto = [
       points: 56,
     },
   },
-  /* {
+  {
     id: 14905,
     game: {
       startTime: '10:00 AM KST',
@@ -114,10 +115,12 @@ const dto = [
       logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Brooklyn_Nets_newlogo.svg/130px-Brooklyn_Nets_newlogo.svg.png',
       points: 56,
     },
-  }, */
+  },
 ];
 
 const TodayGameSection = () => {
+  const [isLastSlide, setIsLastSlide] = useState(false);
+  const [isFirstSlide, setIsFirstSlide] = useState(false);
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
 
@@ -127,7 +130,7 @@ const TodayGameSection = () => {
   const shouldShowNavigation = totalCards.length > 5;
 
   return (
-    <section className={styles.container}>
+    <section className={styles.todayGameContainer}>
       <h2>
         오늘의
         <br />
@@ -135,7 +138,10 @@ const TodayGameSection = () => {
       </h2>
 
       {shouldShowNavigation && (
-        <button ref={prevRef} className={styles.customPrev}>
+        <button
+          ref={prevRef}
+          className={`${styles.customPrev} ${isFirstSlide ? styles.disabled : ''}`}
+        >
           <Icon id="left" width={6.55} height={11.15} />
         </button>
       )}
@@ -144,6 +150,26 @@ const TodayGameSection = () => {
         navigation={{
           prevEl: prevRef.current,
           nextEl: nextRef.current,
+        }}
+        onSwiper={(swiper) => {
+          setTimeout(() => {
+            if (
+              prevRef.current &&
+              nextRef.current &&
+              typeof swiper.params.navigation !== 'boolean'
+            ) {
+              const navigationParams = swiper.params
+                .navigation as NavigationOptions;
+              navigationParams.prevEl = prevRef.current;
+              navigationParams.nextEl = nextRef.current;
+              swiper.navigation.init();
+              swiper.navigation.update();
+            }
+          });
+        }}
+        onSlideChange={(swiper) => {
+          setIsLastSlide(swiper.isEnd);
+          setIsFirstSlide(swiper.isBeginning);
         }}
         slidesPerView={5} // 한 번에 보이는 카드 개수
         slidesPerGroup={3} // 내비게이션 클릭 시 이동할 개수
@@ -158,7 +184,10 @@ const TodayGameSection = () => {
         ))}
       </Swiper>
       {shouldShowNavigation && (
-        <button ref={nextRef} className={styles.customNext}>
+        <button
+          ref={nextRef}
+          className={`${styles.customNext} ${isLastSlide ? styles.disabled : ''}`}
+        >
           <Icon id="right" width={6.55} height={11.15} />
         </button>
       )}

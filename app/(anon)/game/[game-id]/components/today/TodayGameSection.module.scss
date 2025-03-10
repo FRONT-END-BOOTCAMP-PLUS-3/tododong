@@ -1,7 +1,8 @@
 @use 'utils' as *;
 
-.container {
-  padding: 20px 12px;
+.todayGameContainer {
+  padding: 20px 0;
+  width: 1280px;
 
   h2 {
     font-size: $text-28;
@@ -31,4 +32,9 @@
   &:hover {
     opacity: 0.8;
   }
+}
+
+.disabled {
+  // background-color: $color-gray-400;
+  cursor: not-allowed;
 }
