@@ -1,5 +1,6 @@
 import { GameRepository } from '@/domain/repositories/GameRepository';
 import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
+import { convertGameStatus } from '@/utils';
 
 export const migrateTodayGamesToLocalUsecase = async (
   externalRepository: NbaGameRepository,
@@ -9,24 +10,7 @@ export const migrateTodayGamesToLocalUsecase = async (
 
   // status 문자열로 변환
   const processedGames = games.map((game) => {
-    let gameStatus = '';
-
-    switch (game.status) {
-      case '1':
-        gameStatus = 'scheduled';
-        break;
-
-      case '2':
-        gameStatus = 'live';
-        break;
-
-      case '3':
-        gameStatus = 'final';
-        break;
-
-      default:
-        break;
-    }
+    const gameStatus = convertGameStatus(game.status);
 
     return {
       ...game,
