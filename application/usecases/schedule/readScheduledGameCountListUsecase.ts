@@ -1,22 +1,11 @@
-import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
+import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
 import { ScheduledGameCountDto } from './dto/ScheduledGameCountDto';
 
 export const readScheduledGameCountListUsecase = async (
-  gameRepository: NbaGameRepository
+  gameRepository: PrGameRepository
 ): Promise<ScheduledGameCountDto[]> => {
-  const games = await gameRepository.findAll();
-
-  const gameCountByDate = games.reduce<Record<string, number>>((acc, game) => {
-    acc[game.date] = (acc[game.date] || 0) + 1;
-    return acc;
-  }, {});
-
-  const scheduledGameCountDtos: ScheduledGameCountDto[] = Object.entries(
-    gameCountByDate
-  ).map(([date, gameCount]) => ({
-    date,
-    gameCount,
-  }));
+  const scheduledGameCountDtos: ScheduledGameCountDto[] =
+    await gameRepository.countByDate();
 
   return scheduledGameCountDtos;
 };
