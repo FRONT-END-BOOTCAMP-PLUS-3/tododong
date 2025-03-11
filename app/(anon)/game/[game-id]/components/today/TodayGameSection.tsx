@@ -120,7 +120,7 @@ const dto = [
 
 const TodayGameSection = () => {
   const [isLastSlide, setIsLastSlide] = useState(false);
-  const [isFirstSlide, setIsFirstSlide] = useState(false);
+  const [isFirstSlide, setIsFirstSlide] = useState(true);
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
 
