@@ -1,6 +1,7 @@
 import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
 import styles from './GameStatusSection.module.scss';
 import Team from '@/components/team/Team';
+import GameStatus from '@/types/game-status';
 
 const dto = {
   id: 14903,
@@ -43,7 +44,7 @@ const GameStatusSection = () => {
           <div className={styles.matchStatus}>
             {/* date.start가 현재 일시와 동일하거나 그 이상이면 'live', 이전이면 '예정' end보다 이후면 '종료',*/}
             <p aria-label="어웨이팀 점수">{dto.away.points}</p>
-            <GameStatusTag size="lg" status={dto.game.status} />
+            <GameStatusTag size="lg" status={dto.game.status as GameStatus} />
             <p aria-label="홈팀 점수">{dto.home.points}</p>
           </div>
           <table className={styles.matchTable}>

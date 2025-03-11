@@ -2,8 +2,29 @@ import Image from 'next/image';
 import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
 import styles from './TodayGameCard.module.scss';
 import Link from 'next/link';
+import GameStatus from '@/types/game-status';
 
-const TodayGameCard = ({ data }) => {
+type TodayGameCardProps = {
+  data: {
+    id: string;
+    game: {
+      startTime: string;
+      status: GameStatus;
+    };
+    home: {
+      nickname: string;
+      logo: string;
+      points: number;
+    };
+    away: {
+      nickname: string;
+      logo: string;
+      points: number;
+    };
+  };
+};
+
+const TodayGameCard = ({ data }: TodayGameCardProps) => {
   if (data === null)
     return (
       <article className={styles.nodata}>
