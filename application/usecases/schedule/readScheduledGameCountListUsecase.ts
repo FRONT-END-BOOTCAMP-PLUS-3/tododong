@@ -1,8 +1,8 @@
-import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
+import { GameRepository } from '@/domain/repositories/GameRepository';
 import { ScheduledGameCountDto } from './dto/ScheduledGameCountDto';
 
 export const readScheduledGameCountListUsecase = async (
-  gameRepository: PrGameRepository
+  gameRepository: GameRepository
 ): Promise<ScheduledGameCountDto[]> => {
   const scheduledGameCountDtos: ScheduledGameCountDto[] =
     await gameRepository.countByDate();
