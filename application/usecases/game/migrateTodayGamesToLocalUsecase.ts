@@ -1,9 +1,9 @@
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { NbaOfficialGameRpository } from '@/infrastructure/repositories/NbaOfficialGameRepository';
+import { GameRepository } from '@/domain/repositories/GameRepository';
+import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
 
 export const migrateTodayGamesToLocalUsecase = async (
-  externalRepository: NbaOfficialGameRpository,
-  localRepository: DfGameRepository
+  externalRepository: NbaGameRepository,
+  localRepository: GameRepository
 ): Promise<void> => {
   const games = await externalRepository.findTodayGame();
 

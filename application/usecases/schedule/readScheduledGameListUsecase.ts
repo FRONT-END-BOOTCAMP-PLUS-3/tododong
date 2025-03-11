@@ -1,12 +1,12 @@
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
+import { GameRepository } from '@/domain/repositories/GameRepository';
+import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { ScheduledGameDto } from './dto/ScheduledGameDto';
 import GameStatus from '@/types/game-status';
 
 export const readScheduledGameListUsecase = async (
   date: string,
-  gameRepository: DfGameRepository,
-  teamRepository: DfTeamRepository
+  gameRepository: GameRepository,
+  teamRepository: TeamRepository
 ): Promise<ScheduledGameDto[]> => {
   const games = await gameRepository.findByDate(date);
 
