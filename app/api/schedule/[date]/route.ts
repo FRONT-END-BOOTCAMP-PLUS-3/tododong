@@ -1,6 +1,6 @@
 import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
-import { migrateTodayGamesToLocalUsecase } from '@/application/usecases/game/migrateTodayGamesToLocalUsecase';
 import { readScheduledGameListUsecase } from '@/application/usecases/schedule/readScheduledGameListUsecase';
+import { readTodayGameListUsecase } from '@/application/usecases/schedule/readTodayGameListUsecase';
 import { NbaOfficialGameRpository } from '@/infrastructure/repositories/nbaOfficial/NbaOfficialGameRepository';
 import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
 import { PrTeamRepository } from '@/infrastructure/repositories/prisma/PrTeamRepository';
@@ -13,22 +13,22 @@ export const GET = async (
 ) => {
   try {
     const { date } = await params;
-    const nbaOfficialgameRepository = new NbaOfficialGameRpository();
+    const today = dayjs().format('YYYY-MM-DD');
+    const nbaOfficialGameRepository = new NbaOfficialGameRpository();
     const gameRepository = new PrGameRepository();
     const teamRepository = new PrTeamRepository();
 
-    if (date === dayjs().format('YYYY-MM-DD')) {
-      await migrateTodayGamesToLocalUsecase(
-        nbaOfficialgameRepository,
-        gameRepository
-      );
-    }
-
-    const result: ScheduledGameDto[] = await readScheduledGameListUsecase(
-      date,
-      gameRepository,
-      teamRepository
-    );
+    const result: ScheduledGameDto[] =
+      date === today
+        ? await readTodayGameListUsecase(
+            nbaOfficialGameRepository,
+            teamRepository
+          )
+        : await readScheduledGameListUsecase(
+            date,
+            gameRepository,
+            teamRepository
+          );
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

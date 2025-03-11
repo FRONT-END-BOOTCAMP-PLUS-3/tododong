@@ -96,8 +96,8 @@ export class NbaOfficialGameRpository implements NbaGameRepository {
     const response = await fetch(url as string);
     const data: Scoreboard = await response.json();
 
-    const games: Game[] = data.scoreboard.games.map(
-      (game: TodayGameDetail) => ({
+    const games: Game[] = data.scoreboard.games
+      .map((game: TodayGameDetail) => ({
         id: game.gameId,
         season: 0,
         status: game.gameStatus.toString(),
@@ -110,8 +110,15 @@ export class NbaOfficialGameRpository implements NbaGameRepository {
         homeTeamScore: game.homeTeam.score,
         date: '',
         startTime: game.gameTimeUTC,
-      })
-    );
+      }))
+      .sort((a, b) => {
+        const dateA = new Date(a.startTime);
+        const dateB = new Date(b.startTime);
+
+        return (
+          dateA.getTime() - dateB.getTime() || parseInt(a.id) - parseInt(b.id)
+        ); // 시간, id 오름차순 정렬
+      });
 
     return games;
   }
