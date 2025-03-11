@@ -1,0 +1,9 @@
+@use 'utils' as *;
+
+.container {
+  width: 100%;
+  padding: 4px 12px;
+  > span:first-child {
+    margin-right: 8px;
+  }
+}
