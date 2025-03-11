@@ -4,6 +4,7 @@ import styles from './Timeline.module.scss';
 type TimelineProps = {
   type?: string;
   event: EventDto;
+  isFirst?: boolean;
 };
 
 // 경과된 시간 계산하는 함수 (12분 default 기준)
@@ -33,7 +34,7 @@ const formatClockToElapsedTime = (
   return `${formattedMinutes} : ${formattedSeconds}`;
 };
 
-const Timeline = ({ type, event }: TimelineProps) => {
+const Timeline = ({ type, event, isFirst }: TimelineProps) => {
   const isMadeShot = event.shotResult === 'Made';
 
   const points =
@@ -43,7 +44,7 @@ const Timeline = ({ type, event }: TimelineProps) => {
   const score = isMadeShot ? `${event.scoreAway} - ${event.scoreHome}` : '';
 
   return (
-    <tr className={styles.timeline}>
+    <tr className={`${styles.timeline} ${isFirst && styles.fadeIn}`}>
       <td className={`${styles.description} ${styles.away}`}>
         {type === 'away' && (
           <>
