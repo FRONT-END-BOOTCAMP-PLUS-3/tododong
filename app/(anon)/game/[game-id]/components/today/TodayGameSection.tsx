@@ -119,8 +119,8 @@ const dto = [
 ];
 
 const TodayGameSection = () => {
-  const [isLastSlide, setIsLastSlide] = useState(false);
-  const [isFirstSlide, setIsFirstSlide] = useState(true);
+  const [isLastSlide, setIsLastSlide] = useState(() => false);
+  const [isFirstSlide, setIsFirstSlide] = useState(() => true);
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
 
@@ -140,7 +140,9 @@ const TodayGameSection = () => {
       {shouldShowNavigation && (
         <button
           ref={prevRef}
-          className={`${styles.customPrev} ${isFirstSlide ? styles.disabled : ''}`}
+          type="button"
+          className={styles.customPrev}
+          disabled={isFirstSlide}
         >
           <Icon id="left" width={6.55} height={11.15} />
         </button>
@@ -186,7 +188,9 @@ const TodayGameSection = () => {
       {shouldShowNavigation && (
         <button
           ref={nextRef}
-          className={`${styles.customNext} ${isLastSlide ? styles.disabled : ''}`}
+          type="button"
+          className={styles.customNext}
+          disabled={isLastSlide}
         >
           <Icon id="right" width={6.55} height={11.15} />
         </button>
