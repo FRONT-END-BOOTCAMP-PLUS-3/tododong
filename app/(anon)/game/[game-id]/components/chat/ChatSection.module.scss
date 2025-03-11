@@ -38,14 +38,6 @@
 
   @include flexbox($justify: space-between);
 
-  form {
-    padding: 12px 10px;
-
-    border-radius: $border-radius-8;
-    background-color: $color-gray-900;
-    @include flexbox($justify: space-between, $gap: 7px);
-  }
-
   textarea {
     all: unset;
     width: 270px;
@@ -82,8 +74,6 @@
   border-radius: $border-radius-circle;
   background-color: $color-primary;
 
-  cursor: default;
-
   &:hover {
     background-color: $color-primary-hover;
     cursor: pointer;
@@ -92,6 +82,7 @@
 
   &:disabled {
     background-color: $color-gray-600;
+    cursor: not-allowed;
     transform: scale(1);
   }
 

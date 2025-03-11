@@ -137,7 +137,7 @@ const ChatSection = ({
           <Chat key={index} msg={msg} />
         ))}
       </div>
-      <div className={styles.chatInputContainer}>
+      <form className={styles.chatInputContainer}>
         <textarea
           ref={textareaRef}
           value={value}
@@ -158,7 +158,7 @@ const ChatSection = ({
         >
           <Icon id="arrow-up" width={11.15} height={12.6} />
         </button>
-      </div>
+      </form>
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
