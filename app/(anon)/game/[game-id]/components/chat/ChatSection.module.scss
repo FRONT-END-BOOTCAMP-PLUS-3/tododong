@@ -36,6 +36,8 @@
   border-bottom-left-radius: $border-radius-8;
   border-bottom-right-radius: $border-radius-8;
 
+  @include flexbox($justify: space-between);
+
   form {
     padding: 12px 10px;
 
@@ -78,21 +80,19 @@
   padding: 5px;
 
   border-radius: $border-radius-circle;
-  background-color: $color-gray-600;
+  background-color: $color-primary;
 
   cursor: default;
 
-  &.active {
-    background-color: $color-primary;
-    &:hover {
-      background-color: $color-primary-hover;
-      cursor: pointer;
-      transform: scale(0.95);
-    }
+  &:hover {
+    background-color: $color-primary-hover;
+    cursor: pointer;
+    transform: scale(0.95);
   }
 
-  &.inactive {
+  &:disabled {
     background-color: $color-gray-600;
+    transform: scale(1);
   }
 
   @include flexbox($justify: center, $align: center);
