@@ -78,7 +78,7 @@ const PlayByPlay = () => {
 
   return (
     <section className={styles.section}>
-      <h2 className="srOnly">{`${playByPlayData?.game.date} ${playByPlayData?.homeTeam.name} vs ${playByPlayData?.awayTeam.name} 실시간 중계`}</h2>
+      <h2 className="srOnly">{`${playByPlayData.game.date} ${playByPlayData.homeTeam.name} vs ${playByPlayData.awayTeam.name} 실시간 중계`}</h2>
       {/* 쿼터 선택 버튼 */}
       <div className={styles.quarterBtnContainer}>
         {QUARTERS.map((quarter, index) => (
@@ -118,6 +118,7 @@ const PlayByPlay = () => {
                     key={`${item.clock}_${item.edited}_${index}`}
                     type={type}
                     event={item}
+                    isFirst={index === 0}
                   />
                 );
               })
