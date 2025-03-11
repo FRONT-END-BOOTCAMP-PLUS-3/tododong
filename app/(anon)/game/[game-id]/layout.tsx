@@ -48,7 +48,7 @@ const GameLayout = async ({
             {children}
           </div>
         </div>
-        <ChatSection userInfo={userInfo} />
+        <ChatSection userInfo={userInfo} gameId={gameId} />
       </div>
     </>
   );
