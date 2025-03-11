@@ -8,14 +8,6 @@ export const migrateScheduleToLocalUsecase = async (
 ): Promise<void> => {
   const games = await externalRepository.findAll();
 
-  // 경기시간 오름차순 정랼
-  games.sort((a, b) => {
-    const dateA = new Date(a.startTime);
-    const dateB = new Date(b.startTime);
-
-    return dateA.getTime() - dateB.getTime(); // 오름차순 정렬
-  });
-
   const processedGames = games.map((game) => {
     // status 변환
     const gameStatus = convertGameStatus(game.status);
