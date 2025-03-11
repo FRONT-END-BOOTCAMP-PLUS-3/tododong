@@ -13,6 +13,49 @@ export class PrGameRepository implements GameRepository {
     return await this.prisma.game.findMany();
   }
 
+  async findByDate(date: string): Promise<Game[]> {
+    try {
+      const games = await this.prisma.game.findMany({
+        where: { date },
+        orderBy: [
+          {
+            startTime: 'asc',
+          },
+          {
+            id: 'asc',
+          },
+        ],
+      });
+      return games;
+    } catch (error) {
+      console.error(error);
+      throw new Error('게임 데이터 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  async countByDate(): Promise<{ date: string; gameCount: number }[]> {
+    try {
+      const gameCountByDate = await this.prisma.game.groupBy({
+        by: ['date'],
+        _count: {
+          _all: true,
+        },
+      });
+
+      return gameCountByDate.map((game) => ({
+        date: game.date,
+        gameCount: game._count._all,
+      }));
+    } catch (error) {
+      console.error(error);
+      throw new Error('게임 개수 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
   // 저장 또는 업데이트하는 함수
   async saveGames(games: Game[]): Promise<void> {
     try {
@@ -64,6 +107,29 @@ export class PrGameRepository implements GameRepository {
     } catch (error) {
       console.error(error);
       throw new Error('게임 데이터 불러오기 실패');
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  async updateTodayGames(games: Game[]): Promise<void> {
+    try {
+      const updateTodayGames = games.map((game) => {
+        return this.prisma.game.update({
+          where: { id: game.id },
+          data: {
+            status: game.status,
+            awayTeamPeriods: game.awayTeamPeriods,
+            awayTeamScore: game.awayTeamScore,
+            homeTeamPeriods: game.homeTeamPeriods,
+            homeTeamScore: game.homeTeamScore,
+          },
+        });
+      });
+
+      await this.prisma.$transaction(updateTodayGames);
+    } catch (error) {
+      console.error(error);
     } finally {
       await this.prisma.$disconnect();
     }

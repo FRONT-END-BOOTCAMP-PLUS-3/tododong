@@ -1,26 +1,22 @@
 import { GameRepository } from '@/domain/repositories/GameRepository';
 import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
-import { convertGameStatus, convertUTCtoKST } from '@/utils';
+import { convertGameStatus } from '@/utils';
 
-export const migrateScheduleToLocalUsecase = async (
+export const migrateTodayGamesToLocalUsecase = async (
   externalRepository: NbaGameRepository,
   localRepository: GameRepository
 ): Promise<void> => {
-  const games = await externalRepository.findAll();
+  const games = await externalRepository.findTodayGame();
 
+  // status 문자열로 변환
   const processedGames = games.map((game) => {
-    // status 변환
     const gameStatus = convertGameStatus(game.status);
-    // UTC → KST 변환
-    const { dateKST, startTimeKST } = convertUTCtoKST(game.startTime);
 
     return {
       ...game,
       status: gameStatus,
-      startTime: startTimeKST,
-      date: dateKST, // 날짜 필드 추가
     };
   });
 
-  await localRepository.saveGames(processedGames);
+  await localRepository.updateTodayGames(processedGames);
 };

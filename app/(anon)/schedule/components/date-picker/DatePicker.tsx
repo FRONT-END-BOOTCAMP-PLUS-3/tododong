@@ -10,69 +10,29 @@ import 'dayjs/locale/ko';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Swiper as SwiperClass } from 'swiper';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import useDateStore from '@/stores/dateStore';
+import { useEffect, useRef, useState } from 'react';
+import { generateDates } from '@/utils';
 import Icon from '@/components/icon/Icon';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
+import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
 
 dayjs.locale('ko'); // 날짜 포맷 한국어로 지정
 
-const gamesByDate = [
-  { date: '2025-02-05', games: 2 },
-  { date: '2025-02-06', games: 2 },
-  { date: '2025-02-07', games: 2 },
-  { date: '2025-02-08', games: 2 },
-  { date: '2025-02-09', games: 2 },
-  { date: '2025-02-10', games: 2 },
-  { date: '2025-02-11', games: 1 },
-  { date: '2025-02-12', games: 3 },
-  { date: '2025-02-13', games: 1 },
-  { date: '2025-02-14', games: 0 },
-  { date: '2025-02-15', games: 2 },
-  { date: '2025-02-16', games: 1 },
-  { date: '2025-02-17', games: 3 },
-  { date: '2025-02-18', games: 1 },
-  { date: '2025-02-19', games: 0 },
-  { date: '2025-02-20', games: 2 },
-  { date: '2025-02-21', games: 1 },
-  { date: '2025-02-22', games: 3 },
-  { date: '2025-02-23', games: 0 },
-  { date: '2025-02-24', games: 8 },
-];
-
-const generateDates = (date: Date) => {
-  const start = dayjs(date).startOf('month'); // 해당 월의 1일
-  const end = dayjs(date).endOf('month'); // 해당 월의 마지막 날
-  const dates = [];
-
-  for (
-    let d = start;
-    d.isBefore(end) || d.isSame(end, 'day');
-    d = d.add(1, 'day')
-  ) {
-    dates.push(d.toDate());
-  }
-
-  return dates;
+type DatePickerProps = {
+  selectedDate: Date;
+  scheduledGameCounts: ScheduledGameCountDto[];
+  onDateChange: (date: Date) => void;
 };
 
-const DatePicker = () => {
-  const { setDate } = useDateStore();
+const DatePicker = ({
+  selectedDate,
+  scheduledGameCounts,
+  onDateChange,
+}: DatePickerProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
-  const [dates, setDates] = useState<Date[]>(() => generateDates(today));
+  const [dates, setDates] = useState<Date[]>(() => generateDates(selectedDate));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
   useBodyScrollLock(isCalendarOpen);
-
-  const updateDate = useCallback(
-    (date: Date) => {
-      setSelectedDate(date);
-      setDate(date);
-    },
-    [setDate]
-  );
 
   const updateDates = (date: Date) => {
     setDates(generateDates(date));
@@ -85,7 +45,7 @@ const DatePicker = () => {
         ? dayjs(selectedDate).subtract(1, 'month').endOf('month').toDate() // 이전 달은 31일로
         : dayjs(selectedDate).add(1, 'month').startOf('month').toDate(); // 다음 달은 1일로
 
-    updateDate(date);
+    onDateChange(date);
     updateDates(date);
   };
 
@@ -95,7 +55,7 @@ const DatePicker = () => {
       .add(direction === 'prev' ? -1 : 1, 'day')
       .toDate();
 
-    updateDate(date);
+    onDateChange(date);
   };
 
   // 날짜 선택
@@ -105,20 +65,14 @@ const DatePicker = () => {
     const date = Array.isArray(value) ? value[0] : value;
     if (!date) return;
 
-    updateDate(date);
+    onDateChange(date);
     updateDates(date);
-    setIsCalendarOpen(false); // 달력 닫기
+    handleCloseCalendar();
   };
 
-  // 오늘 날짜 선택(오늘 버튼)
-  const handleSelectToday = () => {
-    updateDate(today);
-    updateDates(today);
-    setIsCalendarOpen(false); // 달력 닫기
-  };
-
+  // 달력 닫기
   const handleCloseCalendar = () => {
-    setIsCalendarOpen(false); // 달력 닫기
+    setIsCalendarOpen(false);
   };
 
   useEffect(() => {
@@ -131,7 +85,7 @@ const DatePicker = () => {
   }, [selectedDate, dates]);
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.wrapper}>
         {/* 달 이동 */}
         <div className={styles.monthNavigation}>
@@ -180,10 +134,10 @@ const DatePicker = () => {
               minDetail="year" // 10년 단위 연도 숨기기
               tileContent={({ date, view }) => {
                 const isToday = dayjs(date).isSame(dayjs(), 'day');
-                const gameSchedule = gamesByDate.find((schedule) =>
+                const gameSchedule = scheduledGameCounts?.find((schedule) =>
                   dayjs(schedule.date).isSame(dayjs(date), 'day')
                 );
-                const isDisabled = gameSchedule?.games === 0;
+                const isDisabled = !gameSchedule;
                 return (
                   <>
                     {view === 'month' && isToday && <span>오늘</span>}
@@ -192,7 +146,7 @@ const DatePicker = () => {
                         className={`${styles.gameSchedule} ${isDisabled ? styles.disabled : ''}`}
                       >
                         <span className="srOnly">경기 수</span>
-                        {gameSchedule?.games}
+                        {gameSchedule ? gameSchedule.gameCount : 0}
                       </div>
                     )}
                   </>
@@ -200,15 +154,18 @@ const DatePicker = () => {
               }}
               tileDisabled={({ date, view }) => {
                 if (view === 'month') {
-                  const gameSchedule = gamesByDate.find((schedule) =>
+                  const gameSchedule = scheduledGameCounts?.find((schedule) =>
                     dayjs(schedule.date).isSame(dayjs(date), 'day')
                   );
-                  return gameSchedule?.games === 0; // 경기 수가 0이면 비활성화
+                  return !gameSchedule;
                 }
                 return false;
               }}
             />
-            <button className={styles.todayBtn} onClick={handleSelectToday}>
+            <button
+              className={styles.todayBtn}
+              onClick={() => handleSelectDate(new Date())}
+            >
               오늘
             </button>
             <button className={styles.closeBtn} onClick={handleCloseCalendar}>
@@ -242,7 +199,7 @@ const DatePicker = () => {
           onSlideChange={() => {
             if (!swiperRef.current) return;
             const date = dates[swiperRef.current.activeIndex];
-            updateDate(date);
+            onDateChange(date);
           }}
         >
           {dates.map((date, index) => (
@@ -250,7 +207,7 @@ const DatePicker = () => {
               key={index}
               className={styles.swiperSlide}
               onClick={() => {
-                updateDate(date);
+                onDateChange(date);
               }}
             >
               <div className={styles.day}>{dayjs(date).format('dd')}</div>
@@ -276,7 +233,7 @@ const DatePicker = () => {
           <Icon id="right" width={6.55} height={11.15} />
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
