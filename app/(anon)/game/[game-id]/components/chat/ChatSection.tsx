@@ -1,10 +1,12 @@
 'use client';
+import { setReturnUrl } from '@/app/(anon)/actions/setReturnUrl';
 import { ChatMessageDto } from '@/application/usecases/chat/dto/chatMessageDto';
 import { CreateMessageDto } from '@/application/usecases/chat/dto/createMessageDto';
 import Icon from '@/components/icon/Icon';
 import Modal from '@/components/modal/Modal';
 import { fetcher } from '@/utils';
-import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import io from 'socket.io-client';
 import Chat from './Chat';
 import styles from './ChatSection.module.scss';
@@ -20,6 +22,7 @@ const ChatSection = ({
   userInfo: { id: string; nickname: string };
   gameId: string;
 }) => {
+  const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<ChatMessageDto[]>([]); // initMessage
   const [value, setValue] = useState('');
@@ -115,9 +118,15 @@ const ChatSection = ({
     setValue(''); // 입력창 초기화
   };
 
+  // 로그인 후 돌아올 경로 저장
+  const [, startTransition] = useTransition();
   const handleModalConfirm = () => {
+    startTransition(async () => {
+      await setReturnUrl(pathname); // 현재 경로를 쿠키에 저장
+      window.location.href = '/login'; // 새로고침하면서 로그인 페이지로 이동
+    });
+
     setIsModalOpen(false);
-    location.href = '/login';
   };
 
   return (
