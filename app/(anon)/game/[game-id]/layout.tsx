@@ -35,8 +35,6 @@ const GameLayout = async ({
     if (decoded) userInfo = decoded;
   }
 
-  console.log(userInfo);
-
   return (
     <>
       <TodayGameSection />
