@@ -60,7 +60,6 @@ const Schedule = () => {
       router.push(`?date=${formattedDate}`);
     }
     const fetchData = async () => {
-      if (isInitialLoading) setIsInitialLoading(true);
       await fetchScheduledGames(selectedDate);
       setIsInitialLoading(false);
     };
