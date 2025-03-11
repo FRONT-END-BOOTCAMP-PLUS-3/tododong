@@ -1,7 +1,7 @@
 import { readPlaybyplayUsecase } from '@/application/usecases/game/play-by-play/readPlaybyplayUsecase';
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
-import { NbaOfficialPlaybyPlayRpository } from '@/infrastructure/repositories/NbaOfficialPlaybyplayRepository';
+import { NbaOfficialPlaybyPlayRpository } from '@/infrastructure/repositories/nbaOfficial/NbaOfficialPlaybyplayRepository';
+import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
+import { PrTeamRepository } from '@/infrastructure/repositories/prisma/PrTeamRepository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (
@@ -12,8 +12,8 @@ export const GET = async (
   const gameId = slug['game-id'];
 
   const playbyplayRepository = new NbaOfficialPlaybyPlayRpository();
-  const teamRepository = new DfTeamRepository();
-  const gameRepository = new DfGameRepository();
+  const teamRepository = new PrTeamRepository();
+  const gameRepository = new PrGameRepository();
 
   const result = await readPlaybyplayUsecase(
     gameId,

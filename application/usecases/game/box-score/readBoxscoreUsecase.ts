@@ -1,7 +1,7 @@
 import { StatisticsRepository } from '@/domain/repositories/StatisticsRepository';
-import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { BoxscoreDto } from './dto/boxscoreDto';
 import { Statistics } from '@/domain/entities/Statistics';
+import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { GameRepository } from '@/domain/repositories/GameRepository';
 
 const extractMinAndSecFromText = (str: string) => {

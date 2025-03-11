@@ -2,7 +2,7 @@ import { GameRepository } from '@/domain/repositories/GameRepository';
 import { prisma } from '@/utils/prisma';
 import { Game, PrismaClient } from '@prisma/client';
 
-export class DfGameRepository implements GameRepository {
+export class PrGameRepository implements GameRepository {
   private prisma: PrismaClient;
 
   constructor() {

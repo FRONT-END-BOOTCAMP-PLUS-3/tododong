@@ -1,7 +1,7 @@
 import { readBoxscoreUsecase } from '@/application/usecases/game/box-score/readBoxscoreUsecase';
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
-import { NbaOfficialStatisticsRpository } from '@/infrastructure/repositories/NbaOfficialStatisticsRepository';
+import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
+import { PrTeamRepository } from '@/infrastructure/repositories/prisma/PrTeamRepository';
+import { NbaOfficialStatisticsRpository } from '@/infrastructure/repositories/nbaOfficial/NbaOfficialStatisticsRepository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (
@@ -12,8 +12,8 @@ export const GET = async (
   const gameId = slug['game-id'];
 
   const statisticsRepository = new NbaOfficialStatisticsRpository();
-  const teamRepository = new DfTeamRepository();
-  const gameRepository = new DfGameRepository();
+  const teamRepository = new PrTeamRepository();
+  const gameRepository = new PrGameRepository();
 
   const result = await readBoxscoreUsecase(
     gameId,
