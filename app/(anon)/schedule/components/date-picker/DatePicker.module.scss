@@ -1,8 +1,15 @@
 @use 'utils' as *;
 
+$viewport-max-width: $width-desktop-large;
+
+.container {
+  width: $viewport-max-width;
+  margin-block: 16px 60px;
+}
+
 .wrapper {
   @include flexbox($justify: center, $align: center, $gap: 28px);
-  margin: 16px 0 28px;
+  margin-bottom: 28px;
 }
 
 .monthNavigation {

@@ -7,6 +7,14 @@ export const migrateScheduleToLocalUsecase = async (
 ): Promise<void> => {
   const games = await externalRepository.findAll();
 
+  // 경기시간 오름차순 정랼
+  games.sort((a, b) => {
+    const dateA = new Date(a.startTime);
+    const dateB = new Date(b.startTime);
+
+    return dateA.getTime() - dateB.getTime(); // 오름차순 정렬
+  });
+
   // status 문자열로 변환
   // UTC → 한국 시간 (KST, UTC+9) 변환 후 날짜 필드 추가
   const processedGames = games.map((game) => {
@@ -53,7 +61,8 @@ export const migrateScheduleToLocalUsecase = async (
     const formattedMonth = String(month).padStart(2, '0');
     const formattedDay = String(day).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    const formattedHours =
+      hours % 12 === 0 ? 12 : String(hours % 12).padStart(2, '0');
     const minutes = String(startTimeUTC.getUTCMinutes()).padStart(2, '0');
 
     const dateKST = `${year}-${formattedMonth}-${formattedDay}`; // YYYY-MM-DD 형태

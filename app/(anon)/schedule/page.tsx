@@ -1,101 +1,111 @@
+'use client';
+
 import styles from './page.module.scss';
-import GameStatus from '@/types/game-status';
+import dayjs from 'dayjs';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
-
-// 선택한 날짜 경기 스케줄
-const gameSchedule = [
-  {
-    date: '2024-02-21',
-    gameId: '1',
-    gameStatus: 'scheduled' as GameStatus,
-    startTime: {
-      date: '2025. 02. 21',
-      time: '09:00 AM KST',
-    },
-    teams: {
-      homeTeam: {
-        nickname: 'Pacers',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/fr/thumb/c/cf/Pacers_de_l%27Indiana_logo.svg/1180px-Pacers_de_l%27Indiana_logo.svg.png',
-        score: 0,
-        isWinner: false,
-      },
-      awayTeam: {
-        nickname: 'Grizzlies',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Memphis_Grizzlies.svg/1200px-Memphis_Grizzlies.svg.png',
-        score: 0,
-        isWinner: true,
-      },
-    },
-  },
-  {
-    date: '2024-02-21',
-    gameId: '2',
-    gameStatus: 'live' as GameStatus,
-    startTime: {
-      date: '2025. 02. 21',
-      time: '09:00 AM KST',
-    },
-    teams: {
-      homeTeam: {
-        nickname: '76ers',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/fr/4/48/76ers_2016.png',
-        score: 113,
-        isWinner: false,
-      },
-      awayTeam: {
-        nickname: 'Celtics',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png',
-        score: 127,
-        isWinner: false,
-      },
-    },
-  },
-  {
-    date: '2024-02-21',
-    gameId: '3',
-    gameStatus: 'final' as GameStatus,
-    startTime: {
-      date: '2025. 02. 21',
-      time: '09:00 AM KST',
-    },
-    teams: {
-      homeTeam: {
-        nickname: 'Pacers',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/fr/thumb/c/cf/Pacers_de_l%27Indiana_logo.svg/1180px-Pacers_de_l%27Indiana_logo.svg.png',
-        score: 113,
-        isWinner: false,
-      },
-      awayTeam: {
-        nickname: 'Grizzlies',
-        logoSrc:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Memphis_Grizzlies.svg/1200px-Memphis_Grizzlies.svg.png',
-        score: 127,
-        isWinner: true,
-      },
-    },
-  },
-];
+import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
+import { ScheduledGameCountDto } from '@/application/usecases/schedule/dto/ScheduledGameCountDto';
+import Loader from '@/components/loader/Loader';
 
 const Schedule = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const today = new Date();
+  const initialDate = searchParams.get('date')
+    ? new Date(searchParams.get('date')!)
+    : today;
+  const [selectedDate, setSelectedDate] = useState(initialDate);
+  const [scheduledGames, setScheduledGames] = useState<ScheduledGameDto[]>([]);
+  const [scheduledGameCounts, setScheduledGameCounts] = useState<
+    ScheduledGameCountDto[]
+  >([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchScheduledGameCounts = async () => {
+      try {
+        const response = await fetcher<ScheduledGameCountDto[]>(
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
+        );
+        setScheduledGameCounts([...response]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchScheduledGameCounts();
+  }, []);
+
+  const fetchScheduledGames = useCallback(async (date: Date) => {
+    try {
+      const response = await fetcher<ScheduledGameDto[]>(
+        `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
+      );
+      console.log(response);
+      setScheduledGames(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  // selectedDate 변경 시 데이터 가져오기 및 URL 변경
+  useEffect(() => {
+    if (!selectedDate) return;
+    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+    if (searchParams.get('date') !== formattedDate) {
+      router.push(`?date=${formattedDate}`);
+    }
+    const fetchData = async () => {
+      if (isInitialLoading) setIsInitialLoading(true);
+      await fetchScheduledGames(selectedDate);
+      setIsInitialLoading(false);
+    };
+
+    fetchData();
+  }, [selectedDate, fetchScheduledGames]);
+
+  // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
+  useEffect(() => {
+    const handlePopState = () => {
+      const newDate = new URLSearchParams(window.location.search).get('date');
+      if (newDate) {
+        setSelectedDate(new Date(newDate));
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [fetchScheduledGames]);
+
   return (
     <>
-      <DatePicker />
-      <main className={styles.cardWrapper}>
-        {gameSchedule.map((game) => (
-          <GameCard
-            key={game.gameId}
-            gameId={game.gameId}
-            gameStatus={game.gameStatus}
-            startTime={game.startTime}
-            teams={game.teams}
-          />
-        ))}
+      <DatePicker
+        selectedDate={selectedDate}
+        scheduledGameCounts={scheduledGameCounts}
+        onDateChange={setSelectedDate}
+      />
+      <main>
+        {isInitialLoading ? (
+          <Loader className={styles.loader} />
+        ) : scheduledGames && scheduledGames.length > 0 ? (
+          <div className={styles.cardWrapper}>
+            {scheduledGames.map((game) => (
+              <GameCard
+                key={game.gameId}
+                gameId={game.gameId}
+                gameStatus={game.gameStatus}
+                startTime={game.startTime}
+                teams={game.teams}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.schedulePrompt}>일정이 없습니다.</div>
+        )}
       </main>
     </>
   );
