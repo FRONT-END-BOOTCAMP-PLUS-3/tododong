@@ -4,7 +4,6 @@ import { CreateMessageDto } from '@/application/usecases/chat/dto/createMessageD
 import Icon from '@/components/icon/Icon';
 import Modal from '@/components/modal/Modal';
 import { fetcher } from '@/utils';
-import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import Chat from './Chat';
