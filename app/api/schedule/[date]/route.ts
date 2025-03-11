@@ -1,9 +1,9 @@
 import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
 import { migrateTodayGamesToLocalUsecase } from '@/application/usecases/game/migrateTodayGamesToLocalUsecase';
 import { readScheduledGameListUsecase } from '@/application/usecases/schedule/readScheduledGameListUsecase';
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
-import { DfTeamRepository } from '@/infrastructure/repositories/DfTeamRepository';
-import { NbaOfficialGameRpository } from '@/infrastructure/repositories/NbaOfficialGameRepository';
+import { NbaOfficialGameRpository } from '@/infrastructure/repositories/nbaOfficial/NbaOfficialGameRepository';
+import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
+import { PrTeamRepository } from '@/infrastructure/repositories/prisma/PrTeamRepository';
 import dayjs from 'dayjs';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -14,8 +14,8 @@ export const GET = async (
   try {
     const { date } = await params;
     const nbaOfficialgameRepository = new NbaOfficialGameRpository();
-    const gameRepository = new DfGameRepository();
-    const teamRepository = new DfTeamRepository();
+    const gameRepository = new PrGameRepository();
+    const teamRepository = new PrTeamRepository();
 
     if (date === dayjs().format('YYYY-MM-DD')) {
       await migrateTodayGamesToLocalUsecase(

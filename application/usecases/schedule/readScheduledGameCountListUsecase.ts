@@ -1,8 +1,8 @@
-import { DfGameRepository } from '@/infrastructure/repositories/DfGameRepository';
+import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
 import { ScheduledGameCountDto } from './dto/ScheduledGameCountDto';
 
 export const readScheduledGameCountListUsecase = async (
-  gameRepository: DfGameRepository
+  gameRepository: NbaGameRepository
 ): Promise<ScheduledGameCountDto[]> => {
   const games = await gameRepository.findAll();
 
