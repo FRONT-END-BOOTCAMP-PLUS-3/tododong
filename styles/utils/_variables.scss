@@ -1,5 +1,3 @@
-$base-font-family: pretendard;
-
 $width-desktop: 1080px;
 $width-desktop-large: 1280px;
 
@@ -24,3 +22,25 @@ $color-black: rgba(0, 0, 0, 1);
 $color-red: rgba(250, 47, 47, 1);
 $color-end: rgba(21, 58, 123, 1);
 $color-live: rgba(204, 20, 45, 1);
+
+// font-size
+$text-12: 0.75rem;
+$text-13: 0.8125rem;
+$text-14: 0.875rem;
+$text-16: 1rem;
+$text-18: 1.125rem;
+$text-20: 1.25rem;
+$text-24: 1.5rem;
+$text-28: 1.75rem;
+$text-30: 1.875rem;
+$text-32: 2rem;
+$text-36: 2.25rem;
+
+// border-radius
+
+$border-radius-4: 0.25rem;
+$border-radius-8: 0.5rem;
+$border-radius-12: 0.75rem;
+$border-radius-16: 1rem;
+$border-radius-20: 1.25rem;
+$border-radius-circle: 9999px;

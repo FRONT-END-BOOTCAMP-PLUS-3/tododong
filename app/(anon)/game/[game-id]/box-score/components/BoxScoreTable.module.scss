@@ -1,0 +1,61 @@
+@use 'utils' as *;
+
+.teamTitle {
+  @include flexbox($align: center, $gap: 8);
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.table {
+  @include flexbox();
+  font-size: $text-13;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tableHeader {
+  th {
+    padding: 10px 6px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  tr {
+    border-bottom: 2px solid $color-border;
+    color: $color-gray-300;
+    font-size: $text-12;
+    white-space: pre;
+
+    :nth-child(1) {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      min-width: 130px;
+      text-align: start;
+    }
+  }
+}
+
+.tableBody {
+  td {
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  tr {
+    border-bottom: 1px solid $color-border;
+
+    :nth-child(1) {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      text-align: start;
+    }
+  }
+}
+
+.isSelected {
+  color: $color-primary;
+}

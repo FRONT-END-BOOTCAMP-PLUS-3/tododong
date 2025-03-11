@@ -1,0 +1,82 @@
+@use 'utils' as *;
+
+.react-calendar {
+  padding: 16px;
+  width: 400px;
+  border: 1px solid $color-gray-400;
+  border-radius: $border-radius-12;
+  background-color: $color-gray-800;
+  box-shadow: 4px 2px 10px 0px rgba(0, 0, 0, 0.13);
+}
+
+/* 상단 navigation */
+.react-calendar__navigation {
+  justify-content: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $color-gray-100;
+}
+
+.react-calendar__navigation button {
+  font-size: $text-20;
+  font-weight: 800;
+
+  &:disabled,
+  &:enabled:hover,
+  &:enabled:focus {
+    background: none;
+  }
+}
+
+.react-calendar__navigation__label {
+  flex-grow: 0 !important; // 상단 네비게이션 '연.월' 크기 줄이기
+}
+
+.react-calendar__navigation__arrow {
+  padding-bottom: 4px;
+}
+
+/* 월 */
+.react-calendar__year-view__months__month {
+  font-size: $text-16;
+}
+.react-calendar__year-view .react-calendar__tile {
+  padding: 20px;
+}
+
+/* 요일 */
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-size: $text-14;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend abbr[title='일요일'] {
+  color: #fa2f2f;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend abbr[title='토요일'] {
+  color: #2f6cfa;
+}
+
+/* 일 */
+.react-calendar__tile {
+  padding: 12px;
+  font-size: $text-16;
+  color: $color-white;
+}
+
+.react-calendar__tile--now,
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:disabled {
+  background: none;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile:enabled:focus {
+  border-radius: $border-radius-8;
+  background-color: $color-gray-700;
+  color: $color-primary;
+}
+
+.react-calendar__tile:disabled {
+  color: $color-gray-600;
+}

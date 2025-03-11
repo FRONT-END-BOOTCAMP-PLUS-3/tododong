@@ -1,0 +1,26 @@
+@use 'utils' as *;
+
+.page {
+  @include flexbox(
+    $direction: column,
+    $justify: center,
+    $align: center,
+    $gap: 1.25rem
+  );
+  margin: 0 auto;
+  max-width: 400px;
+  padding-top: 100px;
+
+  .logo {
+    margin-bottom: 1.5rem;
+    > img {
+      width: 8.75rem;
+      height: 5.5625rem;
+    }
+  }
+
+  .loginLink {
+    margin-left: 0.5rem;
+    color: $color-white;
+  }
+}

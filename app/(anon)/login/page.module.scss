@@ -1,0 +1,42 @@
+@use 'utils' as *;
+
+.page {
+  @include flexbox(
+    $direction: column,
+    $justify: center,
+    $align: center,
+    $gap: 1.25rem
+  );
+  margin: 0 auto;
+  max-width: 400px;
+  padding-top: 100px;
+
+  .homeLink {
+    margin-bottom: 1.5rem;
+    > img {
+      width: 8.75rem;
+      height: 5.5625rem;
+    }
+  }
+
+  .linksWrapper {
+    @include flexbox($gap: 1.5rem);
+
+    > a {
+      color: $color-white;
+      text-decoration: none;
+      font-size: $text-14;
+    }
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+  }
+
+  .signupLink {
+    margin-left: 0.5rem;
+    color: $color-white;
+  }
+}

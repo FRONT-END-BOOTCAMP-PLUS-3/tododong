@@ -1,0 +1,36 @@
+@use 'utils' as *;
+
+.header {
+  position: fixed;
+  width: 100%;
+  max-width: $width-desktop-large;
+  padding-block: 0.25rem;
+  background-color: $color-bg;
+  z-index: 9998;
+  @include flexbox($justify: space-between, $align: center);
+
+  > a {
+    > img {
+      width: 4.75rem;
+      height: 3.75rem;
+    }
+  }
+
+  .loginBtn {
+    background-color: $color-primary;
+    padding: 0.5rem 1rem;
+    border-radius: $border-radius-4;
+    color: $color-white;
+    font-size: $text-14;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+  }
+}
+
+.spacer {
+  padding-top: 4.5rem;
+}

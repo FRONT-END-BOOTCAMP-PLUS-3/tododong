@@ -1,0 +1,19 @@
+@use 'utils' as *;
+@use 'swiper/css';
+@use 'swiper/css/navigation';
+
+.swiper {
+  width: 974px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.limited-swiper {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.swiper-slide {
+  width: 182px !important;
+  flex-shrink: 0;
+}

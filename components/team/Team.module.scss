@@ -1,0 +1,13 @@
+@use 'utils' as *;
+
+.team {
+  img {
+    display: block;
+    margin: 0 auto 8px;
+  }
+
+  p {
+    text-align: center;
+    font-size: $text-18;
+  }
+}
