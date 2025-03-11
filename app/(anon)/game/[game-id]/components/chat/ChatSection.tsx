@@ -16,20 +16,14 @@ let socket: ReturnType<typeof io>;
 // 토큰이 없거나 만료되면 undefind/null ->
 const ChatSection = ({
   userInfo,
+  gameId,
 }: {
   userInfo: { id: string; nickname: string };
+  gameId: string;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<ChatMessageDto[]>([]); // initMessage
   const [value, setValue] = useState('');
-  // const [isConnected, setIsConnected] = useState(false);
-  // const [transport, setTransport] = useState('N/A');
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // gameId 가져오기
-  const params = useParams();
-  const gameId = params['game-id'];
 
   // 초기 메시지 API로 불러오기
   useEffect(() => {
@@ -39,8 +33,7 @@ const ChatSection = ({
       try {
         const response = await fetcher<ChatMessageDto[]>(
           `/api/game/${gameId}/chat`,
-          {},
-          setIsLoading
+          {}
         );
         setMessages(response);
       } catch (error) {
@@ -82,7 +75,12 @@ const ChatSection = ({
   // 메시지 전송 함수
   const sendMessage = async () => {
     if (value.trim() === '') return;
-    if (!gameId || Array.isArray(gameId)) return;
+    if (!gameId) return;
+
+    if (userInfo.id === '' || userInfo.nickname === '') {
+      setIsModalOpen(true);
+      return;
+    }
 
     // 보낼 메시지 객체
     const newMsg: CreateMessageDto = {
@@ -118,12 +116,6 @@ const ChatSection = ({
     setValue(''); // 입력창 초기화
   };
 
-  const handleTextAreaClick = () => {
-    if (userInfo.id === '' || userInfo.nickname === '') {
-      setIsModalOpen(true);
-    }
-  };
-
   const handleModalConfirm = () => {
     setIsModalOpen(false);
     location.href = '/login';
@@ -141,8 +133,6 @@ const ChatSection = ({
         <textarea
           ref={textareaRef}
           value={value}
-          onClick={handleTextAreaClick}
-          readOnly={!userInfo}
           onChange={(e) => setValue(e.target.value)}
           placeholder="채팅을 입력하세요."
           onKeyDown={(e) => {
