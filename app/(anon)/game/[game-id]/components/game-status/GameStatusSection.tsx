@@ -49,11 +49,11 @@ const GameStatusSection = () => {
           <table className={styles.matchTable}>
             <thead>
               <tr>
-                <th>팀</th>
-                <th>1Q</th>
-                <th>2Q</th>
-                <th>3Q</th>
-                <th>4Q</th>
+                <th scope="col">팀</th>
+                <th scope="col">1Q</th>
+                <th scope="col">2Q</th>
+                <th scope="col">3Q</th>
+                <th scope="col">4Q</th>
               </tr>
             </thead>
             <tbody>
