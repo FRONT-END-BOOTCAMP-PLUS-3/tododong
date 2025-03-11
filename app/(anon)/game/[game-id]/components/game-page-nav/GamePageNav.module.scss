@@ -13,12 +13,12 @@
   padding: 8px 4px;
 
   font-size: $text-18;
-}
-
-.active {
-  border-bottom: 2px solid $color-white;
 
   &:focus-visible {
     outline: auto;
   }
+}
+
+.active {
+  border-bottom: 2px solid $color-white;
 }
