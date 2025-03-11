@@ -65,7 +65,7 @@ const Schedule = () => {
     };
 
     fetchData();
-  }, [selectedDate, fetchScheduledGames]);
+  }, [selectedDate, fetchScheduledGames, router, searchParams]);
 
   // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
   useEffect(() => {
