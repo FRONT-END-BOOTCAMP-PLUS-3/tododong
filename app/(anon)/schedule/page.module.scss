@@ -1,9 +1,24 @@
 @use 'utils' as *;
 
+$viewport-max-width: $width-desktop-large;
+
 .cardWrapper {
-  margin-block: 60px 80px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   width: 100%;
+  min-height: calc(100vh - 180px);
+  place-content: start;
+}
+
+.loader {
+  width: $viewport-max-width;
+  height: calc(100vh - 180px);
+}
+
+.schedulePrompt {
+  @include flexbox($justify: center, $align: center);
+  width: $viewport-max-width;
+  height: calc(100vh - 180px);
+  font-size: $text-20;
 }
