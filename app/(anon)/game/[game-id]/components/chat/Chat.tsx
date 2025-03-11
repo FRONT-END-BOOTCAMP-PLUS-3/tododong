@@ -1,11 +1,11 @@
 import styles from './Chat.module.scss';
 
-interface ChatProps {
+type ChatProps = {
   msg: {
     userNickname: string;
     message: string;
   };
-}
+};
 
 const getUserColor = (userNickname: string) => {
   const colors = ['#f3ce12', '#1ABC9C', '#E74C3C', '#8E44AD', '#3498DB']; // 다크 모드 최적화 색상
