@@ -26,7 +26,7 @@ export interface PlaybyplayDto {
     gameId: string;
     date: string;
     status: string;
-    events: EventDto[][];
+    events: EventDto[][] | [];
   };
   homeTeam: TeamDto;
   awayTeam: TeamDto;

@@ -70,6 +70,39 @@ export const readPlaybyplayUsecase = async (
   playbyplayRepository: PlaybyplayRepository
 ): Promise<PlaybyplayDto> => {
   try {
+    const game = await gameRepository.findById(gameId);
+    if (!game) {
+      throw new Error(`게임(${gameId}) 정보가 없습니다.`);
+    }
+
+    const currentTime = new Date();
+    const gameStartTime = new Date(game.startTime);
+    const threeHoursLater = new Date(
+      gameStartTime.getTime() + 3 * 60 * 60 * 1000
+    );
+
+    if (currentTime >= threeHoursLater) {
+      game.status = 'final';
+    } else if (currentTime >= gameStartTime) {
+      game.status = 'live';
+    }
+
+    const homeTeam = await teamRepository.findById(game.homeTeamId);
+    if (!homeTeam) {
+      throw new Error(`홈팀(${game.homeTeamId}) 정보가 없습니다.`);
+    }
+    const awayTeam = await teamRepository.findById(game.awayTeamId);
+    if (!awayTeam) {
+      throw new Error(`어웨이팀(${game.awayTeamId}) 정보가 없습니다.`);
+    }
+
+    if (game.status === 'scheduled')
+      return {
+        game: { gameId, date: game.date, status: game.status, events: [] },
+        homeTeam,
+        awayTeam,
+      };
+
     const playbyplay = await playbyplayRepository.findById(gameId);
     const events: EventDto[][] = new Array(4).fill(null).map(() => []);
 
@@ -90,20 +123,6 @@ export const readPlaybyplayUsecase = async (
 
       events[index].push({ ...item, descriptionKor });
     });
-
-    const game = await gameRepository.findById!(gameId);
-    if (!game) {
-      throw new Error(`게임(${gameId}) 정보가 없습니다.`);
-    }
-
-    const homeTeam = await teamRepository.findById(game.homeTeamId);
-    if (!homeTeam) {
-      throw new Error(`홈팀(${game.homeTeamId}) 정보가 없습니다.`);
-    }
-    const awayTeam = await teamRepository.findById(game.awayTeamId);
-    if (!awayTeam) {
-      throw new Error(`어웨이팀(${game.awayTeamId}) 정보가 없습니다.`);
-    }
 
     return {
       game: { gameId, date: game.date, status: game.status, events },
