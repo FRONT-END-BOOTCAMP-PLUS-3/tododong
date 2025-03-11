@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DfMessageRepository } from '@/infrastructure/repositories/DfMessageRepository';
+import { PrMessageRepository } from '@/infrastructure/repositories/prisma/PrMessageRepository';
 import { getChatMessagesUseCase } from '@/application/usecases/chat/getChatMessagesUseCase';
 import { createMessageUsecase } from '@/application/usecases/chat/createChatMessageUsecase';
 import { cookies } from 'next/headers';
@@ -18,7 +18,7 @@ export const GET = async (
   const slug = await params;
   const gameId = slug['game-id'];
 
-  const repository = new DfMessageRepository();
+  const repository = new PrMessageRepository();
 
   if (!gameId) {
     return NextResponse.json({ error: 'Invalid gameId' }, { status: 400 });
@@ -57,7 +57,7 @@ export const POST = async (
       });
   }
 
-  const repository = new DfMessageRepository();
+  const repository = new PrMessageRepository();
   if (!gameId) {
     return NextResponse.json({ error: 'Invalid gameId' }, { status: 400 });
   }

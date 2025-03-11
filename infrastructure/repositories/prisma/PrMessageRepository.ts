@@ -5,7 +5,7 @@ import {
 } from '@/domain/repositories/MessageRepository';
 import { prisma } from '@/utils/prisma';
 
-export class DfMessageRepository implements MessageRepository {
+export class PrMessageRepository implements MessageRepository {
   private prisma: PrismaClient;
 
   constructor() {
