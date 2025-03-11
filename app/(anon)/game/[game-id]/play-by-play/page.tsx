@@ -5,13 +5,24 @@ import { fetcher } from '@/utils';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Timeline from './components/Timeline';
-import { PlayByPlayDto } from './mockDataDto';
+import {
+  EventDto,
+  PlaybyplayDto,
+} from '@/application/usecases/game/play-by-play/dto/PlaybyplayDto';
 
 const QUARTERS = ['1Q', '2Q', '3Q', '4Q'];
 
+const findCurrentQuarter = (data: Array<EventDto[]>) => {
+  let currentQuarter = 1;
+  data.forEach((item, index) =>
+    item[0] ? (currentQuarter = index + 1) : null
+  );
+  return currentQuarter;
+};
+
 const PlayByPlay = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [playByPlayData, setPlayByPlayData] = useState<PlayByPlayDto | null>(
+  const [isLoading, setIsLoading] = useState<boolean>(() => true);
+  const [playByPlayData, setPlayByPlayData] = useState<PlaybyplayDto | null>(
     null
   );
   const [currentQuarter, setcurrentQuarter] = useState<number>(0);
@@ -30,25 +41,30 @@ const PlayByPlay = () => {
 
     const fetchPlayByPlayData = async () => {
       try {
-        setIsLoading(true);
-        const response = await fetcher<PlayByPlayDto>(
-          `/api/game/${gameId}/play-by-play`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-          setIsLoading
+        const response = await fetcher<PlaybyplayDto>(
+          `/api/game/${gameId}/play-by-play`
         );
         setPlayByPlayData(response);
-        setcurrentQuarter(response.quarters.length);
+        setcurrentQuarter(findCurrentQuarter(response.game.events));
+
+        if (response.game.status !== 'live') {
+          clearInterval(intervalFetch);
+        }
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchPlayByPlayData();
+    setIsLoading(false);
+
+    const intervalFetch = setInterval(() => {
+      fetchPlayByPlayData();
+    }, 10000);
+
+    // 언마운트될 때 정리
+    return () => {
+      clearInterval(intervalFetch);
+    };
   }, [gameId]);
 
   if (isLoading) return <div>로딩 중...</div>;
@@ -56,13 +72,13 @@ const PlayByPlay = () => {
     return <p className={styles.statusInfo}>경기 시작 후 업데이트 됩니다.</p>;
   }
 
-  const currentQuarterData = playByPlayData.quarters[currentQuarter - 1];
-
-  console.log(currentQuarterData);
+  const currentQuarterData = [
+    ...playByPlayData.game.events[currentQuarter - 1],
+  ].reverse();
 
   return (
     <section className={styles.section}>
-      <h2 className="srOnly">{`${playByPlayData?.game.date} ${playByPlayData?.home.name} vs ${playByPlayData?.away.name} 실시간 중계`}</h2>
+      <h2 className="srOnly">{`${playByPlayData.game.date} ${playByPlayData.homeTeam.name} vs ${playByPlayData.awayTeam.name} 실시간 중계`}</h2>
       {/* 쿼터 선택 버튼 */}
       <div className={styles.quarterBtnContainer}>
         {QUARTERS.map((quarter, index) => (
@@ -80,31 +96,32 @@ const PlayByPlay = () => {
         <thead>
           <tr>
             <th scope="col" className={styles.tableHeaderTeam}>
-              <span className="srOnly">{playByPlayData.away.name}</span>
+              <span className="srOnly">{playByPlayData.awayTeam.name}</span>
             </th>
             <th scope="col" className={styles.tableHeaderTimeAndScore}>
               <span className="srOnly">시간 및 점수</span>
             </th>
             <th scope="col" className={styles.tableHeaderTeam}>
-              <span className="srOnly">{playByPlayData.home.name}</span>
+              <span className="srOnly">{playByPlayData.homeTeam.name}</span>
             </th>
           </tr>
         </thead>
         <tbody>
           {currentQuarterData
-            ? currentQuarterData.events
-                .sort(
-                  (a, b) =>
-                    new Date(b.created).getTime() -
-                    new Date(a.created).getTime()
-                )
-                .map((event) => {
-                  const type =
-                    event.statistics?.[0]?.team.id === playByPlayData.home.id
-                      ? 'home'
-                      : 'away';
-                  return <Timeline key={event.id} type={type} event={event} />;
-                })
+            ? currentQuarterData.map((item, index) => {
+                const type =
+                  item.teamId?.toString() === playByPlayData.homeTeam.id
+                    ? 'home'
+                    : 'away';
+                return (
+                  <Timeline
+                    key={`${item.clock}_${item.edited}_${index}`}
+                    type={type}
+                    event={item}
+                    isFirst={index === 0}
+                  />
+                );
+              })
             : null}
         </tbody>
       </table>

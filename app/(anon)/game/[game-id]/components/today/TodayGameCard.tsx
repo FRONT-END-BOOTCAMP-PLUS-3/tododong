@@ -30,8 +30,10 @@ const TodayGameCard = ({ data }) => {
               src={data.away.logo}
               alt={data.away.nickname}
             />
+            <span className="srOnly">팀 이름:</span>
             <span>{data.away.nickname}</span>
           </div>
+          <span className="srOnly">점수:</span>
           <span>{data.away.points}</span>
         </div>
         <div className={styles.teamStatus}>
@@ -42,8 +44,10 @@ const TodayGameCard = ({ data }) => {
               src={data.home.logo}
               alt={data.home.nickname}
             />
+            <span className="srOnly">팀 이름:</span>
             <span>{data.home.nickname}</span>
           </div>
+          <span className="srOnly">점수:</span>
           <span>{data.home.points}</span>
         </div>
       </Link>

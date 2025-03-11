@@ -1,3 +1,6 @@
+import { getYoutubeVideosUsecase } from '@/application/usecases/game/videos/getYoutubeVideosUsecase';
+import { PrGameRepository } from '@/infrastructure/repositories/prisma/PrGameRepository';
+import { PrTeamRepository } from '@/infrastructure/repositories/prisma/PrTeamRepository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (
@@ -7,16 +10,13 @@ export const GET = async (
   const slug = await params;
   const gameId = slug['game-id'];
 
-  const result = {
-    game: { id: gameId, status: 'final', date: '2025-02-21' },
-    home: {
-      name: 'Indiana Pacers',
-    },
-    away: { name: 'Memphis Grizzlies' },
-  };
+  const gameRepository = new PrGameRepository();
+  const teamRepository = new PrTeamRepository();
+  const videos = await getYoutubeVideosUsecase(
+    gameId,
+    gameRepository,
+    teamRepository
+  );
 
-  //   await new Promise((resolve) => setTimeout(resolve, 1000));
-  //   return NextResponse.json({ error: '로그인 실패' }, { status: 400 });
-
-  return NextResponse.json(result, { status: 200 });
+  return NextResponse.json(videos, { status: 200 });
 };

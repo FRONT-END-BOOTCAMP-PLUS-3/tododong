@@ -1,9 +1,10 @@
-import { EventDto } from '../mockDataDto';
+import { EventDto } from '@/application/usecases/game/play-by-play/dto/PlaybyplayDto';
 import styles from './Timeline.module.scss';
 
 type TimelineProps = {
   type?: string;
   event: EventDto;
+  isFirst?: boolean;
 };
 
 // 경과된 시간 계산하는 함수 (12분 default 기준)
@@ -11,8 +12,14 @@ const formatClockToElapsedTime = (
   clock: string,
   timePerQuater: string = '12:00'
 ) => {
+  const match = clock.match(/PT(\d+)M(\d+\.\d+)S/);
+  if (!match) {
+    throw new Error('Invalid duration format');
+  }
+
+  const currentMinute = parseInt(match[1], 10);
+  const currentSecond = parseInt(match[2]);
   const [minutes, seconds] = timePerQuater.split(':').map(Number);
-  const [currentMinute, currentSecond] = clock.split(':').map(Number);
 
   const totalSeconds = minutes * 60 + seconds;
   const currentSeconds = currentMinute * 60 + currentSecond;
@@ -27,35 +34,22 @@ const formatClockToElapsedTime = (
   return `${formattedMinutes} : ${formattedSeconds}`;
 };
 
-// 괄호 기준으로 문자열을 분리하는 함수
-const formatDescription = (text: string) => {
-  return text
-    .split(/(\(.*?\))/)
-    .map((item, index) => <span key={index}>{item}</span>);
-};
+const Timeline = ({ type, event, isFirst }: TimelineProps) => {
+  const isMadeShot = event.shotResult === 'Made';
 
-const Timeline = ({ type, event }: TimelineProps) => {
-  const isMadeShot = event.statistics?.find(
-    (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
-  )?.made;
-  const points = isMadeShot
-    ? `${
-        event.statistics?.length
-          ? event.statistics.find(
-              (item) => item.type === 'fieldgoal' || item.type === 'freethrow'
-            )?.points
-          : 0
-      } POINT`
-    : '';
-  const score = isMadeShot ? `${event.away_points} - ${event.home_points}` : '';
+  const points =
+    isMadeShot && event.actionType === 'freethrow'
+      ? '1 POINT'
+      : `${parseInt(event.actionType)} POINT`;
+  const score = isMadeShot ? `${event.scoreAway} - ${event.scoreHome}` : '';
 
   return (
-    <tr className={styles.timeline}>
+    <tr className={`${styles.timeline} ${isFirst && styles.fadeIn}`}>
       <td className={`${styles.description} ${styles.away}`}>
         {type === 'away' && (
           <>
             {isMadeShot && <span className={styles.point}>{points}</span>}
-            {formatDescription(event.description)}
+            {event.descriptionKor}
           </>
         )}
       </td>
@@ -71,7 +65,7 @@ const Timeline = ({ type, event }: TimelineProps) => {
         {type === 'home' && (
           <>
             {isMadeShot && <span className={styles.point}>{points}</span>}
-            {formatDescription(event.description)}
+            {event.descriptionKor}
           </>
         )}
       </td>
