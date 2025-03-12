@@ -68,13 +68,8 @@ export const readBoxscoreUsecase = async (
       game.status = 'live';
     }
 
-    const statistics = await statisticsRepository.findById(gameId);
-    if (!statistics || statistics.length === 0) {
-      throw new Error('게임 통계 정보를 찾을 수 없습니다.');
-    }
-
-    const homeTeamId = statistics[0].teamId;
-    const awayTeamId = statistics[statistics.length - 1].teamId;
+    const homeTeamId = game.homeTeamId;
+    const awayTeamId = game.awayTeamId;
 
     const homeTeam = await teamRepository.findById(homeTeamId);
     if (!homeTeam) {
@@ -84,6 +79,33 @@ export const readBoxscoreUsecase = async (
     const awayTeam = await teamRepository.findById(awayTeamId);
     if (!awayTeam) {
       throw new Error(`어웨이팀(${awayTeamId}) 정보가 없습니다.`);
+    }
+
+    if (game.status === 'scheduled')
+      return {
+        game: {
+          id: game.id,
+          status: game.status,
+        },
+        homeTeam: {
+          id: homeTeam.id,
+          name: homeTeam.name,
+          city: homeTeam.city,
+          logo: homeTeam.logo,
+          players: [],
+        },
+        awayTeam: {
+          id: awayTeam.id,
+          name: awayTeam.name,
+          city: awayTeam.city,
+          logo: awayTeam.logo,
+          players: [],
+        },
+      };
+
+    const statistics = await statisticsRepository.findById(gameId);
+    if (!statistics || statistics.length === 0) {
+      throw new Error('게임 통계 정보를 찾을 수 없습니다.');
     }
 
     const homePlayers = statistics

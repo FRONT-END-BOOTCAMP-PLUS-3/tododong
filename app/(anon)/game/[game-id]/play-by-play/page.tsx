@@ -9,6 +9,7 @@ import {
   EventDto,
   PlaybyplayDto,
 } from '@/application/usecases/game/play-by-play/dto/PlaybyplayDto';
+import Loader from '@/components/loader/Loader';
 
 const QUARTERS = ['1Q', '2Q', '3Q', '4Q'];
 
@@ -67,8 +68,8 @@ const PlayByPlay = () => {
     };
   }, [gameId]);
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (!playByPlayData || playByPlayData.game.status === 'scheduled') {
+  if (isLoading || !playByPlayData) return <Loader />;
+  if (playByPlayData.game.status === 'scheduled') {
     return <p className={styles.statusInfo}>경기 시작 후 업데이트 됩니다.</p>;
   }
 
