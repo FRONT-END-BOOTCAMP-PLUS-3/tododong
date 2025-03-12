@@ -45,7 +45,6 @@ const Schedule = () => {
       const response = await fetcher<ScheduledGameDto[]>(
         `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
       );
-      console.log(response);
       setScheduledGames(response);
     } catch (error) {
       console.error(error);
