@@ -109,6 +109,8 @@ const PlayByPlay = () => {
         <tbody>
           {currentQuarterData
             ? currentQuarterData.map((item, index) => {
+                const isPlayingActionType =
+                  item.actionType !== 'game' && item.actionType !== 'period';
                 const type =
                   item.teamId?.toString() === playByPlayData.homeTeam.id
                     ? 'home'
@@ -118,7 +120,7 @@ const PlayByPlay = () => {
                     key={`${item.clock}_${item.edited}_${index}`}
                     type={type}
                     event={item}
-                    isFirst={index === 0}
+                    isFirst={index === 0 && isPlayingActionType}
                   />
                 );
               })
