@@ -151,26 +151,28 @@ const ChatSection = ({
             sendMessage();
           }}
         >
-          <textarea
-            ref={textareaRef}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="채팅을 입력하세요."
-            disabled={gameState === 'scheduled'}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-          />
-          <button
-            className={styles.iconArrowUp}
-            disabled={!value || gameState === 'scheduled'}
-            aria-label="메세지 보내기"
-          >
-            <Icon id="arrow-up" width={11.15} height={12.6} />
-          </button>
+          <div>
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="채팅을 입력하세요."
+              disabled={gameState === 'scheduled'}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+            />
+            <button
+              className={styles.iconArrowUp}
+              disabled={!value || gameState === 'scheduled'}
+              aria-label="메세지 보내기"
+            >
+              <Icon id="arrow-up" width={11.15} height={12.6} />
+            </button>
+          </div>
         </form>
       </section>
       <Modal
