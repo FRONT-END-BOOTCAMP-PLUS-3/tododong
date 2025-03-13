@@ -2,6 +2,13 @@
 
 .container {
   width: 364px;
+  height: auto;
+  position: relative;
+}
+.sticky {
+  width: 364px;
+  position: sticky;
+  top: 72px;
 }
 
 .chatTitle {
@@ -28,6 +35,11 @@
   @include flexbox($direction: column-reverse);
 }
 
+.scheduleNotice {
+  height: 100%;
+  @include flexbox($align: center, $justify: center);
+}
+
 .chatInputContainer {
   padding: 16px 12px;
 
@@ -37,15 +49,24 @@
 
   @include flexbox($justify: space-between);
 
+  form {
+    padding: 12px 10px;
+
+    background-color: $color-gray-900;
+    border-radius: $border-radius-8;
+
+    @include flexbox($justify: space-between, $gap: 7px);
+  }
+
   textarea {
     all: unset;
     width: 270px;
     max-height: 72px; /* 최대 3줄 높이 */
+
     font-size: $text-14;
     font-family: 'Pretendard';
     color: $color-white;
     resize: none;
-    background: transparent;
     overflow-y: auto;
     line-height: 24px;
 
@@ -61,6 +82,10 @@
     &::-webkit-scrollbar-thumb {
       background-color: rgba(190, 190, 190, 0.2);
       border-radius: 5px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
     }
   }
 }
