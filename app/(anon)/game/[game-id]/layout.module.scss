@@ -2,6 +2,9 @@
 
 .container {
   @include flexbox($justify: space-between, $gap: 16px);
+}
+.mainInfo {
+  @include flexbox($direction: column, $gap: 16px);
 
   > div {
     width: 900px;

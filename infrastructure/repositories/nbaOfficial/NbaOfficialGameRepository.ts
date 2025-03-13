@@ -52,6 +52,27 @@ interface Scoreboard {
   };
 }
 
+interface GameDetails {
+  gameId: string;
+  gameTimeUTC: string;
+  gameStatus: number;
+  arena: { arenaName: string };
+  homeTeam: {
+    teamId: number;
+    score: number;
+    periods: { period: number; score: number }[];
+  };
+  awayTeam: {
+    teamId: number;
+    score: number;
+    periods: { period: number; score: number }[];
+  };
+}
+
+interface GameInfo {
+  game: GameDetails;
+}
+
 export class NbaOfficialGameRpository implements NbaGameRepository {
   async findAll(): Promise<Game[]> {
     const url = process.env.NEXT_PUBLIC_NBA_SEASON_SCHEDULE_URL;
@@ -121,5 +142,32 @@ export class NbaOfficialGameRpository implements NbaGameRepository {
       });
 
     return games;
+  }
+  async findGameDetailById(gameId: string): Promise<Game> {
+    const url = `${process.env.NEXT_PUBLIC_NBA_BOXSCORE_URL}_${gameId}.json`;
+    try {
+      const response = await fetch(url);
+      const data: GameInfo = await response.json();
+
+      const gameDetail: Game = {
+        id: data.game.gameId,
+        season: 0,
+        status: data.game.gameStatus.toString(),
+        arenaName: data.game.arena.arenaName,
+        awayTeamId: data.game.awayTeam.teamId.toString(),
+        awayTeamPeriods: data.game.awayTeam.periods.map((p) => p.score),
+        awayTeamScore: data.game.awayTeam.score,
+        homeTeamId: data.game.homeTeam.teamId.toString(),
+        homeTeamPeriods: data.game.homeTeam.periods.map((p) => p.score),
+        homeTeamScore: data.game.homeTeam.score,
+        date: '',
+        startTime: data.game.gameTimeUTC,
+      };
+
+      return gameDetail;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Boxscore 데이터 불러오기 실패');
+    }
   }
 }
