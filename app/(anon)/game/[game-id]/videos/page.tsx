@@ -10,12 +10,13 @@ import {
   YoutubeVideosWithChannelDto,
 } from '@/application/usecases/game/videos/dto/YoutubeVideosDto';
 import { GameDto } from '@/application/usecases/game/videos/dto/GameDto';
+import Loader from '@/components/loader/Loader';
 
 const Videos = () => {
   const [videos, setVideos] = useState<YoutubeVideoDto[] | null>([]);
   const [countVideos, setCountVideos] = useState<number>(12);
   const [gameData, setGameData] = useState<GameDto | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => true);
 
   const params = useParams();
   const gameId = params['game-id'];
@@ -69,7 +70,7 @@ const Videos = () => {
     [isLoading, displayMoreVideos]
   );
 
-  if (isLoading) return <div style={{ textAlign: 'center' }}>로딩중...</div>;
+  if (isLoading) return <Loader />;
   if (!videos || !gameData)
     return <p className={styles.statusInfo}>추후 업데이트 예정입니다.</p>;
 
