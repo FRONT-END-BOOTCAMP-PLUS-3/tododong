@@ -1,7 +1,7 @@
-import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
-import styles from './GameStatusSection.module.scss';
-import Team from '@/components/team/Team';
 import { GameDetailDto } from '@/application/usecases/game/game-detail/dto/gameDetailDto';
+import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
+import Team from '@/components/team/Team';
+import styles from './GameStatusSection.module.scss';
 
 const GameStatusSection = ({ gameInfo }: { gameInfo: GameDetailDto }) => {
   return (

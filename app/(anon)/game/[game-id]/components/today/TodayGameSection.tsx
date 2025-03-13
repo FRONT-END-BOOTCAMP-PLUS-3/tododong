@@ -31,14 +31,14 @@ const TodayGameSection = () => {
           `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs().format('YYYY-MM-DD')}`
         );
         // fetch가 끝난 데이터
-        setTodayGames(response);
+        setTodayGames([...response]);
         // prev가 아닌 reponse(todaygames) -> 전에 있던 값 참조
-        if (todayGames.length !== 0) {
-          setTodayGames((prev) => [
-            ...prev,
-            ...Array(5 - prev.length).fill(null),
-          ]);
-        }
+
+        setTodayGames((prev) => {
+          if (prev.length < 5)
+            return [...prev, ...Array(5 - prev.length).fill(null)];
+          else return prev;
+        });
       } catch (error) {
         console.error(error);
       }
