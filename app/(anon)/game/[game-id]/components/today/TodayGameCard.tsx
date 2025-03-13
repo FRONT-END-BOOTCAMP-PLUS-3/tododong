@@ -46,8 +46,8 @@ const TodayGameCard = ({ data }: TodayGameCardProps) => {
         <div className={styles.teamStatus}>
           <div>
             <Image
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               src={data.away.logo}
               alt={data.away.nickname}
             />

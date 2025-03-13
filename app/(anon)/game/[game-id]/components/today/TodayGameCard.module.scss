@@ -41,7 +41,7 @@
 
 .teamStatus {
   > div {
-    @include flexbox($gap: 4px, $align: center);
+    @include flexbox($gap: 8px, $align: center);
   }
   @include flexbox($justify: space-between, $align: center);
 }
