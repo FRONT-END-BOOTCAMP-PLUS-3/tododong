@@ -57,7 +57,10 @@ const ChatSection = ({
   // 소켓 연결 및 이벤트 등록
   useEffect(() => {
     // 소켓 연결
-    socket = io();
+    socket = io(`${process.env.SOCKET_URL || 'https://tododong.com'}`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
     socket.emit('joinRoom', { gameId });
 
     // 실시간 새 메시지 수신
