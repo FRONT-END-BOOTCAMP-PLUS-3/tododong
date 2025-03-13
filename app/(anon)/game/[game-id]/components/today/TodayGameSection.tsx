@@ -180,7 +180,7 @@ const TodayGameSection = () => {
         className={`swiper ${totalCards.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
       >
         {totalCards.map((data, index) => (
-          <SwiperSlide key={data?.id ?? index}>
+          <SwiperSlide key={data?.id ?? index} className={styles.swiperslide}>
             <TodayGameCard data={data} />
           </SwiperSlide>
         ))}
