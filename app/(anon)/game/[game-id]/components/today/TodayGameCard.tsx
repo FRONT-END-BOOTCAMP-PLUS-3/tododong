@@ -55,8 +55,8 @@ const TodayGameCard = ({
         <div className={styles.teamStatus}>
           <div>
             <Image
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               src={teams.homeTeam.logoSrc}
               alt={teams.homeTeam.name}
             />

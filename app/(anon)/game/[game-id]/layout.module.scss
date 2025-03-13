@@ -9,7 +9,6 @@
   > div {
     width: 900px;
     flex-shrink: 0;
-    @include flexbox($direction: column, $gap: 16px);
   }
 }
 
