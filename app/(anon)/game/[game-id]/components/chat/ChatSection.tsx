@@ -18,9 +18,11 @@ let socket: ReturnType<typeof io>;
 const ChatSection = ({
   userInfo,
   gameId,
+  gameState,
 }: {
   userInfo: { id: string; nickname: string };
   gameId: string;
+  gameState: string;
 }) => {
   const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -57,7 +59,10 @@ const ChatSection = ({
   // 소켓 연결 및 이벤트 등록
   useEffect(() => {
     // 소켓 연결
-    socket = io();
+    socket = io(`${process.env.SOCKET_URL || 'https://tododong.com'}`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
     socket.emit('joinRoom', { gameId });
 
     // 실시간 새 메시지 수신
@@ -130,35 +135,50 @@ const ChatSection = ({
   };
 
   return (
-    <section className={styles.container}>
-      <div className={styles.chatTitle}>채팅</div>
-      <div className={styles.chatContainer}>
-        {messages.map((msg, index) => (
-          <Chat key={index} msg={msg} />
-        ))}
-      </div>
-      <form className={styles.chatInputContainer}>
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="채팅을 입력하세요."
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              sendMessage();
-            }
+    <div className={styles.container}>
+      <section className={styles.sticky}>
+        <div className={styles.chatTitle}>채팅</div>
+        <div className={styles.chatContainer}>
+          {gameState === 'scheduled' ? (
+            <p className={styles.scheduleNotice}>
+              경기 시작 후 채팅에 참여 가능합니다.
+            </p>
+          ) : (
+            messages.map((msg, index) => <Chat key={index} msg={msg} />)
+          )}
+        </div>
+        <form
+          className={styles.chatInputContainer}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
           }}
-        />
-        <button
-          className={styles.iconArrowUp}
-          disabled={!value}
-          onClick={sendMessage}
-          aria-label="메세지 보내기"
         >
-          <Icon id="arrow-up" width={11.15} height={12.6} />
-        </button>
-      </form>
+          <div>
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="채팅을 입력하세요."
+              disabled={gameState === 'scheduled'}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              rows={1}
+            />
+            <button
+              className={styles.iconArrowUp}
+              disabled={!value || gameState === 'scheduled'}
+              aria-label="메세지 보내기"
+            >
+              <Icon id="arrow-up" width={11.15} height={12.6} />
+            </button>
+          </div>
+        </form>
+      </section>
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
@@ -172,7 +192,7 @@ const ChatSection = ({
           로그인 하시겠습니까?
         </p>
       </Modal>
-    </section>
+    </div>
   );
 };
 

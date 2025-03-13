@@ -1,122 +1,20 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styles from './TodayGameSection.module.scss';
 import './swiper.scss';
 
 /* swiper */
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
 import Icon from '@/components/icon/Icon';
-import TodayGameCard from './TodayGameCard';
+import { fetcher } from '@/utils';
+import dayjs from 'dayjs';
 import { NavigationOptions } from 'swiper/types';
-
-const dto = [
-  {
-    id: 14901,
-    game: {
-      startTime: '10:00 AM KST',
-      status: 'scheduled',
-    },
-    home: {
-      nickname: 'Bulls',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d1/Bulls_de_Chicago_logo.svg/1200px-Bulls_de_Chicago_logo.svg.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Hawks',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png',
-      points: 56,
-    },
-  },
-  {
-    id: 14902,
-    game: {
-      startTime: '09:00 AM KST',
-      status: 'live',
-    },
-    home: {
-      nickname: 'Cavaliers',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/0/06/Cavs_de_Cleveland_logo_2017.png/150px-Cavs_de_Cleveland_logo_2017.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Nets',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Brooklyn_Nets_newlogo.svg/130px-Brooklyn_Nets_newlogo.svg.png',
-      points: 56,
-    },
-  },
-  {
-    id: 14903,
-    game: {
-      startTime: '10:00 AM KST',
-      status: 'scheduled',
-    },
-    home: {
-      nickname: 'Bulls',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d1/Bulls_de_Chicago_logo.svg/1200px-Bulls_de_Chicago_logo.svg.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Hawks',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png',
-      points: 56,
-    },
-  },
-  {
-    id: 14904,
-    game: {
-      startTime: '09:00 AM KST',
-      status: 'live',
-    },
-    home: {
-      nickname: 'Cavaliers',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/0/06/Cavs_de_Cleveland_logo_2017.png/150px-Cavs_de_Cleveland_logo_2017.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Nets',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Brooklyn_Nets_newlogo.svg/130px-Brooklyn_Nets_newlogo.svg.png',
-      points: 56,
-    },
-  },
-  {
-    id: 14905,
-    game: {
-      startTime: '10:00 AM KST',
-      status: 'scheduled',
-    },
-    home: {
-      nickname: 'Bulls',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d1/Bulls_de_Chicago_logo.svg/1200px-Bulls_de_Chicago_logo.svg.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Hawks',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png',
-      points: 56,
-    },
-  },
-  {
-    id: 14906,
-    game: {
-      startTime: '09:00 AM KST',
-      status: 'live',
-    },
-    home: {
-      nickname: 'Cavaliers',
-      logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/0/06/Cavs_de_Cleveland_logo_2017.png/150px-Cavs_de_Cleveland_logo_2017.png',
-      points: 56,
-    },
-    away: {
-      nickname: 'Nets',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Brooklyn_Nets_newlogo.svg/130px-Brooklyn_Nets_newlogo.svg.png',
-      points: 56,
-    },
-  },
-];
+import TodayGameCard from './TodayGameCard';
 
 const TodayGameSection = () => {
   const [isLastSlide, setIsLastSlide] = useState(() => false);
@@ -124,10 +22,31 @@ const TodayGameSection = () => {
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
 
-  // 최소 5개가 되도록 빈 카드 추가
-  const totalCards = [...dto, ...Array(Math.max(0, 5 - dto.length)).fill(null)];
+  const [todayGames, setTodayGames] = useState<ScheduledGameDto[]>([]);
 
-  const shouldShowNavigation = totalCards.length > 5;
+  useEffect(() => {
+    const fetchScheduledGames = async () => {
+      try {
+        const response = await fetcher<ScheduledGameDto[]>(
+          `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs().format('YYYY-MM-DD')}`
+        );
+        // fetch가 끝난 데이터
+        setTodayGames([...response]);
+        // prev가 아닌 reponse(todaygames) -> 전에 있던 값 참조
+
+        setTodayGames((prev) => {
+          if (prev.length < 5)
+            return [...prev, ...Array(5 - prev.length).fill(null)];
+          else return prev;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchScheduledGames();
+  }, []);
+
+  const shouldShowNavigation = todayGames.length > 5;
 
   return (
     <section className={styles.todayGameContainer}>
@@ -177,11 +96,16 @@ const TodayGameSection = () => {
         slidesPerGroup={3} // 내비게이션 클릭 시 이동할 개수
         spaceBetween={16}
         centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
-        className={`swiper ${totalCards.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
+        className={`swiper ${todayGames.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
       >
-        {totalCards.map((data, index) => (
-          <SwiperSlide key={data?.id ?? index}>
-            <TodayGameCard data={data} />
+        {todayGames.map((data, index) => (
+          <SwiperSlide key={data?.gameId ?? index}>
+            <TodayGameCard
+              gameId={data?.gameId}
+              gameStatus={data?.gameStatus}
+              startTime={data?.startTime}
+              teams={data?.teams}
+            />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -42,6 +42,10 @@
   }
 }
 
+.loser {
+  color: $color-gray-600;
+}
+
 .links {
   @include flexbox($justify: center, $gap: 20px);
 

@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .teamTitle {
-  @include flexbox($align: center, $gap: 8);
+  @include flexbox($align: center, $gap: 8px);
 
   span {
     font-weight: 600;

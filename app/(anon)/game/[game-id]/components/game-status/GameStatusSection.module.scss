@@ -9,7 +9,7 @@
   background-color: $color-primary;
   border-radius: $border-radius-8;
 
-  @include flexbox($justify: center, $align: center, $gap: 32px);
+  @include flexbox($justify: center, $align: center, $gap: 56px);
 }
 
 .teamWrap {
@@ -58,6 +58,7 @@
 
   th,
   td {
+    text-align: start;
     padding: 5px 12px;
   }
 

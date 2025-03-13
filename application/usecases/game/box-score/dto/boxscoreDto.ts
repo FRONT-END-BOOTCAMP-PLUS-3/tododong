@@ -27,7 +27,7 @@ export interface TeamDto {
   name: string;
   city: string;
   logo: string;
-  players: StatisticsDto[];
+  players: StatisticsDto[] | [];
 }
 
 export interface BoxscoreDto {
