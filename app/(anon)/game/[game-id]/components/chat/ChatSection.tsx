@@ -167,6 +167,7 @@ const ChatSection = ({
                   sendMessage();
                 }
               }}
+              rows={1}
             />
             <button
               className={styles.iconArrowUp}
