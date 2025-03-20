@@ -21,12 +21,12 @@ tododong.com
 
 ## 🔎 서비스 소개
 
-1.	NBA 경기 일정 및 영상 함께 제공
-2.	실시간 경기 데이터 제공
+1.  NBA 경기 일정 및 영상 함께 제공
+2.  실시간 경기 데이터 제공
 - 경기 점수: 현재 스코어 업데이트
 - 선수 기록: 득점, 리바운드, 어시스트 등 주요 통계 제공
 - 중계 텍스트: 경기 흐름을 실시간으로 텍스트 중계
-3.	경기 별 실시간 채팅 기능
+3.  경기 별 실시간 채팅 기능
 
 <br/>
 
@@ -72,28 +72,22 @@ tododong.com
 
 <br/>
 
-## 📁 프로젝트 구조
-
-클린 아키텍처 사용
-
-<br/>
-
 ## ✨ 기능 소개
 ### 로그인
-<img src="https://github.com/user-attachments/assets/1c5946e0-02ea-42fa-89d4-2c3ea221fd16" width="100%"/>
+<img src="https://github.com/user-attachments/assets/4ec95b42-8cca-4c59-b4d8-244631960f28" width="100%"/>
 
 - JWT 토큰 발급
 - accessToken을 cookie에 저장해 세션 관리
 - bcryptjs로 비밀번호 암호화
 
 ### 회원가입
-<img src="https://github.com/user-attachments/assets/aef23ac9-11b1-4bc6-8080-9eb3f7e8fdc7" width="100%"/>
+<img src="https://github.com/user-attachments/assets/20b5c79c-23f0-4d78-ab75-f4c8054e896b" width="100%"/>
 
 - bcryptjs로 비밀번호 암호화
 - nodemailer 이용해 이메일 인증코드 발송
 
 ### 경기 일정 조회
-<img src="https://github.com/user-attachments/assets/e1d9e08c-4488-4c9a-ab2a-1be762be7e8e" width="100%"/>
+<img src="https://github.com/user-attachments/assets/d05c50a7-1dd4-4ac4-8d45-862a733af004" width="100%"/>
 
 - react-calender, swiper를 활용한 날짜 선택 및 경기 일정 조회
 - 날짜 계산, 포맷팅 전반에 dayjs 활용
@@ -101,7 +95,7 @@ tododong.com
 - 경기별 영상 / 선수 기록 / 실시간 중계 페이지로 이동
 
 ### 경기 정보 조회
-<img src="https://github.com/user-attachments/assets/30c4e2e5-101a-4b87-8837-e49f2103b50b" width="100%"/>
+<img src="https://github.com/user-attachments/assets/d342aaab-ebf0-49b0-88c5-e863a9485080" width="100%"/>
 
 #### 영상
 - 특정 경기의 영상을 Youtube Data API 사용해 표시
@@ -113,11 +107,15 @@ tododong.com
 - 일정 시간 간격으로 쿼터별 실시간 중계 내용 표시
 
 ### 실시간 채팅
-<img src="https://github.com/user-attachments/assets/b8d80c71-55ce-4034-b4cc-756ffc7540bc" width="100%"/>
+<img src="https://github.com/user-attachments/assets/0b660309-e5de-4cd1-8a49-d3990818ab8a" width="100%"/>
 
 - 별도의 소켓 서버 호스팅 
 - Socket IO 기반 경기별 실시간 채팅 지원
 - 최근 50개 메세지 DB 조회 후 렌더링
 
+<br/>
 
+## 📁 프로젝트 구조
+
+클린 아키텍처 사용
 
