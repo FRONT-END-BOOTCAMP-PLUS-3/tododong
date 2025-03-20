@@ -2,9 +2,7 @@
 
 ## 배포링크
 
-```
-tododong.com
-```
+> https://tododong.com
 
 <br/>
 
@@ -13,6 +11,7 @@ tododong.com
 - [🔎 서비스 소개](#-서비스-소개)
 - [👥 팀원 소개](#-팀원-소개)
 - [🛠️ 기술 스택](#-기술-스택)
+- [💾 ERD](#-ERD)
 - [📝 협업 방식](#-협업-방식)
 - [✨ 기능 소개](#-기능-소개)
 - [📁 프로젝트 구조](#-프로젝트-구조)
@@ -67,8 +66,44 @@ tododong.com
 
 <br/>
 
+## 💾 ERD
+![Untitled](https://github.com/user-attachments/assets/61178fd1-9f74-43b8-86bd-cad7e4c6d840)
+
+
 ## 📝 협업 방식
 
+### Git Flow 전략
+![image](https://github.com/user-attachments/assets/415629da-3500-47a6-89b8-f15ba245a62e)
+
+### 커밋 컨벤션
+```
+#   ✨ feat    : 기능 한 줄 설명 (새로운 기능, 새로운 브랜치 생성)
+#   예시) ✨ feat  : 알림 읽음 처리 기능 추가 (기능 설명)
+
+#   🐛 fix     : 버그 수정 설명
+#   예시) 🐛 fix   : 스토리 댓글 기능 게시 버튼 작동
+
+#   🎨 design   : css 디자인 설명
+#   예시) 🎨 design : flexbox 추가
+
+#   💄 style   : 스타일 (코드 형식, 명칭 변경, 주석 추가 또는 수정 -> 동작에 영향 없음)
+#   예시) 💄 style : 알림 리스트 클래스 뷰 변수() 문구 변경
+
+#   📝 docs    : 문서 (README 등 각종 Markdown만)
+#   예시) 📝 docs  : readme 팀원 추가
+
+#   🔧 chore   : 기타 변경사항 (빌드 스크립트 수정 등 MD 제외 모든 파일)
+#   예시) 🔧 chore : gitignore redis 추가, chore : migrations 파일 추가
+
+#   ♻️ refactor : 이미 올렸던 코드 변경 했을 때 (로직 변경)
+```
+
+### PR 점검사항 (코드 리뷰)
+
+- 웹 접근성
+- 성능 향상
+- 코드 가독성
+- 아키텍처 분리
 
 <br/>
 
@@ -117,5 +152,11 @@ tododong.com
 
 ## 📁 프로젝트 구조
 
-클린 아키텍처 사용
+### 클린 아키텍처
 
+- UI(Page) [프레젠테이션 계층]: Next.js의 app 디렉터리 내부의 page.tsx 파일들
+- API Routes [Adapter 계층]: /app/api 디렉터리 내부의 API 핸들러
+- UseCase(Service) [비즈니스 로직 계층]: /application/usecases 디렉터리에서 애플리케이션의 핵심 로직을 처리
+- Entity [도메인 계층]: /domain/entities 디렉터리에서 데이터 구조 및 도메인 모델 정의
+
+<img src="https://velog.velcdn.com/images/juwon98/post/2c77cf45-fc8b-4a00-bb89-81de6ccb81ac/image.png" width="100%" />
