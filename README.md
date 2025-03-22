@@ -11,9 +11,9 @@
 - [🔎 서비스 소개](#-서비스-소개)
 - [👥 팀원 소개](#-팀원-소개)
 - [🛠️ 기술 스택](#-기술-스택)
-- [💾 ERD](#-ERD)
 - [📝 협업 방식](#-협업-방식)
 - [✨ 기능 소개](#-기능-소개)
+- [💾 ERD](#-ERD)
 - [📁 프로젝트 구조](#-프로젝트-구조)
 
 <br/>
@@ -38,8 +38,7 @@
 
 <br/>
 
-## 🛠️ 기술 스택
-
+## 🛠 기술 스택
 
 ### Frontend
 
@@ -65,10 +64,6 @@
 | 협업 도구  | <img src="https://img.shields.io/badge/FIGMA-F24E1E?style=for-the-badge&logo=FIGMA&logoColor=white" /> <img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white" /> <img src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=GITHUB&logoColor=white" /> <img src="https://img.shields.io/badge/DISCORD-5865F2?style=for-the-badge&logo=DISCORD&logoColor=white" /> |
 
 <br/>
-
-## 💾 ERD
-![Untitled](https://github.com/user-attachments/assets/61178fd1-9f74-43b8-86bd-cad7e4c6d840)
-
 
 ## 📝 협업 방식
 
@@ -147,6 +142,11 @@
 - 별도의 소켓 서버 호스팅 
 - Socket IO 기반 경기별 실시간 채팅 지원
 - 최근 50개 메세지 DB 조회 후 렌더링
+
+<br/>
+
+## 💾 ERD
+![ERD](https://github.com/user-attachments/assets/61178fd1-9f74-43b8-86bd-cad7e4c6d840)
 
 <br/>
 
