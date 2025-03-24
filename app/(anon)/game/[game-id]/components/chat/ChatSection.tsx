@@ -16,9 +16,11 @@ let socket: ReturnType<typeof io>;
 const ChatSection = ({
   userInfo,
   gameId,
+  gameState,
 }: {
   userInfo: { id: string; nickname: string };
   gameId: string;
+  gameState: string;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<ChatMessageDto[]>([]); // initMessage
@@ -134,12 +136,18 @@ const ChatSection = ({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="채팅을 입력하세요."
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+          disabled={gameState === 'scheduled'}
+          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (
+              e.key === 'Enter' &&
+              !e.shiftKey &&
+              !e.nativeEvent.isComposing
+            ) {
               e.preventDefault();
               sendMessage();
             }
           }}
+          rows={1}
         />
         <button
           className={styles.iconArrowUp}
