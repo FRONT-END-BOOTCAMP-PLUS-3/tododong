@@ -3,10 +3,10 @@ import { generateAccessToken } from '@/utils/auth';
 import bcryptjs from 'bcryptjs';
 import LoginUserDto from './dto/LoginUserDto';
 
-export async function loginUsecase(
+export const loginUsecase = async (
   userRepository: UserRepository,
   dto: LoginUserDto
-): Promise<{ accessToken: string }> {
+): Promise<{ accessToken: string }> => {
   const { email, password } = dto;
 
   // 1. 회원데이터를 조회
@@ -37,4 +37,4 @@ export async function loginUsecase(
   const accessToken = await generateAccessToken(accessPayload);
 
   return { accessToken };
-}
+};

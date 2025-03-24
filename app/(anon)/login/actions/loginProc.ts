@@ -4,10 +4,10 @@ import { fetcher } from '@/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function loginProc(
+export const loginProc = async (
   state: { message: string },
   formData: FormData
-) {
+) => {
   // 폼 데이터에서 email과 password 추출
   const email = formData.get('email');
   const password = formData.get('password');
@@ -62,4 +62,4 @@ export async function loginProc(
 
   // 로그인 성공 시 메인 페이지로 리다이렉트
   redirect(redirectUrl);
-}
+};
