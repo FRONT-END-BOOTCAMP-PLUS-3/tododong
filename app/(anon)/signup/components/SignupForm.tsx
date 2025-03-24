@@ -5,6 +5,7 @@ import Icon from '@/components/icon/Icon';
 import { fetcher, formatTime } from '@/utils';
 import { FocusEvent, InputHTMLAttributes, useRef, useState } from 'react';
 import styles from './SignupForm.module.scss';
+import Modal from '@/components/modal/Modal';
 
 type FormDataKeys =
   | 'email'
@@ -25,6 +26,14 @@ const messagePhrase = {
 };
 
 const SignupForm = () => {
+  type ModalAlert =
+    | ''
+    | 'successSendEmail'
+    | 'successVerify'
+    | 'failVerify'
+    | 'successSignup'
+    | 'failSignup';
+
   /* ----------------------------------- refs ---------------------------------- */
   const timerRef = useRef<NodeJS.Timeout>(null);
 
@@ -49,6 +58,7 @@ const SignupForm = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mailTime, setMailTime] = useState(0);
+  const [modalAlert, setModalAlert] = useState<ModalAlert>('');
 
   /* --------------------------------- functions ------------------------------- */
   // input 값이 변경되면, formData 상태 업데이트
@@ -128,6 +138,7 @@ const SignupForm = () => {
         setIsEmailSending
       );
 
+      setModalAlert('successSendEmail');
       // 타이머 시작
       setMailTime(120);
 
@@ -169,9 +180,9 @@ const SignupForm = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setMailTime(0);
       setIsVerified(true);
-      alert('인증 성공');
+      setModalAlert('successVerify');
     } catch (err) {
-      alert('인증 코드가 일치하지 않습니다.');
+      setModalAlert('failVerify');
       if (err instanceof Error) console.error(err.message);
     }
   };
@@ -196,8 +207,7 @@ const SignupForm = () => {
         },
         setIsLoading
       );
-      // 성공 시 이동
-      location.href = '/login';
+      setModalAlert('successSignup');
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.message === '닉네임 중복')
@@ -207,7 +217,7 @@ const SignupForm = () => {
           }));
         console.error(err.message);
       }
-      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      setModalAlert('failSignup');
     }
   };
 
@@ -272,35 +282,65 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} aria-label="회원가입" className={styles.form}>
-      {/* 5개의 input + 오류 메세지 */}
-      {inputOptions.map((inputOption) => (
-        <div key={inputOption.name}>
-          <AuthInput
-            value={formData[inputOption.name]}
-            isInvalid={!!messages[inputOption.name]}
-            onChange={handleInputChange}
-            {...inputOption}
-          >
-            {renderInputChildren(inputOption.name)}
-          </AuthInput>
+    <>
+      <form
+        onSubmit={handleSubmit}
+        aria-label="회원가입"
+        className={styles.form}
+      >
+        {/* 5개의 input + 오류 메세지 */}
+        {inputOptions.map((inputOption) => (
+          <div key={inputOption.name}>
+            <AuthInput
+              value={formData[inputOption.name]}
+              isInvalid={!!messages[inputOption.name]}
+              onChange={handleInputChange}
+              {...inputOption}
+            >
+              {renderInputChildren(inputOption.name)}
+            </AuthInput>
 
-          {/* 오류 메세지 (aria-polite 내부에 내용이 생기면 스크린 리더가 읽어줌) */}
-          <div aria-live="polite">
-            {messages[inputOption.name] && (
-              <p className={styles.message}>
-                <Icon id="info" width={16} color="#fa2f2f" aria-hidden />
-                {messages[inputOption.name]}
-              </p>
-            )}
+            {/* 오류 메세지 (aria-polite 내부에 내용이 생기면 스크린 리더가 읽어줌) */}
+            <div aria-live="polite">
+              {messages[inputOption.name] && (
+                <p className={styles.message}>
+                  <Icon id="info" width={16} color="#fa2f2f" aria-hidden />
+                  {messages[inputOption.name]}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      <button disabled={isLoading || !isVerified || !isFormValid}>
-        {isLoading ? '회원가입 중...' : '회원가입'}
-      </button>
-    </form>
+        <button disabled={isLoading || !isVerified || !isFormValid}>
+          {isLoading ? '회원가입 중...' : '회원가입'}
+        </button>
+      </form>
+
+      {/* alert */}
+      <Modal
+        isOpen={!!modalAlert}
+        onClose={() => {
+          setModalAlert('');
+          if (modalAlert === 'successSignup') location.href = '/login';
+        }}
+        isAlert
+      >
+        {modalAlert === 'successSendEmail' && (
+          <p>{'인증 코드가 메일로 발송되었습니다.\n2분 내 입력해주세요.'}</p>
+        )}
+        {modalAlert === 'successVerify' && <p>인증 성공</p>}
+        {modalAlert === 'failVerify' && <p>인증 코드가 일치하지 않습니다.</p>}
+        {modalAlert === 'successSignup' && (
+          <p>{'회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.'}</p>
+        )}
+        {modalAlert === 'failSignup' && (
+          <p style={{ whiteSpace: 'pre-wrap' }}>
+            {'회원가입에 실패했습니다.\n다시 시도해 주세요'}
+          </p>
+        )}
+      </Modal>
+    </>
   );
 };
 
