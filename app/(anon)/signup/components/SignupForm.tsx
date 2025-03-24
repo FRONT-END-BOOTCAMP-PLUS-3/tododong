@@ -117,7 +117,7 @@ const SignupForm = () => {
 
       // 인증 요청
       await fetcher(
-        '/api/signup/verify',
+        '/api/user/verify',
         {
           method: 'POST',
           headers: {
@@ -154,7 +154,7 @@ const SignupForm = () => {
   const handleCheckBtnClick = async () => {
     // 확인 요청
     try {
-      await fetcher('/api/signup/verify/check', {
+      await fetcher('/api/user/verify/check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ const SignupForm = () => {
     // 회원가입 요청
     try {
       await fetcher(
-        '/api/signup',
+        '/api/user',
         {
           method: 'POST',
           headers: {
