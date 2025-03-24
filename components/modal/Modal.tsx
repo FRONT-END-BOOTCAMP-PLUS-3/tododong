@@ -10,13 +10,15 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm?: () => void;
+  isAlert?: boolean;
 };
 
 const Modal = ({
   children,
   isOpen,
   onClose,
-  onConfirm,
+  onConfirm = onClose,
+  isAlert = false,
   ...restProps
 }: ModalProps): React.ReactElement => {
   useBodyScrollLock(isOpen);
@@ -103,10 +105,20 @@ const Modal = ({
             />
             {children}
             <div className={styles.buttonWrapper}>
-              <button type="button" onClick={onClose}>
-                취소
-              </button>
-              <button type="button" onClick={onConfirm}>
+              {!isAlert && (
+                <button
+                  type="button"
+                  className={styles.closeBtn}
+                  onClick={onClose}
+                >
+                  취소
+                </button>
+              )}
+              <button
+                type="button"
+                className={styles.confirmBtn}
+                onClick={onConfirm}
+              >
                 확인
               </button>
             </div>
