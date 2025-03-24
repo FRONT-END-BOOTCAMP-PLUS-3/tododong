@@ -29,12 +29,12 @@ model Game {
 
 model Message {
   id        Int      @id @default(autoincrement())
-  gameId    String   @map("game_id")
   userId    String   @map("user_id")
   message   String
   createdAt DateTime @default(now()) @map("created_at")
-  game      Game     @relation(fields: [gameId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  gameId    String   @map("game_id")
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("messages")
 }
