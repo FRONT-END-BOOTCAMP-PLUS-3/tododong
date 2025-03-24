@@ -49,3 +49,9 @@
     }
   }
 }
+
+.alertModalContent {
+  > p {
+    white-space: pre-wrap;
+  }
+}

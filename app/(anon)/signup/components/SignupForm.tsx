@@ -326,19 +326,19 @@ const SignupForm = () => {
         }}
         isAlert
       >
-        {modalAlert === 'successSendEmail' && (
-          <p>{'인증 코드가 메일로 발송되었습니다.\n2분 내 입력해주세요.'}</p>
-        )}
-        {modalAlert === 'successVerify' && <p>인증 성공</p>}
-        {modalAlert === 'failVerify' && <p>인증 코드가 일치하지 않습니다.</p>}
-        {modalAlert === 'successSignup' && (
-          <p>{'회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.'}</p>
-        )}
-        {modalAlert === 'failSignup' && (
-          <p style={{ whiteSpace: 'pre-wrap' }}>
-            {'회원가입에 실패했습니다.\n다시 시도해 주세요'}
-          </p>
-        )}
+        <div className={styles.alertModalContent}>
+          {modalAlert === 'successSendEmail' && (
+            <p>{'인증 코드가 메일로 발송되었습니다.\n2분 내 입력해주세요.'}</p>
+          )}
+          {modalAlert === 'successVerify' && <p>인증 성공</p>}
+          {modalAlert === 'failVerify' && <p>인증 코드가 일치하지 않습니다.</p>}
+          {modalAlert === 'successSignup' && (
+            <p>{'회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.'}</p>
+          )}
+          {modalAlert === 'failSignup' && (
+            <p>{'회원가입에 실패했습니다.\n다시 시도해 주세요'}</p>
+          )}
+        </div>
       </Modal>
     </>
   );
