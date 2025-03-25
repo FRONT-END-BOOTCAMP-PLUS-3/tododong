@@ -32,4 +32,4 @@ jobs:
     
     steps:
       - name: Deploy Next.js Project
-        run: echo "Deploy Next.js Project" 
+        run: /home/tododong/next-app-update.sh
