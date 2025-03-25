@@ -80,3 +80,16 @@
 .react-calendar__tile:disabled {
   color: $color-gray-600;
 }
+
+@media (max-width: 767px) {
+  .react-calendar {
+    width: 100%;
+    border: 0;
+    border-radius: $border-radius-12 $border-radius-12 0 0;
+  }
+
+  .react-calendar__tile {
+    padding: 8px;
+    font-size: $text-14;
+  }
+}
