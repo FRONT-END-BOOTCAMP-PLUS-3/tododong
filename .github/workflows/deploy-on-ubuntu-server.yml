@@ -13,23 +13,23 @@ jobs:
   # 첫번째 단계 : 빌드
   build:
     runs-on: [self-hosted, tododong-server]
-  
-  steps:
-    - name: Build Next.js Project
-      run: echo "Build Next.js Project" 
+    
+    steps:
+      - name: Build Next.js Project
+        run: echo "Build Next.js Project" 
   
   # 두번째 단계: 테스트
   test:
     runs-on: [self-hosted, tododong-server]
-  
-  steps:
-    - name: Test Next.js Project
-      run: echo "Test Next.js Project" 
+    
+    steps:
+      - name: Test Next.js Project
+        run: echo "Test Next.js Project" 
   
   # 세번째 단계: 배포
   deploy: 
     runs-on: [self-hosted, tododong-server]
-  
-  steps:
-    - name: Deploy Next.js Project
-      run: echo "Deploy Next.js Project" 
+    
+    steps:
+      - name: Deploy Next.js Project
+        run: echo "Deploy Next.js Project" 
