@@ -1,12 +1,9 @@
 @use './utils' as *;
 
-// 가로 최대크기
-$viewport-max-width: $width-desktop-large;
-
 .footer {
   @include flexbox($direction: column, $gap: 44px);
   margin: 120px auto 50px;
-  width: $viewport-max-width;
+  width: 100%;
   background-color: $color-bg;
   font-size: $text-13;
   color: $color-white;
@@ -35,4 +32,10 @@ $viewport-max-width: $width-desktop-large;
 
 .socialList {
   @include flexbox($gap: 4px);
+}
+
+@media (max-width: 767px) {
+  .termWrapper {
+    @include flexbox($direction: column, $gap: 20px);
+  }
 }

@@ -122,3 +122,23 @@ $viewport-max-width: $width-desktop-large;
   width: 40px;
   border-bottom: 3px solid $color-white;
 }
+
+@media (max-width: 1024px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .monthNavigation {
+    font-size: $text-28;
+  }
+
+  .swiper {
+    width: 100%;
+  }
+
+  .selected::after {
+    width: 32px;
+  }
+}

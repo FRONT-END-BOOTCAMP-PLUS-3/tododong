@@ -11,3 +11,11 @@
     font-size: $text-18;
   }
 }
+
+@media (max-width: 1024px) {
+  .team {
+    p {
+      font-size: $text-14;
+    }
+  }
+}

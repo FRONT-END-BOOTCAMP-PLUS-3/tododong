@@ -64,3 +64,58 @@
     }
   }
 }
+
+@media (max-width: 1024px) {
+  .card {
+    width: 100%;
+    padding: 52px 0 32px;
+  }
+
+  .game {
+    grid-template-columns: 1fr 160px 1fr;
+  }
+
+  .status {
+    column-gap: 12px;
+
+    p {
+      font-size: $text-28;
+    }
+
+    .date {
+      font-size: $text-18;
+    }
+
+    .time {
+      font-size: $text-24;
+    }
+  }
+
+  .links {
+    @include flexbox($justify: center, $gap: 12px);
+
+    a {
+      padding: 6px 0;
+      width: 100px;
+      font-size: $text-18;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .links {
+    a {
+      font-size: $text-16;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .links {
+    a {
+      padding: 4px 0;
+      width: 80px;
+      font-size: $text-14;
+    }
+  }
+}
