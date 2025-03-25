@@ -8,6 +8,7 @@ import './swiper.scss';
 /* swiper */
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
 
 import { ScheduledGameDto } from '@/application/usecases/schedule/dto/ScheduledGameDto';
 import Icon from '@/components/icon/Icon';
@@ -48,6 +49,26 @@ const TodayGameSection = () => {
 
   const shouldShowNavigation = todayGames.length > 5;
 
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+
+  useEffect(() => {
+    if (
+      swiperInstance &&
+      prevRef.current &&
+      nextRef.current &&
+      typeof swiperInstance.params.navigation !== 'boolean'
+    ) {
+      const navigationParams = swiperInstance.params
+        .navigation as NavigationOptions;
+      navigationParams.prevEl = prevRef.current;
+      navigationParams.nextEl = nextRef.current;
+
+      swiperInstance.navigation.destroy(); // 기존 navigation 제거
+      swiperInstance.navigation.init(); // 새로 init
+      swiperInstance.navigation.update(); // 버튼 갱신
+    }
+  }, [swiperInstance, prevRef.current, nextRef.current, todayGames]);
+
   return (
     <section className={styles.todayGameContainer}>
       <h2>
@@ -72,22 +93,7 @@ const TodayGameSection = () => {
           prevEl: prevRef.current,
           nextEl: nextRef.current,
         }}
-        onSwiper={(swiper) => {
-          setTimeout(() => {
-            if (
-              prevRef.current &&
-              nextRef.current &&
-              typeof swiper.params.navigation !== 'boolean'
-            ) {
-              const navigationParams = swiper.params
-                .navigation as NavigationOptions;
-              navigationParams.prevEl = prevRef.current;
-              navigationParams.nextEl = nextRef.current;
-              swiper.navigation.init();
-              swiper.navigation.update();
-            }
-          });
-        }}
+        onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => {
           setIsLastSlide(swiper.isEnd);
           setIsFirstSlide(swiper.isBeginning);
