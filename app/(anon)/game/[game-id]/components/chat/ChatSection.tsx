@@ -19,11 +19,9 @@ const ChatSection = ({
   userInfo,
   gameId,
   gameState,
-  gameState,
 }: {
   userInfo: { id: string; nickname: string };
   gameId: string;
-  gameState: string;
   gameState: string;
 }) => {
   const pathname = usePathname();
@@ -163,8 +161,12 @@ const ChatSection = ({
               onChange={(e) => setValue(e.target.value)}
               placeholder="채팅을 입력하세요."
               disabled={gameState === 'scheduled'}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                if (
+                  e.key === 'Enter' &&
+                  !e.shiftKey &&
+                  !e.nativeEvent.isComposing
+                ) {
                   e.preventDefault();
                   sendMessage();
                 }
