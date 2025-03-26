@@ -6,9 +6,10 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { fetcher } from '@/utils';
 import { BoxscoreDto } from '@/application/usecases/game/box-score/dto/boxscoreDto';
+import Loader from '@/components/loader/Loader';
 
 const BoxScore = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => true);
   const [boxscoreData, setBoxscoreData] = useState<BoxscoreDto>();
 
   const params = useParams();
@@ -33,12 +34,7 @@ const BoxScore = () => {
     fetchBoxscore();
   }, [gameId]);
 
-  if (isLoading) return <div style={{ textAlign: 'center' }}>로딩중...</div>;
-  if (!boxscoreData) {
-    return (
-      <div className={styles.scheduledGame}>추후 업데이트 예정입니다.</div>
-    );
-  }
+  if (isLoading || !boxscoreData) return <Loader />;
   if (boxscoreData.game.status === 'scheduled') {
     return (
       <div className={styles.scheduledGame}>경기 시작 후 업데이트 됩니다.</div>

@@ -45,7 +45,6 @@ const Schedule = () => {
       const response = await fetcher<ScheduledGameDto[]>(
         `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
       );
-      console.log(response);
       setScheduledGames(response);
     } catch (error) {
       console.error(error);
@@ -65,7 +64,7 @@ const Schedule = () => {
     };
 
     fetchData();
-  }, [selectedDate, fetchScheduledGames]);
+  }, [selectedDate, fetchScheduledGames, router, searchParams]);
 
   // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
   useEffect(() => {

@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .boxScoreContainer {
-  @include flexbox($direction: column, $gap: 24);
+  @include flexbox($direction: column, $gap: 24px);
   width: 100%;
 }
 

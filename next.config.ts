@@ -11,25 +11,36 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-    {
-      protocol: 'https',
-      hostname: 'upload.wikimedia.org',
-      port: '',
-      pathname: '/**',
-    },
-    {
-      protocol: 'https',
-      hostname: 'i.ytimg.com',
-      port: '',
-      pathname: '/**',
-    },
-    {
-      protocol: 'https',
-      hostname: 'yt3.ggpht.com',
-      port: '',
-      pathname: '/**',
-    },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'yt3.ggpht.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
+  },
+
+  // intro page 아직 없어서 설정
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/schedule',
+        permanent: true, // 301 리디렉션
+      },
+    ];
   },
 };
 

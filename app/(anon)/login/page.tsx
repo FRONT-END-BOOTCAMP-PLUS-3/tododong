@@ -2,6 +2,11 @@ import Image from 'next/image';
 import LoginForm from './components/LoginForm';
 import styles from './page.module.scss';
 
+export const metadata = {
+  title: '로그인 - 토도동',
+  description: '토도동에 로그인하고 다양한 서비스를 이용해 보세요.',
+};
+
 const Login = () => {
   return (
     <main className={styles.page}>

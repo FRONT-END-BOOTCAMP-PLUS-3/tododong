@@ -1,10 +1,12 @@
 'use client';
+import { setReturnUrl } from '@/app/(anon)/actions/setReturnUrl';
 import { ChatMessageDto } from '@/application/usecases/chat/dto/chatMessageDto';
 import { CreateMessageDto } from '@/application/usecases/chat/dto/createMessageDto';
 import Icon from '@/components/icon/Icon';
 import Modal from '@/components/modal/Modal';
 import { fetcher } from '@/utils';
-import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import io from 'socket.io-client';
 import Chat from './Chat';
 import styles from './ChatSection.module.scss';
@@ -17,11 +19,14 @@ const ChatSection = ({
   userInfo,
   gameId,
   gameState,
+  gameState,
 }: {
   userInfo: { id: string; nickname: string };
   gameId: string;
   gameState: string;
+  gameState: string;
 }) => {
+  const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<ChatMessageDto[]>([]); // initMessage
   const [value, setValue] = useState('');
@@ -56,7 +61,10 @@ const ChatSection = ({
   // 소켓 연결 및 이벤트 등록
   useEffect(() => {
     // 소켓 연결
-    socket = io();
+    socket = io(`${process.env.SOCKET_URL || 'https://tododong.com'}`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
     socket.emit('joinRoom', { gameId });
 
     // 실시간 새 메시지 수신
@@ -117,47 +125,62 @@ const ChatSection = ({
     setValue(''); // 입력창 초기화
   };
 
+  // 로그인 후 돌아올 경로 저장
+  const [, startTransition] = useTransition();
   const handleModalConfirm = () => {
+    startTransition(async () => {
+      await setReturnUrl(pathname); // 현재 경로를 쿠키에 저장
+      window.location.href = '/login'; // 새로고침하면서 로그인 페이지로 이동
+    });
+
     setIsModalOpen(false);
-    location.href = '/login';
   };
 
   return (
-    <section className={styles.container}>
-      <div className={styles.chatTitle}>채팅</div>
-      <div className={styles.chatContainer}>
-        {messages.map((msg, index) => (
-          <Chat key={index} msg={msg} />
-        ))}
-      </div>
-      <div className={styles.chatInputContainer}>
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="채팅을 입력하세요."
-          disabled={gameState === 'scheduled'}
-          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-            if (
-              e.key === 'Enter' &&
-              !e.shiftKey &&
-              !e.nativeEvent.isComposing
-            ) {
-              e.preventDefault();
-              sendMessage();
-            }
+    <div className={styles.container}>
+      <section className={styles.sticky}>
+        <div className={styles.chatTitle}>채팅</div>
+        <div className={styles.chatContainer}>
+          {gameState === 'scheduled' ? (
+            <p className={styles.scheduleNotice}>
+              경기 시작 후 채팅에 참여 가능합니다.
+            </p>
+          ) : (
+            messages.map((msg, index) => <Chat key={index} msg={msg} />)
+          )}
+        </div>
+        <form
+          className={styles.chatInputContainer}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
           }}
-          rows={1}
-        />
-        <button
-          className={styles.iconArrowUp}
-          disabled={!value}
-          onClick={sendMessage}
-          aria-label="메세지 보내기"
         >
-          <Icon id="arrow-up" width={11.15} height={12.6} />
-        </button>
-      </div>
+          <div>
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="채팅을 입력하세요."
+              disabled={gameState === 'scheduled'}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              rows={1}
+            />
+            <button
+              className={styles.iconArrowUp}
+              disabled={!value || gameState === 'scheduled'}
+              aria-label="메세지 보내기"
+            >
+              <Icon id="arrow-up" width={11.15} height={12.6} />
+            </button>
+          </div>
+        </form>
+      </section>
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
@@ -171,7 +194,7 @@ const ChatSection = ({
           로그인 하시겠습니까?
         </p>
       </Modal>
-    </section>
+    </div>
   );
 };
 

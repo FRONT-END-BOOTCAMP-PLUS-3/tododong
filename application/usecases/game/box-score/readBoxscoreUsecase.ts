@@ -3,6 +3,7 @@ import { BoxscoreDto } from './dto/boxscoreDto';
 import { Statistics } from '@/domain/entities/Statistics';
 import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { GameRepository } from '@/domain/repositories/GameRepository';
+import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
 
 const extractMinAndSecFromText = (str: string) => {
   const match = str.match(/PT(\d+)M(\d+)(?:\.\d+)?S/);
@@ -51,19 +52,24 @@ export const readBoxscoreUsecase = async (
   statisticsRepository: StatisticsRepository
 ): Promise<BoxscoreDto> => {
   try {
-    const statistics = await statisticsRepository.findById(gameId);
     const game = await gameRepository.findById(gameId);
 
     if (!game) {
       throw new Error(`게임(${gameId}) 정보가 없습니다.`);
     }
 
-    if (!statistics || statistics.length === 0) {
-      throw new Error('게임 통계 정보를 찾을 수 없습니다.');
+    const currentTime = new Date().getTime();
+    const gameStartTime = convertKSTtoTime(game.startTime);
+    const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
+
+    if (currentTime >= threeHoursLater) {
+      game.status = 'final';
+    } else if (currentTime >= gameStartTime) {
+      game.status = 'live';
     }
 
-    const homeTeamId = statistics[0].teamId;
-    const awayTeamId = statistics[statistics.length - 1].teamId;
+    const homeTeamId = game.homeTeamId;
+    const awayTeamId = game.awayTeamId;
 
     const homeTeam = await teamRepository.findById(homeTeamId);
     if (!homeTeam) {
@@ -73,6 +79,33 @@ export const readBoxscoreUsecase = async (
     const awayTeam = await teamRepository.findById(awayTeamId);
     if (!awayTeam) {
       throw new Error(`어웨이팀(${awayTeamId}) 정보가 없습니다.`);
+    }
+
+    if (game.status === 'scheduled')
+      return {
+        game: {
+          id: game.id,
+          status: game.status,
+        },
+        homeTeam: {
+          id: homeTeam.id,
+          name: homeTeam.name,
+          city: homeTeam.city,
+          logo: homeTeam.logo,
+          players: [],
+        },
+        awayTeam: {
+          id: awayTeam.id,
+          name: awayTeam.name,
+          city: awayTeam.city,
+          logo: awayTeam.logo,
+          players: [],
+        },
+      };
+
+    const statistics = await statisticsRepository.findById(gameId);
+    if (!statistics || statistics.length === 0) {
+      throw new Error('게임 통계 정보를 찾을 수 없습니다.');
     }
 
     const homePlayers = statistics

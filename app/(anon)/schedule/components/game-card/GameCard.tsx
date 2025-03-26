@@ -9,8 +9,18 @@ type GameCardProps = {
   gameStatus: GameStatus;
   startTime: { date: string; time: string };
   teams: {
-    homeTeam: { name: string; logoSrc: string; score: number };
-    awayTeam: { name: string; logoSrc: string; score: number };
+    homeTeam: {
+      name: string;
+      logoSrc: string;
+      score: number;
+      isWinner: boolean;
+    };
+    awayTeam: {
+      name: string;
+      logoSrc: string;
+      score: number;
+      isWinner: boolean;
+    };
   };
 };
 
@@ -27,9 +37,13 @@ const GameCard = ({ gameId, gameStatus, startTime, teams }: GameCardProps) => {
             </p>
           ) : (
             <>
-              <p>{teams.awayTeam.score}</p>
+              <p className={!teams.awayTeam.isWinner ? styles.loser : ''}>
+                {teams.awayTeam.score}
+              </p>
               <GameStatusTag size="lg" status={gameStatus} />
-              <p>{teams.homeTeam.score}</p>
+              <p className={!teams.homeTeam.isWinner ? styles.loser : ''}>
+                {teams.homeTeam.score}
+              </p>
             </>
           )}
         </div>
