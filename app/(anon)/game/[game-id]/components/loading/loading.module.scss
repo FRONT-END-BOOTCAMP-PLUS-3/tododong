@@ -16,7 +16,7 @@
 .mainInfo {
   @include flexbox($direction: column, $gap: 16px);
   width: 100%;
-  height: calc(100vh - 228px);
+  height: calc(100vh - 221px);
 }
 
 .gameStatus {
