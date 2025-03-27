@@ -8,6 +8,7 @@
 .mainInfo {
   @include flexbox($direction: column, $gap: 16px);
   width: 100%;
+  min-width: 360px;
 
   // > div {
   //   // width: 900px;
