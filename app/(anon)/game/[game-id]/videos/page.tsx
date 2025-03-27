@@ -1,45 +1,35 @@
 'use client';
 
+import { fetcher } from '@/utils';
+import { useCallback, useRef, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { YoutubeVideosWithChannelDto } from '@/application/usecases/game/videos/dto/YoutubeVideosDto';
+import { useQuery } from '@tanstack/react-query';
 import styles from './page.module.scss';
 import YoutubeVideoCard from './components/YoutubeVideoCard';
-import { fetcher } from '@/utils';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import {
-  YoutubeVideoDto,
-  YoutubeVideosWithChannelDto,
-} from '@/application/usecases/game/videos/dto/YoutubeVideosDto';
-import { GameDto } from '@/application/usecases/game/videos/dto/GameDto';
 import Loader from '@/components/loader/Loader';
 
+const fetchYoutubeVideos = async (gameId: string | string[]) => {
+  const id = Array.isArray(gameId) ? gameId[0] : gameId;
+
+  return fetcher<YoutubeVideosWithChannelDto>(`/api/game/${id}/videos`);
+};
+
 const Videos = () => {
-  const [videos, setVideos] = useState<YoutubeVideoDto[] | null>([]);
   const [countVideos, setCountVideos] = useState<number>(12);
-  const [gameData, setGameData] = useState<GameDto | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(() => true);
 
   const params = useParams();
   const gameId = params['game-id'];
 
-  useEffect(() => {
-    if (!gameId) return;
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['youtubeVideos', gameId],
+    queryFn: () => fetchYoutubeVideos(gameId!),
+    staleTime: 3600000,
+    enabled: !!gameId, // gameId가 있을 때만 요청 실행
+  });
 
-    const fetchYoutubeVideos = async () => {
-      try {
-        const response = await fetcher<YoutubeVideosWithChannelDto>(
-          `/api/game/${gameId}/videos`,
-          {},
-          setIsLoading
-        );
-        setVideos(response.videos);
-        setGameData(response.game);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchYoutubeVideos();
-  }, [gameId]);
+  const videos = data?.videos;
+  const gameData = data?.game;
 
   // 동영상을 추가로 렌더링하는 함수
   const displayMoreVideos = useCallback(() => {
@@ -71,7 +61,7 @@ const Videos = () => {
   );
 
   if (isLoading) return <Loader />;
-  if (!videos || !gameData)
+  if (!videos || !gameData || error)
     return <p className={styles.statusInfo}>추후 업데이트 예정입니다.</p>;
 
   return (
