@@ -7,6 +7,8 @@ import GamePageNav from './components/game-page-nav/GamePageNav';
 import GameStatusSection from './components/game-status/GameStatusSection';
 import TodayGameSection from './components/today/TodayGameSection';
 import styles from './layout.module.scss';
+import { Suspense } from 'react';
+import Loading from './components/loading/loading';
 
 export const generateMetadata = async ({
   params,
@@ -74,21 +76,23 @@ const GameLayout = async ({
 
   return (
     <>
-      <TodayGameSection />
-      <div className={styles.container}>
-        <div className={styles.mainInfo}>
-          <GameStatusSection gameInfo={gameInfo} />
-          <div className={styles.gamePageMain}>
-            <GamePageNav gameId={gameId} />
-            {children}
+      <Suspense fallback={<Loading />}>
+        <TodayGameSection />
+        <div className={styles.container}>
+          <div className={styles.mainInfo}>
+            <GameStatusSection gameInfo={gameInfo} />
+            <div className={styles.gamePageMain}>
+              <GamePageNav gameId={gameId} />
+              {children}
+            </div>
           </div>
+          <ChatSection
+            userInfo={userInfo}
+            gameId={gameId}
+            gameState={gameInfo.gameStatus}
+          />
         </div>
-        <ChatSection
-          userInfo={userInfo}
-          gameId={gameId}
-          gameState={gameInfo.gameStatus}
-        />
-      </div>
+      </Suspense>
     </>
   );
 };
