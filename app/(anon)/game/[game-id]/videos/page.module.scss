@@ -6,11 +6,30 @@
   column-gap: 22px;
   row-gap: 16px;
   justify-content: center;
-  width: 100%;
+}
+
+.videoCard {
+  overflow: hidden;
 }
 
 .statusInfo {
   height: 100%;
   text-align: center;
   align-content: center;
+}
+
+@include mq(tablet) {
+  .videoContainer {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 24px;
+    row-gap: 16px;
+  }
+}
+
+@include mq(mobile) {
+  .videoContainer {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+  }
 }

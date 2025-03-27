@@ -73,6 +73,7 @@ const Videos = () => {
         <ul className={styles.videoContainer}>
           {videos.slice(0, countVideos).map((video, index) => (
             <li
+              className={styles.videoCard}
               key={video.id.videoId}
               ref={index === countVideos - 1 ? refLastVideo : null}
             >
