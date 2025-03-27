@@ -99,22 +99,7 @@ const TodayGameSection = () => {
               prevEl: prevRef.current,
               nextEl: nextRef.current,
             }}
-            onSwiper={(swiper) => {
-              setTimeout(() => {
-                if (
-                  prevRef.current &&
-                  nextRef.current &&
-                  typeof swiper.params.navigation !== 'boolean'
-                ) {
-                  const navigationParams = swiper.params
-                    .navigation as NavigationOptions;
-                  navigationParams.prevEl = prevRef.current;
-                  navigationParams.nextEl = nextRef.current;
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                }
-              });
-            }}
+            onSwiper={setSwiperInstance}
             onSlideChange={(swiper) => {
               setIsLastSlide(swiper.isEnd);
               setIsFirstSlide(swiper.isBeginning);
