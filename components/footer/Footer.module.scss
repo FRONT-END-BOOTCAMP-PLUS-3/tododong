@@ -34,7 +34,7 @@
   @include flexbox($gap: 4px);
 }
 
-@media (max-width: 767px) {
+@include mq(lgMobile) {
   .termWrapper {
     @include flexbox($direction: column, $gap: 20px);
   }

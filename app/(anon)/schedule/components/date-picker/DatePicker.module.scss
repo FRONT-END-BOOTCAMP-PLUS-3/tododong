@@ -62,21 +62,6 @@ $viewport-max-width: $width-desktop-large;
   transform: translateX(-50%);
 }
 
-@media (max-width: 767px) {
-  .calendar {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .calendarContainer.open .calendar {
-    transform: translateY(0);
-  }
-}
-
 // 게임 개수
 .gameSchedule {
   @include flexbox($justify: center, $align: center, $gap: 4px);
@@ -148,13 +133,26 @@ $viewport-max-width: $width-desktop-large;
   border-bottom: 3px solid $color-white;
 }
 
-@media (max-width: 1024px) {
+@include mq(tablet) {
   .container {
     width: 100%;
   }
 }
 
-@media (max-width: 767px) {
+@include mq(lgMobile) {
+  .calendar {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .calendarContainer.open .calendar {
+    transform: translateY(0);
+  }
+
   .monthNavigation {
     font-size: $text-28;
   }

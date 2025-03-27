@@ -7,6 +7,13 @@
   width: 100%;
   min-height: calc(100vh - 180px);
   place-content: start;
+
+  @include mq(tablet) {
+    gap: 28px;
+  }
+  @include mq(lgMobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .loader {
@@ -19,16 +26,4 @@
   width: 100%;
   height: calc(100vh - 180px);
   font-size: $text-20;
-}
-
-@media (max-width: 1024px) {
-  .cardWrapper {
-    gap: 28px;
-  }
-}
-
-@media (max-width: 767px) {
-  .cardWrapper {
-    grid-template-columns: 1fr;
-  }
 }

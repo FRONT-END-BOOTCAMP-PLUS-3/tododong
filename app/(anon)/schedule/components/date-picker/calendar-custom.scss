@@ -81,7 +81,7 @@
   color: $color-gray-600;
 }
 
-@media (max-width: 767px) {
+@include mq(lgMobile) {
   .react-calendar {
     width: 100%;
     border: 0;

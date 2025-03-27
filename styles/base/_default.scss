@@ -18,7 +18,7 @@ body {
   color: $font-color;
 }
 
-@media (max-width: 1024px) {
+@include mq(tablet) {
   body {
     padding: 0px 16px;
   }
