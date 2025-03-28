@@ -11,3 +11,27 @@
     font-size: $text-18;
   }
 }
+
+@include mq(tablet) {
+  .team {
+    p {
+      font-size: $text-14;
+    }
+  }
+}
+
+@include mq(lgMobile) {
+  .team {
+    p {
+      font-size: $text-18;
+    }
+  }
+}
+
+@include mq(smMobile) {
+  .team {
+    p {
+      font-size: $text-14;
+    }
+  }
+}

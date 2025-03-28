@@ -1,7 +1,5 @@
 @use 'utils' as *;
 
-$viewport-max-width: $width-desktop-large;
-
 .cardWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -9,16 +7,23 @@ $viewport-max-width: $width-desktop-large;
   width: 100%;
   min-height: calc(100vh - 180px);
   place-content: start;
+
+  @include mq(tablet) {
+    gap: 28px;
+  }
+  @include mq(lgMobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .loader {
-  width: $viewport-max-width;
+  width: 100%;
   height: calc(100vh - 180px);
 }
 
 .schedulePrompt {
   @include flexbox($justify: center, $align: center);
-  width: $viewport-max-width;
+  width: 100%;
   height: calc(100vh - 180px);
   font-size: $text-20;
 }
