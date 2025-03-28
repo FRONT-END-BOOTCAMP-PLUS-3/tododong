@@ -16,14 +16,16 @@ const YoutubeVideoCard = ({ data }: YoutubeVideoCardProps) => {
   return (
     <article className={styles.videoCard}>
       <Link href={`https://www.youtube.com/watch?v=${data.id.videoId}`}>
-        <Image
-          src={data.snippet.thumbnails.medium.url}
-          alt={data.snippet.title}
-          width={200}
-          height={112}
-          className={styles.thumbnail}
-          priority
-        />
+        <div className={styles.thumbnailWrapper}>
+          <Image
+            className={styles.thumbnail}
+            src={data.snippet.thumbnails.medium.url}
+            alt={data.snippet.title}
+            sizes="(max-width:767) 45vw, (max-width:1279) 30vw, 20vw"
+            fill={true}
+            priority
+          />
+        </div>
       </Link>
       <div className={styles.details}>
         <Link href={`https://www.youtube.com/watch?v=${data.id.videoId}`}>
