@@ -72,7 +72,8 @@
 
 // 미디어쿼리 중단점
 $breakpoints: (
-  mobile: 767,
+  smMobile: 480,
+  lgMobile: 768,
   tablet: 1279,
 );
 
@@ -80,7 +81,7 @@ $breakpoints: (
 @mixin mq($breakpoint) {
   @each $key, $value in $breakpoints {
     @if not map.has-key($breakpoints, $breakpoint) {
-      @error '#{$breakpoint}는 유효한 중단점이 아닙니다.(유효한 값: mobile, tablet, desktop)';
+      @error '#{$breakpoint}는 유효한 중단점이 아닙니다.(유효한 값: mobile, tablet)';
     }
   }
 
@@ -91,3 +92,10 @@ $breakpoints: (
     @content;
   }
 }
+
+// 사용 예시
+// @include mq(tablet) {
+//   .test {
+//     width: 100%;
+//   }
+// }
