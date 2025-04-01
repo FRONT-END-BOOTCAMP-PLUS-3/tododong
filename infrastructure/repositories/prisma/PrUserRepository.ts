@@ -75,4 +75,25 @@ export default class PrUserRepository implements UserRepository {
       this.#prisma.$disconnect();
     }
   }
+
+  async updateOne(userInfo: User): Promise<User> {
+    try {
+      const updatedUser = await this.#prisma.user.update({
+        where: {
+          id: userInfo.id,
+        },
+        data: userInfo,
+      });
+
+      return updatedUser;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+        throw err;
+      }
+      throw new Error('유저 정보 업데이트 중 알 수 없는 오류 발생');
+    } finally {
+      this.#prisma.$disconnect();
+    }
+  }
 }
