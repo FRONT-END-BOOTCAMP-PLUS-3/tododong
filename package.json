@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "@tanstack/react-query": "^5.66.7",
+    "@tanstack/react-query-devtools": "^5.71.0",
     "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
     "jose": "^6.0.8",
@@ -20,6 +21,7 @@
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
+    "root": "git+https://github.com/tanstack/react-query.git",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "swiper": "^11.2.4",
