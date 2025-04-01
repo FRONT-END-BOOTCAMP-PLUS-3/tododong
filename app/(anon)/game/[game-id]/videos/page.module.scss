@@ -26,7 +26,7 @@
   }
 }
 
-@include mq(mobile) {
+@include mq(lgMobile) {
   .videoContainer {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 16px;
