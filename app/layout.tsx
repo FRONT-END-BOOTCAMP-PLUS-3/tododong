@@ -3,6 +3,7 @@ import '@/styles/globals.scss';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { headers } from 'next/headers';
+import QueryProvider from '@/components/query-provider/QueryProvider';
 
 export const metadata = {
   title: '토도동',
@@ -43,7 +44,7 @@ export default async function RootLayout({
     <html lang="ko-KR">
       <body>
         <Header pathname={headerPathname} />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Footer pathname={headerPathname} />
 
         <div id="loading-start" aria-live="assertive"></div>
