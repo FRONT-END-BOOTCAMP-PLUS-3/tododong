@@ -2,8 +2,9 @@
 
 import styles from './page.module.scss';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
@@ -19,37 +20,38 @@ const Schedule = () => {
     ? new Date(searchParams.get('date')!)
     : today;
   const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [scheduledGames, setScheduledGames] = useState<ScheduledGameDto[]>([]);
-  const [scheduledGameCounts, setScheduledGameCounts] = useState<
-    ScheduledGameCountDto[]
-  >([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchScheduledGameCounts = async () => {
-      try {
-        const response = await fetcher<ScheduledGameCountDto[]>(
-          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
-        );
-        setScheduledGameCounts([...response]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const fetchScheduledGameCounts = async () => {
+    return await fetcher<ScheduledGameCountDto[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedule`
+    );
+  };
 
-    fetchScheduledGameCounts();
-  }, []);
+  const {
+    data: scheduledGameCounts = [],
+    // isLoading: isCountsLoading,
+    // error: countsError,
+  } = useQuery({
+    queryKey: ['scheduledGameCounts'],
+    queryFn: fetchScheduledGameCounts,
+  });
 
-  const fetchScheduledGames = useCallback(async (date: Date) => {
-    try {
-      const response = await fetcher<ScheduledGameDto[]>(
-        `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
-      );
-      setScheduledGames(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  const fetchScheduledGames = async (date: Date) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    return fetcher<ScheduledGameDto[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedule/${formattedDate}`
+    );
+  };
+
+  const {
+    data: scheduledGames = [],
+    isLoading: isGamesLoading,
+    // error: gamesError,
+  } = useQuery({
+    queryKey: ['scheduledGames', selectedDate],
+    queryFn: () => fetchScheduledGames(selectedDate),
+    enabled: !!selectedDate, // selectedDate가 설정된 후에만 실행
+  });
 
   // selectedDate 변경 시 데이터 가져오기 및 URL 변경
   useEffect(() => {
@@ -58,13 +60,7 @@ const Schedule = () => {
     if (searchParams.get('date') !== formattedDate) {
       router.push(`?date=${formattedDate}`);
     }
-    const fetchData = async () => {
-      await fetchScheduledGames(selectedDate);
-      setIsInitialLoading(false);
-    };
-
-    fetchData();
-  }, [selectedDate, fetchScheduledGames, router, searchParams]);
+  }, [selectedDate, router, searchParams]);
 
   // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
   useEffect(() => {
@@ -77,7 +73,7 @@ const Schedule = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [fetchScheduledGames]);
+  }, []);
 
   return (
     <>
@@ -87,7 +83,7 @@ const Schedule = () => {
         onDateChange={setSelectedDate}
       />
       <main>
-        {isInitialLoading ? (
+        {isGamesLoading ? (
           <Loader className={styles.loader} />
         ) : scheduledGames && scheduledGames.length > 0 ? (
           <div className={styles.cardWrapper}>
