@@ -23,6 +23,11 @@ export const loginUsecase = async (
     throw new Error('Invalid email or password');
   }
 
+  if (user.deletedAt) {
+    console.error('Deleted user');
+    throw new Error('Deleted user');
+  }
+
   // JWT 페이로드 구성 (필요한 정보만 포함)
   const accessPayload = {
     id: user.id,

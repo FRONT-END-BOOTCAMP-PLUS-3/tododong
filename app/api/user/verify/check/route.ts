@@ -1,4 +1,5 @@
 import { checkVerificationCodeUsecase } from '@/application/usecases/user/checkVerificationCodeUsecase';
+import PrUserRepository from '@/infrastructure/repositories/prisma/PrUserRepository';
 import PrVerificationCodeRepository from '@/infrastructure/repositories/prisma/PrVerificationCodeRepository';
 import { NextResponse } from 'next/server';
 
@@ -13,11 +14,23 @@ export const POST = async (request: Request) => {
     );
   }
 
-  const result = await checkVerificationCodeUsecase(
-    new PrVerificationCodeRepository(),
-    { email, code }
-  );
+  try {
+    const result = await checkVerificationCodeUsecase(
+      new PrUserRepository(),
+      new PrVerificationCodeRepository(),
+      { email, code }
+    );
+    if (result) return NextResponse.json({ message: '인증 성공' });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      if (err.message === '30일 이내에 탈퇴한 이메일입니다.') {
+        return NextResponse.json(
+          { error: '30일 이내에 탈퇴한 이메일입니다.' },
+          { status: 409 }
+        );
+      }
+    }
+  }
 
-  if (result) return NextResponse.json({ message: '인증 성공' });
   return NextResponse.json({ error: '인증 실패' }, { status: 400 });
 };

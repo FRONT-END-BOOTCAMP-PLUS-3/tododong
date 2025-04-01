@@ -8,8 +8,13 @@ export const signupUsecase = async (
 ): Promise<void> => {
   const { email, password, nickname } = dto;
 
-  const user = await userRepository.findByNickname(nickname);
-  if (user) {
+  const emailDuplicatedUser = await userRepository.findByEmail(email);
+  if (emailDuplicatedUser) {
+    throw new Error('이메일 중복');
+  }
+
+  const nicknameDuplicatedUser = await userRepository.findByNickname(nickname);
+  if (nicknameDuplicatedUser) {
     throw new Error('닉네임 중복');
   }
 

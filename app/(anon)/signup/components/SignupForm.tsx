@@ -26,13 +26,16 @@ const messagePhrase = {
 };
 
 const SignupForm = () => {
-  type ModalAlert =
+  type ModalVarient =
     | ''
     | 'successSendEmail'
     | 'successVerify'
     | 'failVerify'
     | 'successSignup'
-    | 'failSignup';
+    | 'failSignup'
+    | 'restoreEmail'
+    | 'successRestoreEmail'
+    | 'failRestoreEmail';
 
   /* ----------------------------------- refs ---------------------------------- */
   const timerRef = useRef<NodeJS.Timeout>(null);
@@ -58,7 +61,7 @@ const SignupForm = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mailTime, setMailTime] = useState(0);
-  const [modalAlert, setModalAlert] = useState<ModalAlert>('');
+  const [openedModal, setOpenedModal] = useState<ModalVarient>('');
 
   /* --------------------------------- functions ------------------------------- */
   // input 값이 변경되면, formData 상태 업데이트
@@ -138,7 +141,7 @@ const SignupForm = () => {
         setIsEmailSending
       );
 
-      setModalAlert('successSendEmail');
+      setOpenedModal('successSendEmail');
       // 타이머 시작
       setMailTime(120);
 
@@ -150,12 +153,15 @@ const SignupForm = () => {
     } catch (err: unknown) {
       setIsEmailSent(false);
       setMailTime(0);
+
       if (err instanceof Error) {
-        if (err.message === '이미 가입된 이메일입니다.')
+        if (err.message === '이미 가입된 이메일입니다.') {
           setMessages((prev) => ({
             ...prev,
             email: messagePhrase.duplicatedEmail,
           }));
+        }
+
         console.error(err.message);
       }
     }
@@ -180,10 +186,15 @@ const SignupForm = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setMailTime(0);
       setIsVerified(true);
-      setModalAlert('successVerify');
+      setOpenedModal('successVerify');
     } catch (err) {
-      setModalAlert('failVerify');
-      if (err instanceof Error) console.error(err.message);
+      setOpenedModal('failVerify');
+      if (err instanceof Error) {
+        if (err.message === '30일 이내에 탈퇴한 이메일입니다.') {
+          setOpenedModal('restoreEmail');
+        }
+        console.error(err.message);
+      }
     }
   };
 
@@ -207,17 +218,52 @@ const SignupForm = () => {
         },
         setIsLoading
       );
-      setModalAlert('successSignup');
+      setOpenedModal('successSignup');
     } catch (err: unknown) {
       if (err instanceof Error) {
-        if (err.message === '닉네임 중복')
+        if (err.message === '닉네임 중복') {
           setMessages((prev) => ({
             ...prev,
             nickname: messagePhrase.duplicatedNickName,
           }));
+        }
+        if (err.message === '이메일 중복') {
+          setMessages((prev) => ({
+            ...prev,
+            email: messagePhrase.duplicatedEmail,
+          }));
+          setIsVerified(false);
+          setIsEmailSent(false);
+        }
         console.error(err.message);
       }
-      setModalAlert('failSignup');
+
+      setOpenedModal('failSignup');
+    }
+  };
+
+  const handleRestoreEmail = async () => {
+    if (isEmailSending) {
+      alert('이메일 발송 중입니다. 잠시만 기다려주세요.');
+      return;
+    }
+
+    try {
+      await fetcher(
+        '/api/user/restore',
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: formData.email }),
+        },
+        setIsEmailSending
+      );
+      setOpenedModal('successRestoreEmail');
+    } catch (err) {
+      setOpenedModal('failRestoreEmail');
+      if (err instanceof Error) console.error(err.message);
     }
   };
 
@@ -317,27 +363,78 @@ const SignupForm = () => {
         </button>
       </form>
 
-      {/* alert */}
+      {/* 모달창 */}
       <Modal
-        isOpen={!!modalAlert}
+        isOpen={!!openedModal}
         onClose={() => {
-          setModalAlert('');
-          if (modalAlert === 'successSignup') location.href = '/login';
+          if (isEmailSending) {
+            alert('이메일 발송 중입니다. 잠시만 기다려주세요.');
+            return;
+          }
+
+          setOpenedModal('');
+          if (
+            openedModal === 'successSignup' ||
+            openedModal === 'successRestoreEmail'
+          )
+            location.href = '/login';
         }}
-        isAlert
+        onConfirm={
+          openedModal === 'restoreEmail' ? handleRestoreEmail : undefined
+        }
+        isAlert={openedModal !== 'restoreEmail'}
       >
         <div className={styles.alertModalContent}>
-          {modalAlert === 'successSendEmail' && (
-            <p>{'인증 코드가 메일로 발송되었습니다.\n2분 내 입력해주세요.'}</p>
-          )}
-          {modalAlert === 'successVerify' && <p>인증 성공</p>}
-          {modalAlert === 'failVerify' && <p>인증 코드가 일치하지 않습니다.</p>}
-          {modalAlert === 'successSignup' && (
-            <p>{'회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.'}</p>
-          )}
-          {modalAlert === 'failSignup' && (
-            <p>{'회원가입에 실패했습니다.\n다시 시도해 주세요'}</p>
-          )}
+          {(() => {
+            switch (openedModal) {
+              case 'successSendEmail':
+                return (
+                  <p>
+                    {'인증 코드가 메일로 발송되었습니다.\n2분 내 입력해주세요.'}
+                  </p>
+                );
+              case 'successVerify':
+                return <p>인증 성공</p>;
+              case 'failVerify':
+                return <p>인증 코드가 일치하지 않습니다.</p>;
+              case 'successSignup':
+                return (
+                  <p>
+                    {'회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.'}
+                  </p>
+                );
+              case 'failSignup':
+                return <p>{'회원가입에 실패했습니다.\n다시 시도해 주세요'}</p>;
+              case 'restoreEmail':
+                return (
+                  <p>
+                    {'30일 이내에 탈퇴한 이메일입니다.\n\n' +
+                      '탈퇴 후 30일 이내에는 재가입이 불가능합니다.\n' +
+                      '기존 계정을 복구하시겠습니까?\n\n'}
+                    <span className={styles.explanation}>
+                      ("확인" 버튼을 누르면 해당 이메일로 임시 비밀번호가
+                      발송됩니다.)
+                    </span>
+                  </p>
+                );
+              case 'successRestoreEmail':
+                return (
+                  <p>
+                    {
+                      '임시 비밀번호가 발송되었습니다.\n로그인 페이지로 이동합니다.'
+                    }
+                  </p>
+                );
+              case 'failRestoreEmail':
+                return (
+                  <p>
+                    {'임시 비밀번호 발송에 실패했습니다.\n다시 시도해 주세요.'}
+                  </p>
+                );
+              default:
+                return null;
+            }
+          })()}
         </div>
       </Modal>
     </>

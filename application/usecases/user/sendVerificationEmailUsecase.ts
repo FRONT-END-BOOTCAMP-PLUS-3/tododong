@@ -1,14 +1,6 @@
 import UserRepository from '@/domain/repositories/UserRepository';
 import { VerificationCodeRepository } from '@/domain/repositories/VerificationCodeRepository';
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import { transporter } from '@/utils/transporter';
 
 export const sendVerificationEmailUsecase = async (
   verificationCodeRepository: VerificationCodeRepository,
@@ -17,7 +9,9 @@ export const sendVerificationEmailUsecase = async (
 ) => {
   try {
     const user = await userRepository.findByEmail(email);
-    if (user) throw new Error('이메일 중복');
+    if (user && !user.deletedAt) {
+      throw new Error('이메일 중복');
+    }
 
     await verificationCodeRepository.deleteDuplication(email);
 
