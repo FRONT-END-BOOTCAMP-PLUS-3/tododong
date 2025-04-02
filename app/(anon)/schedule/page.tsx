@@ -20,10 +20,20 @@ const Schedule = () => {
     ? new Date(searchParams.get('date')!)
     : today;
   const [selectedDate, setSelectedDate] = useState(initialDate);
+  const [calendarYear, setCalendarYear] = useState(dayjs(selectedDate).year());
+  const [calendarMonth, setCalendarMonth] = useState(
+    dayjs(selectedDate).month() + 1
+  );
 
-  const fetchScheduledGameCounts = async () => {
+  // selectedDate가 변경될 때마다 calendarYear, calendarMonth 업데이트
+  useEffect(() => {
+    setCalendarYear(dayjs(selectedDate).year());
+    setCalendarMonth(dayjs(selectedDate).month() + 1);
+  }, [selectedDate]);
+
+  const fetchScheduledGameCounts = async (year: number, month: number) => {
     return await fetcher<ScheduledGameCountDto[]>(
-      `${process.env.NEXT_PUBLIC_API_URL}/schedule`
+      `${process.env.NEXT_PUBLIC_API_URL}/schedule?year=${year}&month=${month}`
     );
   };
 
@@ -32,8 +42,9 @@ const Schedule = () => {
     // isLoading: isCountsLoading,
     // error: countsError,
   } = useQuery({
-    queryKey: ['scheduledGameCounts'],
-    queryFn: fetchScheduledGameCounts,
+    queryKey: ['scheduledGameCounts', calendarYear, calendarMonth],
+    queryFn: () => fetchScheduledGameCounts(calendarYear, calendarMonth),
+    staleTime: 1000 * 60 * 60 * 24,
   });
 
   const fetchScheduledGames = async (date: Date) => {
@@ -51,6 +62,7 @@ const Schedule = () => {
     queryKey: ['scheduledGames', selectedDate],
     queryFn: () => fetchScheduledGames(selectedDate),
     enabled: !!selectedDate, // selectedDate가 설정된 후에만 실행
+    refetchOnWindowFocus: false,
   });
 
   // selectedDate 변경 시 데이터 가져오기 및 URL 변경
@@ -81,6 +93,8 @@ const Schedule = () => {
         selectedDate={selectedDate}
         scheduledGameCounts={scheduledGameCounts}
         onDateChange={setSelectedDate}
+        onCalendarYearChange={setCalendarYear}
+        onCalendarMonthChange={setCalendarMonth}
       />
       <main>
         {isGamesLoading ? (
