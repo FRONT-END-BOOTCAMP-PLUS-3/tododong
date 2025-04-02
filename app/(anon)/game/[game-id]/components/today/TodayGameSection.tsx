@@ -97,8 +97,16 @@ const TodayGameSection = () => {
           setIsLastSlide(swiper.isEnd);
           setIsFirstSlide(swiper.isBeginning);
         }}
-        slidesPerView={5} // 한 번에 보이는 카드 개수
-        slidesPerGroup={3} // 내비게이션 클릭 시 이동할 개수
+        breakpoints={{
+          0: {
+            slidesPerView: 'auto',
+            slidesPerGroup: 1,
+          },
+          1280: {
+            slidesPerView: 5,
+            slidesPerGroup: 3,
+          },
+        }}
         spaceBetween={16}
         centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
         className={`swiper ${todayGames.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
