@@ -78,7 +78,7 @@ const GameLayout = async ({
       <TodayGameSection />
       <div className={styles.container}>
         <div className={styles.mainInfo}>
-          <GameStatusSection gameInfo={gameInfo} />
+          <GameStatusSection initialGameInfo={gameInfo} />
           <div className={styles.gamePageMain}>
             <GamePageNav gameId={gameId} />
             {children}
