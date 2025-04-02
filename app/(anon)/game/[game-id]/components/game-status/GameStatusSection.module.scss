@@ -9,7 +9,7 @@
   background-color: $color-primary;
   border-radius: $border-radius-8;
 
-  @include flexbox($justify: center, $align: center, $gap: 56px);
+  @include flexbox($justify: center, $align: center, $gap: 3.5rem);
 }
 
 .teamWrap {
@@ -77,5 +77,11 @@
     height: 27px;
     padding: 0;
     line-height: 26px;
+  }
+}
+
+@include mq(lgMobile) {
+  .container {
+    gap: 2rem;
   }
 }

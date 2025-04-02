@@ -4,11 +4,21 @@
 
 .swiper {
   width: 974px;
+  max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
 }
 
+.swiper-slide {
+  width: 182px !important;
+}
 .limited-swiper {
   margin-left: auto;
   margin-right: 0;
+}
+
+@include mq(tablet) {
+  .swiper {
+    width: 100%;
+  }
 }
