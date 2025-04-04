@@ -1,7 +1,8 @@
 import '@/styles/globals.scss';
 // import styles from './layout.module.scss';
-import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import Header from '@/components/header/Header';
+import MediaProvider from '@/providers/MediaProvider';
 import { headers } from 'next/headers';
 
 export const metadata = {
@@ -42,6 +43,8 @@ export default async function RootLayout({
   return (
     <html lang="ko-KR">
       <body>
+        <MediaProvider />
+
         <Header pathname={headerPathname} />
         {children}
         <Footer pathname={headerPathname} />
