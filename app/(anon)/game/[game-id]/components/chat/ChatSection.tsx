@@ -110,17 +110,23 @@ const ChatSection = ({
       if (response) {
         console.log('데이터 생성 성공');
       }
+
+      // 실시간 소켓 브로드캐스트
+      socket.emit('newMessage', newMsg);
+
+      // 메시지를 직접 추가하지 않고, 소켓을 통해 수신되도록 함
+      socket.emit('sendMessage', newMsg); // 여기서 emit 이벤트 이름도 통일
+
+      setValue(''); // 입력창 초기화
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        if (error.message === '토큰이 만료되었습니다.') {
+          setIsModalOpen(true);
+        }
+        console.error(error.message);
+      }
+      return;
     }
-
-    // 실시간 소켓 브로드캐스트
-    socket.emit('newMessage', newMsg);
-
-    // 메시지를 직접 추가하지 않고, 소켓을 통해 수신되도록 함
-    socket.emit('sendMessage', newMsg); // 여기서 emit 이벤트 이름도 통일
-
-    setValue(''); // 입력창 초기화
   };
 
   // 로그인 후 돌아올 경로 저장
