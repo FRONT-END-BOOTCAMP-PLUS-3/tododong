@@ -5,9 +5,9 @@ import Link from 'next/link';
 export default async function NotFound() {
   return (
     <main className={styles.page}>
-      <a href="/" aria-label="홈으로 이동" className={styles.homeLink}>
+      <Link href="/" aria-label="홈으로 이동" className={styles.homeLink}>
         <Image src="/logo.png" alt="" width={140} height={89} priority />
-      </a>
+      </Link>
 
       <div className={styles.contents}>
         <h1 className={styles.title}>404 ERROR</h1>
