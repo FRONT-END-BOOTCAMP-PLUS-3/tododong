@@ -112,7 +112,10 @@ const TodayGameSection = () => {
         className={`swiper ${todayGames.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
       >
         {todayGames.map((data, index) => (
-          <SwiperSlide key={data?.gameId ?? index}>
+          <SwiperSlide
+            key={data?.gameId ?? index}
+            className={`custom-swiper-slide`}
+          >
             <TodayGameCard
               gameId={data?.gameId}
               gameStatus={data?.gameStatus}
