@@ -14,19 +14,12 @@ export default async function AnonLayout({
   const hideLayoutRoutes = ['/login', '/signup'];
 
   return hideLayoutRoutes.includes(headerPathname) ? (
-    <>
-      {children}
-      <div id="loading-start" aria-live="assertive"></div>
-      <div id="loading-end" aria-live="assertive"></div>
-    </>
+    <>{children}</>
   ) : (
     <>
       <Header pathname={headerPathname} />
       {children}
       <Footer pathname={headerPathname} />
-
-      <div id="loading-start" aria-live="assertive"></div>
-      <div id="loading-end" aria-live="assertive"></div>
     </>
   );
 }

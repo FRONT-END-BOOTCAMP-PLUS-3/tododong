@@ -33,8 +33,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang="ko-KR">
       <body>{children}</body>
+
+      <div id="loading-start" aria-live="assertive"></div>
+      <div id="loading-end" aria-live="assertive"></div>
     </html>
   );
 }
