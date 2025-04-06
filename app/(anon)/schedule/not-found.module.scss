@@ -1,0 +1,50 @@
+@use 'utils' as *;
+
+.page {
+  @include flexbox(
+    $direction: column,
+    $justify: center,
+    $align: center,
+    $gap: 2rem
+  );
+  margin: -72px auto 0;
+  height: 100vh;
+
+  .contents {
+    @include flexbox($direction: column, $gap: 1.25rem);
+
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      color: $color-primary;
+    }
+
+    > p {
+      font-size: $text-24;
+    }
+  }
+
+  .homeButton {
+    width: 160px;
+    padding: 0.75rem 0;
+    border-radius: $border-radius-8;
+    background-color: $color-primary;
+    color: $color-white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+  }
+}
+
+@include mq(smMobile) {
+  .contents > p {
+    font-size: $text-20;
+  }
+  .contents > div p {
+    font-size: $text-14;
+  }
+}
