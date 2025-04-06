@@ -34,14 +34,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko-KR">
-      <body>
-        <Header pathname={headerPathname} />
-        {children}
-        <Footer pathname={headerPathname} />
-
-        <div id="loading-start" aria-live="assertive"></div>
-        <div id="loading-end" aria-live="assertive"></div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
