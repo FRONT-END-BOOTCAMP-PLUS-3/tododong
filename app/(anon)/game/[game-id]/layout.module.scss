@@ -2,14 +2,19 @@
 
 .container {
   @include flexbox($justify: space-between, $gap: 16px);
+  width: 100%;
 }
+
 .mainInfo {
   @include flexbox($direction: column, $gap: 16px);
+  width: 100%;
+  min-width: 360px;
 
-  > div {
-    width: 900px;
-    flex-shrink: 0;
-  }
+  // > div {
+  //   // width: 900px;
+  //   max-width: 1280px;
+  //   // flex-shrink: 0;
+  // }
 }
 
 .gamePageMain {

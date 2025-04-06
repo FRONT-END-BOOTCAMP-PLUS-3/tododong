@@ -1,3 +1,4 @@
+import QueryProvider from '@/components/query-provider/QueryProvider';
 import '@/styles/globals.scss';
 
 export const metadata = {
@@ -34,10 +35,12 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko-KR">
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
 
-      <div id="loading-start" aria-live="assertive"></div>
-      <div id="loading-end" aria-live="assertive"></div>
+        <div id="loading-start" aria-live="assertive"></div>
+        <div id="loading-end" aria-live="assertive"></div>
+      </body>
     </html>
   );
 }

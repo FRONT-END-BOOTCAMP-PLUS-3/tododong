@@ -16,6 +16,19 @@
   width: 40px;
   padding: 6px 0px;
   font-size: $text-14;
+
+  @include mq(tablet) {
+    width: 32px;
+    font-size: $text-12;
+  }
+  @include mq(lgMobile) {
+    width: 40px;
+    font-size: $text-14;
+  }
+  @include mq(smMobile) {
+    width: 32px;
+    font-size: $text-12;
+  }
 }
 
 .live {

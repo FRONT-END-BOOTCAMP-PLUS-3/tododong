@@ -34,3 +34,9 @@
 .spacer {
   padding-top: 4.5rem;
 }
+
+@include mq(tablet) {
+  .header {
+    width: calc(100% - $gap * 2);
+  }
+}
