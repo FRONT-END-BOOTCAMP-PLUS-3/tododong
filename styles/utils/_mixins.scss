@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use 'sass:string';
+
+
 // 숨김 콘텐츠
 @mixin srOnly {
   position: absolute;
@@ -66,3 +70,33 @@
   left: $left;
   right: $right;
 }
+
+// 미디어쿼리 중단점
+$breakpoints: (
+  smMobile: 480,
+  lgMobile: 768,
+  tablet: 1279,
+);
+
+// 미디어쿼리 믹스인
+@mixin mq($breakpoint) {
+  @each $key, $value in $breakpoints {
+    @if not map.has-key($breakpoints, $breakpoint) {
+      @error '#{$breakpoint}는 유효한 중단점이 아닙니다.(유효한 값: mobile, tablet)';
+    }
+  }
+
+  $viewport: map.get($breakpoints, $breakpoint);
+  $query: string.unquote('max-width: #{$viewport}px');
+
+  @media ($query) {
+    @content;
+  }
+}
+
+// 사용 예시
+// @include mq(tablet) {
+//   .test {
+//     width: 100%;
+//   }
+// }

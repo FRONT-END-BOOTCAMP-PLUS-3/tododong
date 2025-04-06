@@ -43,7 +43,7 @@
 }
 
 .loser {
-  color: $color-gray-600;
+  color: $color-gray-300;
 }
 
 .links {
@@ -61,6 +61,117 @@
 
     &:hover {
       background-color: $color-gray-600;
+    }
+  }
+}
+
+@include mq(tablet) {
+  .card {
+    width: 100%;
+    padding: 52px 0 32px;
+  }
+
+  .game {
+    grid-template-columns: 1fr 152px 1fr;
+  }
+
+  .status {
+    grid-template-columns: 1fr 32px 1fr;
+    column-gap: 12px;
+
+    p {
+      font-size: $text-28;
+    }
+
+    .date {
+      font-size: $text-18;
+    }
+
+    .time {
+      font-size: $text-24;
+    }
+  }
+
+  .links {
+    @include flexbox($justify: center, $gap: 16px);
+
+    a {
+      padding: 6px 0;
+      width: 100px;
+      font-size: $text-18;
+    }
+  }
+}
+
+@include mq(lgMobile) {
+  .card {
+    padding: 60px 0px 32px;
+  }
+
+  .game {
+    grid-template-columns: 1fr 220px 1fr;
+  }
+
+  .status {
+    grid-template-columns: 1fr 40px 1fr;
+    column-gap: 24px;
+
+    p {
+      font-size: $text-36;
+    }
+
+    .date {
+      font-size: $text-20;
+    }
+
+    .time {
+      font-size: $text-30;
+    }
+  }
+
+  .links {
+    a {
+      padding: 8px 0;
+      width: 132px;
+      font-size: $text-20;
+    }
+  }
+}
+
+@include mq(smMobile) {
+  .card {
+    width: 100%;
+    padding: 52px 0 32px;
+  }
+
+  .game {
+    grid-template-columns: 1fr 152px 1fr;
+  }
+
+  .status {
+    grid-template-columns: 1fr 32px 1fr;
+    column-gap: 12px;
+
+    p {
+      font-size: $text-28;
+    }
+
+    .date {
+      font-size: $text-18;
+    }
+
+    .time {
+      font-size: $text-24;
+    }
+  }
+
+  .links {
+    @include flexbox($justify: center, $gap: 12px);
+
+    a {
+      padding: 6px 0;
+      width: 80px;
+      font-size: $text-14;
     }
   }
 }

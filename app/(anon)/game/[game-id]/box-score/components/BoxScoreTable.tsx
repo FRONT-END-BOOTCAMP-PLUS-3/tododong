@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from './BoxScoreTable.module.scss';
-import Image from 'next/image';
 import {
   StatisticsDto,
   TeamDto,
 } from '@/application/usecases/game/box-score/dto/boxscoreDto';
+import styles from './BoxScoreTable.module.scss';
+import Image from 'next/image';
 
 // Box Score 테이블 헤더
 const BOX_SCORE_TABLE_HEADER = [
@@ -33,7 +33,7 @@ const BOX_SCORE_TABLE_HEADER = [
   '+/-',
 ];
 
-type BoxScoreTable = {
+type BoxScoreTableProps = {
   data: TeamDto;
   visitor: boolean;
 };
@@ -43,7 +43,7 @@ type SortState = {
   descending: boolean | null;
 };
 
-const BoxScoreTable = ({ data, visitor }: BoxScoreTable) => {
+const BoxScoreTable = ({ data, visitor }: BoxScoreTableProps) => {
   const [sortState, setSortState] = useState<SortState>({
     key: null,
     descending: true,

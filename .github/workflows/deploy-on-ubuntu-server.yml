@@ -1,0 +1,35 @@
+# 워크 플로우 이름 : 우분투 서버에서 빌드와 배포를 위한 워크 플로우
+name: 'Build and Deploy to Ubuntu Server Run'
+
+# main 브랜치에 push 가 발생하면 jobs가 실행되도록 이벤트 설정
+on:
+  push:
+    branches:
+      - main # main 브랜치에 push 가 발생하면 
+
+# 위에 설정된 push 이벤트를 실행할 job들의 순서를 정한다.
+jobs:
+
+  # 첫번째 단계 : 빌드
+  build:
+    runs-on: [self-hosted, tododong-server]
+    
+    steps:
+      - name: Build Next.js Project
+        run: echo "Build Next.js Project" 
+  
+  # 두번째 단계: 테스트
+  test:
+    runs-on: [self-hosted, tododong-server]
+    
+    steps:
+      - name: Test Next.js Project
+        run: echo "Test Next.js Project" 
+  
+  # 세번째 단계: 배포
+  deploy: 
+    runs-on: [self-hosted, tododong-server]
+    
+    steps:
+      - name: Deploy Next.js Project
+        run: /home/tododong/next-app-update.sh
