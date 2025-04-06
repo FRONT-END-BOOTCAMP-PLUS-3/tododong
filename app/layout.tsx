@@ -1,9 +1,8 @@
 import '@/styles/globals.scss';
-// import styles from './layout.module.scss';
-import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import MediaProvider from '@/providers/MediaProvider';
 import { headers } from 'next/headers';
+import QueryProvider from '@/components/query-provider/QueryProvider';
 
 export const metadata = {
   title: '토도동',
@@ -46,7 +45,7 @@ export default async function RootLayout({
         <MediaProvider />
 
         <Header pathname={headerPathname} />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Footer pathname={headerPathname} />
 
         <div id="loading-start" aria-live="assertive"></div>
