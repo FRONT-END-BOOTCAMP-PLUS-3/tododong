@@ -3,7 +3,7 @@
 import styles from './page.module.scss';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
@@ -24,6 +24,10 @@ const Schedule = () => {
     ScheduledGameCountDto[]
   >([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  if (!selectedDate || isNaN(selectedDate.getTime())) {
+    notFound(); // 잘못된 날짜면 not-found 페이지로 이동
+  }
 
   useEffect(() => {
     const fetchScheduledGameCounts = async () => {
