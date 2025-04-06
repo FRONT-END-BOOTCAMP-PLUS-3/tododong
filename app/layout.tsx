@@ -33,8 +33,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>{children}</body>
+    <html lang="ko-KR">
+      <body>
+        <Header pathname={headerPathname} />
+        {children}
+        <Footer pathname={headerPathname} />
+
+        <div id="loading-start" aria-live="assertive"></div>
+        <div id="loading-end" aria-live="assertive"></div>
+      </body>
     </html>
   );
 }
