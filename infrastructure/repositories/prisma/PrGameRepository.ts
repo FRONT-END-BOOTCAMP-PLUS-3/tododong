@@ -35,10 +35,30 @@ export class PrGameRepository implements GameRepository {
     }
   }
 
-  async countByDate(): Promise<{ date: string; gameCount: number }[]> {
+  async countByDate(
+    year: number,
+    month: number
+  ): Promise<{ date: string; gameCount: number }[]> {
     try {
+      const getFormattedDate = (year: number, month: number, day: number) => {
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      };
+
+      const startDateStr = getFormattedDate(year, month, 1); // 해당 월의 1일
+      const endDateStr = getFormattedDate(
+        year,
+        month,
+        new Date(year, month, 0).getDate()
+      ); // 해당 월의 마지막 날
+
       const gameCountByDate = await this.prisma.game.groupBy({
         by: ['date'],
+        where: {
+          date: {
+            gte: startDateStr, // 해당 월의 시작일 이상
+            lt: endDateStr, // 해당 월의 마지막일 이하
+          },
+        },
         _count: {
           _all: true,
         },
