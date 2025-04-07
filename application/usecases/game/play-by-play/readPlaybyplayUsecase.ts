@@ -3,7 +3,6 @@ import { GameRepository } from '@/domain/repositories/GameRepository';
 import { EventDto, PlaybyplayDto } from './dto/PlaybyplayDto';
 import { PlaybyplayRepository } from '@/domain/repositories/PlaybyPlayRepository';
 import { Playbyplay } from '@/domain/entities/Playbyplay';
-import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
 
 const descriptionKor: Record<string, Record<string, string> | string> = {
   game: {
@@ -74,16 +73,6 @@ export const readPlaybyplayUsecase = async (
     const game = await gameRepository.findById(gameId);
     if (!game) {
       throw new Error(`게임(${gameId}) 정보가 없습니다.`);
-    }
-
-    const currentTime = new Date().getTime();
-    const gameStartTime = convertKSTtoTime(game.startTime);
-    const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
-
-    if (currentTime >= threeHoursLater) {
-      game.status = 'final';
-    } else if (currentTime >= gameStartTime) {
-      game.status = 'live';
     }
 
     const homeTeam = await teamRepository.findById(game.homeTeamId);

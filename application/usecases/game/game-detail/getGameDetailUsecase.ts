@@ -2,8 +2,6 @@
 import { GameRepository } from '@/domain/repositories/GameRepository';
 import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
 import { TeamRepository } from '@/domain/repositories/TeamRepository';
-import { convertGameStatus } from '@/utils';
-import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
 import { GameDetailDto } from './dto/gameDetailDto';
 import GameStatus from '@/types/game-status';
 
@@ -20,21 +18,7 @@ export const getGameDetailUsecase = async (
     throw new Error(`게임(${gameId}) 정보가 없습니다.`);
   }
 
-  let gameStatus = convertGameStatus(game.status);
-
-  const currentTime = new Date().getTime();
-  const gameStartTime = convertKSTtoTime(game.startTime);
-  const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
-
-  if (currentTime >= threeHoursLater) {
-    gameStatus = 'final';
-  } else if (currentTime >= gameStartTime) {
-    gameStatus = 'live';
-  } else {
-    gameStatus = 'scheduled';
-  }
-
-  if (gameStatus === 'live')
+  if (game.status === 'live')
     game = await externalRepository.findGameDetailById(gameId);
 
   const parts = game.startTime.split(' ');
@@ -56,7 +40,7 @@ export const getGameDetailUsecase = async (
 
   const gameDetailDto: GameDetailDto = {
     gameId: game.id,
-    gameStatus: gameStatus as GameStatus,
+    gameStatus: game.status as GameStatus,
     arenaName: game.arenaName,
     startTime: {
       date: datePart,

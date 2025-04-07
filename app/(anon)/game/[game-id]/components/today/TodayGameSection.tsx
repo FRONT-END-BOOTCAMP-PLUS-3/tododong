@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import styles from './TodayGameSection.module.scss';
 import './swiper.scss';
@@ -41,10 +41,13 @@ const TodayGameSection = () => {
     queryFn: fetchTodayGames,
   });
 
-  const todayGames =
-    todayGamesRaw.length < 5
-      ? [...todayGamesRaw, ...Array(5 - todayGamesRaw.length).fill(null)]
-      : todayGamesRaw;
+  const todayGames = useMemo(
+    () =>
+      todayGamesRaw.length < 5
+        ? [...todayGamesRaw, ...Array(5 - todayGamesRaw.length).fill(null)]
+        : todayGamesRaw,
+    [todayGamesRaw]
+  );
 
   const shouldShowNavigation = todayGames.length > 5;
 
@@ -66,7 +69,7 @@ const TodayGameSection = () => {
       swiperInstance.navigation.init(); // 새로 init
       swiperInstance.navigation.update(); // 버튼 갱신
     }
-  }, [swiperInstance, prevRef.current, nextRef.current, todayGames]);
+  }, [swiperInstance, todayGames]);
 
   return (
     <section className={styles.todayGameContainer}>

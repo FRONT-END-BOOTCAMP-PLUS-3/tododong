@@ -7,7 +7,6 @@ import GamePageNav from './components/game-page-nav/GamePageNav';
 import GameStatusSection from './components/game-status/GameStatusSection';
 import TodayGameSection from './components/today/TodayGameSection';
 import styles from './layout.module.scss';
-import ReactQueryProvider from './components/providers/ReactQueryProviders';
 
 export const generateMetadata = async ({
   params,
@@ -66,7 +65,7 @@ const GameLayout = async ({
   const gameInfo: GameDetailDto = await response.json();
 
   return (
-    <ReactQueryProvider>
+    <>
       <TodayGameSection />
       <div className={styles.container}>
         <div className={styles.mainInfo}>
@@ -82,7 +81,7 @@ const GameLayout = async ({
           gameState={gameInfo.gameStatus}
         />
       </div>
-    </ReactQueryProvider>
+    </>
   );
 };
 
