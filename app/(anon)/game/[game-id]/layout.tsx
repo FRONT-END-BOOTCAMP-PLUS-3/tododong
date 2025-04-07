@@ -7,6 +7,7 @@ import GamePageNav from './components/game-page-nav/GamePageNav';
 import GameStatusSection from './components/game-status/GameStatusSection';
 import TodayGameSection from './components/today/TodayGameSection';
 import styles from './layout.module.scss';
+import ReactQueryProvider from './components/providers/ReactQueryProviders';
 
 export const generateMetadata = async ({
   params,
@@ -43,8 +44,6 @@ const GameLayout = async ({
   const segment = await params;
   const gameId = segment['game-id'];
 
-  console.log(gameId, 'gameId');
-
   // 쿠키에서 토큰 꺼내고, 토큰에서 유저 정보 꺼내기
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value || '';
@@ -56,11 +55,6 @@ const GameLayout = async ({
     if (decoded) userInfo = decoded;
   }
 
-  // const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/game/${gameId}`);
-
-  // console.log(data);
-  // const gameInfo: GameDetailDto = await data.json();
-
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/game/${gameId}`
   );
@@ -70,14 +64,13 @@ const GameLayout = async ({
   }
 
   const gameInfo: GameDetailDto = await response.json();
-  console.log('gameInfo:', gameInfo);
 
   return (
-    <>
+    <ReactQueryProvider>
       <TodayGameSection />
       <div className={styles.container}>
         <div className={styles.mainInfo}>
-          <GameStatusSection gameInfo={gameInfo} />
+          <GameStatusSection initialGameInfo={gameInfo} />
           <div className={styles.gamePageMain}>
             <GamePageNav gameId={gameId} />
             {children}
@@ -89,7 +82,7 @@ const GameLayout = async ({
           gameState={gameInfo.gameStatus}
         />
       </div>
-    </>
+    </ReactQueryProvider>
   );
 };
 

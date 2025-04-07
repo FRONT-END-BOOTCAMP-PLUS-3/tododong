@@ -1,13 +1,11 @@
 //import { ScheduledGameDto } from './dto/ScheduledGameDto';
-import { StatisticsRepository } from '@/domain/repositories/StatisticsRepository';
-import { TeamRepository } from '@/domain/repositories/TeamRepository';
-import GameStatus from '@/types/game-status';
-import { convertGameStatus, convertUTCtoKST } from '@/utils';
-import { GameDetailDto } from './dto/gameDetailDto';
-import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
 import { GameRepository } from '@/domain/repositories/GameRepository';
-import { off } from 'process';
+import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
+import { TeamRepository } from '@/domain/repositories/TeamRepository';
+import { convertGameStatus } from '@/utils';
 import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
+import { GameDetailDto } from './dto/gameDetailDto';
+import GameStatus from '@/types/game-status';
 
 export const getGameDetailUsecase = async (
   internalRepository: GameRepository,
@@ -22,17 +20,21 @@ export const getGameDetailUsecase = async (
     throw new Error(`게임(${gameId}) 정보가 없습니다.`);
   }
 
+  let gameStatus = convertGameStatus(game.status);
+
   const currentTime = new Date().getTime();
   const gameStartTime = convertKSTtoTime(game.startTime);
   const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
 
   if (currentTime >= threeHoursLater) {
-    game.status = 'final';
+    gameStatus = 'final';
   } else if (currentTime >= gameStartTime) {
-    game.status = 'live';
+    gameStatus = 'live';
+  } else {
+    gameStatus = 'scheduled';
   }
 
-  if (game.status === 'live')
+  if (gameStatus === 'live')
     game = await externalRepository.findGameDetailById(gameId);
 
   const parts = game.startTime.split(' ');
@@ -54,7 +56,7 @@ export const getGameDetailUsecase = async (
 
   const gameDetailDto: GameDetailDto = {
     gameId: game.id,
-    gameStatus: game.status as GameStatus,
+    gameStatus: gameStatus as GameStatus,
     arenaName: game.arenaName,
     startTime: {
       date: datePart,
@@ -63,6 +65,7 @@ export const getGameDetailUsecase = async (
     teams: {
       homeTeam: {
         name: homeTeam.name,
+        code: homeTeam.code,
         logoSrc: homeTeam.logo,
         score: game.homeTeamScore,
         isWinner: game.homeTeamScore > game.awayTeamScore,
@@ -70,6 +73,7 @@ export const getGameDetailUsecase = async (
       },
       awayTeam: {
         name: awayTeam.name,
+        code: awayTeam.code,
         logoSrc: awayTeam.logo,
         score: game.awayTeamScore,
         isWinner: game.awayTeamScore > game.homeTeamScore,

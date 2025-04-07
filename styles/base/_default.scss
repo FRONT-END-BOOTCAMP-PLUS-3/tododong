@@ -18,6 +18,12 @@ body {
   color: $font-color;
 }
 
+@include mq(tablet) {
+  body {
+    padding: 0px 16px;
+  }
+}
+
 input,
 textarea,
 select,

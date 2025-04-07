@@ -12,11 +12,11 @@ importers:
         specifier: ^6.4.1
         version: 6.4.1(prisma@6.4.1(typescript@5.8.2))(typescript@5.8.2)
       '@tanstack/react-query':
-        specifier: ^5.66.7
+        specifier: ^5.67.1
         version: 5.67.1(react@19.0.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.71.0
-        version: 5.71.0(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)
+        specifier: ^5.69.0
+        version: 5.69.0(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -41,9 +41,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
-      root:
-        specifier: git+https://github.com/tanstack/react-query.git
-        version: git+https://github.com/tanstack/react-query.git#cd6c8c04ee12ed3543dcacfb5ca3f1b62cda284a
       socket.io:
         specifier: ^4.8.1
         version: 4.8.1
@@ -611,10 +608,11 @@ packages:
   '@tanstack/query-devtools@5.67.2':
     resolution: {integrity: sha512-O4QXFFd7xqp6EX7sdvc9tsVO8nm4lpWBqwpgjpVLW5g7IeOY6VnS/xvs/YzbRhBVkKTMaJMOUGU7NhSX+YGoNg==}
 
-  '@tanstack/react-query-devtools@5.71.0':
-    resolution: {integrity: sha512-BPyvXYlR7Bsil4g068q+9b9MplSse3Ddqu+ucbViJNSLlLo0w7i/sIRTVy0I3unTaaAmp5fw9fwYjdHE4XuEwQ==}
+
+  '@tanstack/react-query-devtools@5.69.0':
+    resolution: {integrity: sha512-sYklnou3IKAemqB5wJeBwjmG5bUGDKAL5/I4pVA+aqSnsNibVLt8/pAU976uuJ5K71w71bHtI/AMxiIs3gtkEA==}
     peerDependencies:
-      '@tanstack/react-query': ^5.71.0
+      '@tanstack/react-query': ^5.69.0
       react: ^18 || ^19
 
   '@tanstack/react-query@5.67.1':
@@ -2352,7 +2350,7 @@ snapshots:
 
   '@tanstack/query-devtools@5.67.2': {}
 
-  '@tanstack/react-query-devtools@5.71.0(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)':
+  '@tanstack/react-query-devtools@5.69.0(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@tanstack/query-devtools': 5.67.2
       '@tanstack/react-query': 5.67.1(react@19.0.0)
