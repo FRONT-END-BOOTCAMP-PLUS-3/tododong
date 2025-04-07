@@ -3,7 +3,6 @@ import { BoxscoreDto } from './dto/boxscoreDto';
 import { Statistics } from '@/domain/entities/Statistics';
 import { TeamRepository } from '@/domain/repositories/TeamRepository';
 import { GameRepository } from '@/domain/repositories/GameRepository';
-import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
 
 const extractMinAndSecFromText = (str: string) => {
   const match = str.match(/PT(\d+)M(\d+)(?:\.\d+)?S/);
@@ -56,16 +55,6 @@ export const readBoxscoreUsecase = async (
 
     if (!game) {
       throw new Error(`게임(${gameId}) 정보가 없습니다.`);
-    }
-
-    const currentTime = new Date().getTime();
-    const gameStartTime = convertKSTtoTime(game.startTime);
-    const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
-
-    if (currentTime >= threeHoursLater) {
-      game.status = 'final';
-    } else if (currentTime >= gameStartTime) {
-      game.status = 'live';
     }
 
     const homeTeamId = game.homeTeamId;
