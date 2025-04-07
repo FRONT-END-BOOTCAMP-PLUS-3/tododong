@@ -10,9 +10,6 @@ import UserDropDown from './UserDropDown';
 interface JWTPayloadIwthUserInfo extends JWTPayload, UserInfo {}
 
 const Header = async ({ pathname }: { pathname: string }) => {
-  const hideHeaderRoutes = ['/login', '/signup'];
-  if (hideHeaderRoutes.includes(pathname)) return null;
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value || '';
 

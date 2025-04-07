@@ -7,9 +7,6 @@ import LogoutButton from './LogoutButton';
 import ReturnUrlLink from '../action-link/ReturnUrlLink';
 
 const Footer = async ({ pathname }: { pathname: string }) => {
-  const hideHeaderRoutes = ['/login', '/signup'];
-  if (hideHeaderRoutes.includes(pathname)) return null;
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value || '';
 
