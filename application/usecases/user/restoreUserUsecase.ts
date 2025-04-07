@@ -31,7 +31,6 @@ export const restoreUserUsecase = async (
           <h1 style="margin-bottom: 12px; font-size: 28px">임시 비밀번호</h1>
           <p style="margin: 0 0 8px 0; white-space: pre-wrap">회원님의 계정이 복구되어 임시 비밀번호를 보내드립니다.\n아래의 비밀번호를 입력해주세요</p>
           <strong style="font-size: 28px; color: #fa812f">${randomPassword}</strong>
-          <p style="color: #999999; margin: 8px">(2분 내 입력해주세요)</p>
         </div>
       </div>
     `,
