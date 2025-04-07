@@ -3,7 +3,7 @@
 import styles from './page.module.scss';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
@@ -24,6 +24,10 @@ const Schedule = () => {
   const [calendarMonth, setCalendarMonth] = useState(
     dayjs(selectedDate).month() + 1
   );
+
+  if (!selectedDate || isNaN(selectedDate.getTime())) {
+    notFound(); // 잘못된 날짜면 not-found 페이지로 이동
+  }
 
   // selectedDate가 변경될 때마다 calendarYear, calendarMonth 업데이트
   useEffect(() => {
