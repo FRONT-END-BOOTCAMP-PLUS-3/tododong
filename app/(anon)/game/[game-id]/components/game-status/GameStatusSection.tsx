@@ -14,6 +14,8 @@ const GameStatusSection = ({ initialGameInfo }: Props) => {
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
   useEffect(() => {
+    if (gameInfo.gameStatus !== 'live') return;
+
     const fetchGameInfo = async () => {
       try {
         const res = await fetch(
@@ -32,8 +34,7 @@ const GameStatusSection = ({ initialGameInfo }: Props) => {
 
     const interval = setInterval(fetchGameInfo, 10000);
     return () => clearInterval(interval);
-  }, [gameInfo.gameId]);
-  console.log(gameInfo);
+  }, [gameInfo]);
 
   return (
     <section className={styles.container}>
