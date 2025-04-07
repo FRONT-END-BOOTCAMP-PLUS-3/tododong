@@ -1,12 +1,10 @@
+import QueryProvider from '@/components/query-provider/QueryProvider';
 import '@/styles/globals.scss';
-// import styles from './layout.module.scss';
-import Header from '@/components/header/Header';
-import Footer from '@/components/footer/Footer';
-import { headers } from 'next/headers';
 
 export const metadata = {
   title: '토도동',
-  description: '농구 경기 일정, 실시간 중계를 제공',
+  description:
+    'NBA 경기 일정, 경기별 Youtube영상, 선수 기록, 실시간 중계를 제공합니다.',
   icons: {
     icon: [
       { url: '/favicons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -35,15 +33,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const headerPathname = headersList.get('x-pathname') || '';
-
   return (
     <html lang="ko-KR">
       <body>
-        <Header pathname={headerPathname} />
-        {children}
-        <Footer pathname={headerPathname} />
+        <QueryProvider>{children}</QueryProvider>
 
         <div id="loading-start" aria-live="assertive"></div>
         <div id="loading-end" aria-live="assertive"></div>

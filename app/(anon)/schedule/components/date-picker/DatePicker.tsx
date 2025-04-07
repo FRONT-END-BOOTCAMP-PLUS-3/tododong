@@ -22,12 +22,16 @@ type DatePickerProps = {
   selectedDate: Date;
   scheduledGameCounts: ScheduledGameCountDto[];
   onDateChange: (date: Date) => void;
+  onCalendarYearChange: (year: number) => void;
+  onCalendarMonthChange: (month: number) => void;
 };
 
 const DatePicker = ({
   selectedDate,
   scheduledGameCounts,
   onDateChange,
+  onCalendarYearChange,
+  onCalendarMonthChange,
 }: DatePickerProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [dates, setDates] = useState<Date[]>(() => generateDates(selectedDate));
@@ -68,6 +72,12 @@ const DatePicker = ({
     onDateChange(date);
     updateDates(date);
     handleCloseCalendar();
+  };
+
+  // 달력에서 연도와 월 변경 시
+  const handleActiveDateChange = (newActiveStartDate: Date) => {
+    onCalendarYearChange(dayjs(newActiveStartDate).year());
+    onCalendarMonthChange(dayjs(newActiveStartDate).month() + 1);
   };
 
   // 달력 닫기
@@ -115,67 +125,68 @@ const DatePicker = ({
       </div>
 
       {/* 달력 */}
-
-      <div
-        className={`${styles.calendarContainer} ${isCalendarOpen ? styles.open : ''}`}
-        onClick={handleCloseCalendar}
-      >
-        <div className={styles.calendar} onClick={(e) => e.stopPropagation()}>
-          <Calendar
-            value={selectedDate}
-            onChange={handleSelectDate}
-            formatDay={(locale, date) => {
-              return dayjs(date).isSame(dayjs(), 'day')
-                ? '' // 오늘
-                : dayjs(date).format('D'); // '일' 제거 숫자만 보이게
-            }}
-            formatMonthYear={(locale, date) => dayjs(date).format('M월')}
-            calendarType="gregory" // 일요일부터 시작
-            showNeighboringMonth={false} // 이전달, 다음달 날짜 숨기기
-            next2Label={null} // +1년 & +10년 이동 버튼 숨기기
-            prev2Label={null} // -1년 & -10년 이동 버튼 숨기기
-            minDetail="year" // 10년 단위 연도 숨기기
-            tileContent={({ date, view }) => {
-              const isToday = dayjs(date).isSame(dayjs(), 'day');
-              const gameSchedule = scheduledGameCounts?.find((schedule) =>
-                dayjs(schedule.date).isSame(dayjs(date), 'day')
-              );
-              const isDisabled = !gameSchedule;
-              return (
-                <>
-                  {view === 'month' && isToday && <span>오늘</span>}
-                  {view === 'month' && (
-                    <div
-                      className={`${styles.gameSchedule} ${isDisabled ? styles.disabled : ''}`}
-                    >
-                      <span className="srOnly">경기 수</span>
-                      {gameSchedule ? gameSchedule.gameCount : 0}
-                    </div>
-                  )}
-                </>
-              );
-            }}
-            tileDisabled={({ date, view }) => {
-              if (view === 'month') {
+      {isCalendarOpen && (
+        <div className={styles.calendarContainer} onClick={handleCloseCalendar}>
+          <div className={styles.calendar} onClick={(e) => e.stopPropagation()}>
+            <Calendar
+              value={selectedDate}
+              onActiveStartDateChange={({ activeStartDate }) =>
+                activeStartDate && handleActiveDateChange(activeStartDate)
+              }
+              onChange={handleSelectDate}
+              formatDay={(locale, date) => {
+                return dayjs(date).isSame(dayjs(), 'day')
+                  ? '' // 오늘
+                  : dayjs(date).format('D'); // '일' 제거 숫자만 보이게
+              }}
+              formatMonthYear={(locale, date) => dayjs(date).format('M월')}
+              calendarType="gregory" // 일요일부터 시작
+              showNeighboringMonth={false} // 이전달, 다음달 날짜 숨기기
+              next2Label={null} // +1년 & +10년 이동 버튼 숨기기
+              prev2Label={null} // -1년 & -10년 이동 버튼 숨기기
+              minDetail="year" // 10년 단위 연도 숨기기
+              tileContent={({ date, view }) => {
+                const isToday = dayjs(date).isSame(dayjs(), 'day');
                 const gameSchedule = scheduledGameCounts?.find((schedule) =>
                   dayjs(schedule.date).isSame(dayjs(date), 'day')
                 );
-                return !gameSchedule;
-              }
-              return false;
-            }}
-          />
-          <button
-            className={styles.todayBtn}
-            onClick={() => handleSelectDate(new Date())}
-          >
-            오늘
-          </button>
-          <button className={styles.closeBtn} onClick={handleCloseCalendar}>
-            <Icon id="close" width={12} />
-          </button>
+                const isDisabled = !gameSchedule;
+                return (
+                  <>
+                    {view === 'month' && isToday && <span>오늘</span>}
+                    {view === 'month' && (
+                      <div
+                        className={`${styles.gameSchedule} ${isDisabled ? styles.disabled : ''}`}
+                      >
+                        <span className="srOnly">경기 수</span>
+                        {gameSchedule ? gameSchedule.gameCount : 0}
+                      </div>
+                    )}
+                  </>
+                );
+              }}
+              tileDisabled={({ date, view }) => {
+                if (view === 'month') {
+                  const gameSchedule = scheduledGameCounts?.find((schedule) =>
+                    dayjs(schedule.date).isSame(dayjs(date), 'day')
+                  );
+                  return !gameSchedule;
+                }
+                return false;
+              }}
+            />
+            <button
+              className={styles.todayBtn}
+              onClick={() => handleSelectDate(new Date())}
+            >
+              오늘
+            </button>
+            <button className={styles.closeBtn} onClick={handleCloseCalendar}>
+              <Icon id="close" width={12} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 날짜 Swiper */}
       <div className={styles.swiper}>
