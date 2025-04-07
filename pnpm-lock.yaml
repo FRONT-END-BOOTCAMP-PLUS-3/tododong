@@ -614,6 +614,7 @@ packages:
   '@tanstack/query-devtools@5.67.2':
     resolution: {integrity: sha512-O4QXFFd7xqp6EX7sdvc9tsVO8nm4lpWBqwpgjpVLW5g7IeOY6VnS/xvs/YzbRhBVkKTMaJMOUGU7NhSX+YGoNg==}
 
+
   '@tanstack/react-query-devtools@5.69.0':
     resolution: {integrity: sha512-sYklnou3IKAemqB5wJeBwjmG5bUGDKAL5/I4pVA+aqSnsNibVLt8/pAU976uuJ5K71w71bHtI/AMxiIs3gtkEA==}
     peerDependencies:
@@ -1740,6 +1741,10 @@ packages:
   reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  root@git+https://github.com/tanstack/react-query.git#cd6c8c04ee12ed3543dcacfb5ca3f1b62cda284a:
+    resolution: {commit: cd6c8c04ee12ed3543dcacfb5ca3f1b62cda284a, repo: https://github.com/tanstack/react-query.git, type: git}
+    version: 0.0.0
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -3757,6 +3762,8 @@ snapshots:
       supports-preserve-symlinks-flag: 1.0.0
 
   reusify@1.1.0: {}
+
+  root@git+https://github.com/tanstack/react-query.git#cd6c8c04ee12ed3543dcacfb5ca3f1b62cda284a: {}
 
   run-parallel@1.2.0:
     dependencies:

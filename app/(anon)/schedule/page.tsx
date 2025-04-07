@@ -2,8 +2,9 @@
 
 import styles from './page.module.scss';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/utils';
 import DatePicker from './components/date-picker/DatePicker';
 import GameCard from './components/game-card/GameCard';
@@ -19,37 +20,50 @@ const Schedule = () => {
     ? new Date(searchParams.get('date')!)
     : today;
   const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [scheduledGames, setScheduledGames] = useState<ScheduledGameDto[]>([]);
-  const [scheduledGameCounts, setScheduledGameCounts] = useState<
-    ScheduledGameCountDto[]
-  >([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [calendarYear, setCalendarYear] = useState(dayjs(selectedDate).year());
+  const [calendarMonth, setCalendarMonth] = useState(
+    dayjs(selectedDate).month() + 1
+  );
 
+  // selectedDate가 변경될 때마다 calendarYear, calendarMonth 업데이트
   useEffect(() => {
-    const fetchScheduledGameCounts = async () => {
-      try {
-        const response = await fetcher<ScheduledGameCountDto[]>(
-          `${process.env.NEXT_PUBLIC_API_URL}/schedule`
-        );
-        setScheduledGameCounts([...response]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    setCalendarYear(dayjs(selectedDate).year());
+    setCalendarMonth(dayjs(selectedDate).month() + 1);
+  }, [selectedDate]);
 
-    fetchScheduledGameCounts();
-  }, []);
+  const fetchScheduledGameCounts = async (year: number, month: number) => {
+    return await fetcher<ScheduledGameCountDto[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedule?year=${year}&month=${month}`
+    );
+  };
 
-  const fetchScheduledGames = useCallback(async (date: Date) => {
-    try {
-      const response = await fetcher<ScheduledGameDto[]>(
-        `${process.env.NEXT_PUBLIC_API_URL}/schedule/${dayjs(date).format('YYYY-MM-DD')}`
-      );
-      setScheduledGames(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  const {
+    data: scheduledGameCounts = [],
+    // isLoading: isCountsLoading,
+    // error: countsError,
+  } = useQuery({
+    queryKey: ['scheduledGameCounts', calendarYear, calendarMonth],
+    queryFn: () => fetchScheduledGameCounts(calendarYear, calendarMonth),
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  const fetchScheduledGames = async (date: Date) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    return fetcher<ScheduledGameDto[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedule/${formattedDate}`
+    );
+  };
+
+  const {
+    data: scheduledGames = [],
+    isLoading: isGamesLoading,
+    // error: gamesError,
+  } = useQuery({
+    queryKey: ['scheduledGames', selectedDate],
+    queryFn: () => fetchScheduledGames(selectedDate),
+    enabled: !!selectedDate, // selectedDate가 설정된 후에만 실행
+    refetchOnWindowFocus: false,
+  });
 
   // selectedDate 변경 시 데이터 가져오기 및 URL 변경
   useEffect(() => {
@@ -58,13 +72,7 @@ const Schedule = () => {
     if (searchParams.get('date') !== formattedDate) {
       router.push(`?date=${formattedDate}`);
     }
-    const fetchData = async () => {
-      await fetchScheduledGames(selectedDate);
-      setIsInitialLoading(false);
-    };
-
-    fetchData();
-  }, [selectedDate, fetchScheduledGames, router, searchParams]);
+  }, [selectedDate, router, searchParams]);
 
   // 브라우저 뒤로가기 감지하여 selectedDate 업데이트
   useEffect(() => {
@@ -77,7 +85,7 @@ const Schedule = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [fetchScheduledGames]);
+  }, []);
 
   return (
     <>
@@ -85,9 +93,11 @@ const Schedule = () => {
         selectedDate={selectedDate}
         scheduledGameCounts={scheduledGameCounts}
         onDateChange={setSelectedDate}
+        onCalendarYearChange={setCalendarYear}
+        onCalendarMonthChange={setCalendarMonth}
       />
       <main>
-        {isInitialLoading ? (
+        {isGamesLoading ? (
           <Loader className={styles.loader} />
         ) : scheduledGames && scheduledGames.length > 0 ? (
           <div className={styles.cardWrapper}>

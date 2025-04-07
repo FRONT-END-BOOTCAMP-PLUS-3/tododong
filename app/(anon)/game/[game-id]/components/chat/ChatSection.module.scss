@@ -137,3 +137,9 @@
 
   @include flexbox($justify: center, $align: center);
 }
+
+@include mq(tablet) {
+  .container {
+    display: none;
+  }
+}
