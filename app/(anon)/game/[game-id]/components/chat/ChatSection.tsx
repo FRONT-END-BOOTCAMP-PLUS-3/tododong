@@ -139,7 +139,7 @@ const ChatSection = ({
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
-  useBodyScrollLock(media !== 'desktop' && isExpanded);
+  useBodyScrollLock(isExpanded);
 
   const handleDragEnd = (
     _: MouseEvent | TouchEvent | PointerEvent,
@@ -173,7 +173,7 @@ const ChatSection = ({
         style={
           media !== 'desktop'
             ? {
-                translate: isExpanded ? '0 0' : '0 calc(60vh - 2.75rem)',
+                translate: isExpanded ? '0 0' : '0 calc(70vh - 3.75rem)',
                 transition: 'translate 0.3s ease-in-out',
               }
             : {}
