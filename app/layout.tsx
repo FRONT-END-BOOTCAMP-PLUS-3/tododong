@@ -1,3 +1,5 @@
+import '@/styles/globals.scss';
+import MediaProvider from '@/providers/MediaProvider';
 import QueryProvider from '@/components/query-provider/QueryProvider';
 import '@/styles/globals.scss';
 
@@ -36,6 +38,7 @@ export default async function RootLayout({
   return (
     <html lang="ko-KR">
       <body>
+        <MediaProvider />
         <QueryProvider>{children}</QueryProvider>
 
         <div id="loading-start" aria-live="assertive"></div>
