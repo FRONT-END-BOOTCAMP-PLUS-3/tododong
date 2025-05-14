@@ -4,7 +4,10 @@ import { ChatMessageDto } from '@/application/usecases/chat/dto/chatMessageDto';
 import { CreateMessageDto } from '@/application/usecases/chat/dto/createMessageDto';
 import Icon from '@/components/icon/Icon';
 import Modal from '@/components/modal/Modal';
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
+import { useMediaStore } from '@/stores/mediaStore';
 import { fetcher } from '@/utils';
+import { motion, PanInfo } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import io from 'socket.io-client';
@@ -24,6 +27,7 @@ const ChatSection = ({
   gameId: string;
   gameState: string;
 }) => {
+  const media = useMediaStore((state) => state.media);
   const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<ChatMessageDto[]>([]); // initMessage
@@ -134,10 +138,61 @@ const ChatSection = ({
     setIsModalOpen(false);
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  useBodyScrollLock(isExpanded);
+
+  const handleDragEnd = (
+    _: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
+    const offset = info.offset.y;
+    const velocity = info.velocity.y;
+
+    // 닫기
+    if (offset > 50 || velocity > 500) {
+      setIsExpanded(false);
+    }
+    // 열기
+    else if (offset < -50 || velocity < -500) {
+      setIsExpanded(true);
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <section className={styles.sticky}>
-        <div className={styles.chatTitle}>채팅</div>
+    <div
+      style={
+        isExpanded
+          ? {
+              backdropFilter: 'blur(2px)',
+            }
+          : {}
+      }
+      className={styles.container}
+    >
+      <section
+        style={
+          media !== 'desktop'
+            ? {
+                translate: isExpanded ? '0 0' : '0 calc(70vh - 3.75rem)',
+                transition: 'translate 0.3s ease-in-out',
+              }
+            : {}
+        }
+        className={styles.chatSection}
+      >
+        <motion.div
+          {...(media !== 'desktop'
+            ? {
+                drag: 'y',
+                dragConstraints: { top: 0, bottom: 0 },
+                onDragEnd: handleDragEnd,
+                dragElastic: 0,
+              }
+            : {})}
+          className={styles.chatTitle}
+        >
+          채팅
+        </motion.div>
         <div className={styles.chatContainer}>
           {gameState === 'scheduled' ? (
             <p className={styles.scheduleNotice}>
@@ -161,8 +216,12 @@ const ChatSection = ({
               onChange={(e) => setValue(e.target.value)}
               placeholder="채팅을 입력하세요."
               disabled={gameState === 'scheduled'}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                if (
+                  e.key === 'Enter' &&
+                  !e.shiftKey &&
+                  !e.nativeEvent.isComposing
+                ) {
                   e.preventDefault();
                   sendMessage();
                 }

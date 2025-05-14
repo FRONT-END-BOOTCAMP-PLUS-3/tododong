@@ -22,12 +22,16 @@ type DatePickerProps = {
   selectedDate: Date;
   scheduledGameCounts: ScheduledGameCountDto[];
   onDateChange: (date: Date) => void;
+  onCalendarYearChange: (year: number) => void;
+  onCalendarMonthChange: (month: number) => void;
 };
 
 const DatePicker = ({
   selectedDate,
   scheduledGameCounts,
   onDateChange,
+  onCalendarYearChange,
+  onCalendarMonthChange,
 }: DatePickerProps) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [dates, setDates] = useState<Date[]>(() => generateDates(selectedDate));
@@ -68,6 +72,12 @@ const DatePicker = ({
     onDateChange(date);
     updateDates(date);
     handleCloseCalendar();
+  };
+
+  // 달력에서 연도와 월 변경 시
+  const handleActiveDateChange = (newActiveStartDate: Date) => {
+    onCalendarYearChange(dayjs(newActiveStartDate).year());
+    onCalendarMonthChange(dayjs(newActiveStartDate).month() + 1);
   };
 
   // 달력 닫기
@@ -120,6 +130,9 @@ const DatePicker = ({
           <div className={styles.calendar} onClick={(e) => e.stopPropagation()}>
             <Calendar
               value={selectedDate}
+              onActiveStartDateChange={({ activeStartDate }) =>
+                activeStartDate && handleActiveDateChange(activeStartDate)
+              }
               onChange={handleSelectDate}
               formatDay={(locale, date) => {
                 return dayjs(date).isSame(dayjs(), 'day')

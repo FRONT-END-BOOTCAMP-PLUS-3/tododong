@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: '/schedule',
-        permanent: true, // 301 리디렉션
+        permanent: false, // true로 설정 시 다른 브라우저 캐시 때문에 다른 프로젝트에서도 리다이렉션 되는 문제 발생
       },
     ];
   },

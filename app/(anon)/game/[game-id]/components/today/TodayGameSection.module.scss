@@ -3,7 +3,7 @@
 .todayGameContainer {
   padding: 20px 0;
   width: 1280px;
-
+  overflow: hidden;
   h2 {
     font-size: $text-28;
     font-weight: 600;
@@ -54,4 +54,17 @@
   height: 90px;
   border-radius: $border-radius-8;
   background-color: $color-gray-800;
+
+@include mq(tablet) {
+  .todayGameContainer {
+    width: 100%;
+    h2 {
+      @include srOnly;
+    }
+    @include flexbox($justify: center, $align: center);
+  }
+  .customPrev,
+  .customNext {
+    display: none;
+  }
 }
