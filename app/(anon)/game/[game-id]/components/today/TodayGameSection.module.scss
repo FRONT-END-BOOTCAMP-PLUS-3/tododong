@@ -43,10 +43,15 @@
   margin-right: 16px;
 }
 
+.loadingContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
 .loading {
-  margin-right: 46px;
-  width: 974px;
-  height: 89px;
+  width: 182px;
+  height: 90px;
   border-radius: $border-radius-8;
   background-color: $color-gray-800;
 }

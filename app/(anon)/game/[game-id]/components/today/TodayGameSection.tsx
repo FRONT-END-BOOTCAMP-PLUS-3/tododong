@@ -80,7 +80,13 @@ const TodayGameSection = () => {
         경기 일정
       </h2>
       {isLoading ? (
-        <div className={styles.loading} />
+        <div className={styles.loadingContainer}>
+          <div className={styles.loading} />
+          <div className={styles.loading} />
+          <div className={styles.loading} />
+          <div className={styles.loading} />
+          <div className={styles.loading} />
+        </div>
       ) : (
         <>
           {shouldShowNavigation && (
@@ -108,7 +114,7 @@ const TodayGameSection = () => {
             slidesPerGroup={3} // 내비게이션 클릭 시 이동할 개수
             spaceBetween={16}
             centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
-            className={`swiper ${todayGames.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
+            className={`${todayGames.length <= 5 ? 'limited-swiper' : 'swiper'}`}
           >
             {todayGames.map((data, index) => (
               <SwiperSlide key={data?.gameId ?? index}>
