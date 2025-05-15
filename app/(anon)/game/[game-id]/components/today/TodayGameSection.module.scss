@@ -54,6 +54,7 @@
   height: 90px;
   border-radius: $border-radius-8;
   background-color: $color-gray-800;
+}
 
 @include mq(tablet) {
   .todayGameContainer {
@@ -66,5 +67,11 @@
   .customPrev,
   .customNext {
     display: none;
+  }
+}
+
+@media (max-width: 1006px) {
+  .todayGameContainer {
+    @include flexbox($justify: start);
   }
 }

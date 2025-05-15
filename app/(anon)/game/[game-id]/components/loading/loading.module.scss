@@ -1,13 +1,11 @@
 @use 'utils' as *;
-
 .todayGameContainer {
   margin: 20px 0 20px auto;
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 16px;
+  @include flexbox($direction: row-reverse, $gap: 16px);
 }
 
 .todayGame {
+  flex-shrink: 0;
   width: 182px;
   height: 90px;
   background-color: $color-gray-800;
@@ -44,4 +42,21 @@
   height: auto;
   background-color: $color-gray-800;
   border-radius: $border-radius-8;
+}
+
+@include mq(tablet) {
+  .todayGameContainer {
+    @include flexbox($justify: center);
+    overflow: hidden;
+  }
+
+  .chat {
+    display: none;
+  }
+}
+
+@media (max-width: 1006px) {
+  .todayGameContainer {
+    @include flexbox($justify: start);
+  }
 }
