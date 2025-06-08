@@ -18,7 +18,6 @@ import { NavigationOptions } from 'swiper/types';
 import TodayGameCard from './TodayGameCard';
 
 const TodayGameSection = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLastSlide, setIsLastSlide] = useState(() => false);
   const [isFirstSlide, setIsFirstSlide] = useState(() => true);
   const prevRef = useRef<HTMLButtonElement | null>(null);

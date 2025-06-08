@@ -67,25 +67,23 @@ const GameLayout = async ({
   const gameInfo: GameDetailDto = await response.json();
 
   return (
-    <>
-      <Suspense fallback={<Loading />}>
-        <TodayGameSection />
-        <div className={styles.container}>
-          <div className={styles.mainInfo}>
-            <GameStatusSection initialGameInfo={gameInfo} />
-            <div className={styles.gamePageMain}>
-              <GamePageNav gameId={gameId} />
-              {children}
-            </div>
+    <Suspense fallback={<Loading />}>
+      <TodayGameSection />
+      <div className={styles.container}>
+        <div className={styles.mainInfo}>
+          <GameStatusSection initialGameInfo={gameInfo} />
+          <div className={styles.gamePageMain}>
+            <GamePageNav gameId={gameId} />
+            {children}
           </div>
-          <ChatSection
-            userInfo={userInfo}
-            gameId={gameId}
-            gameState={gameInfo.gameStatus}
-          />
         </div>
-      </Suspense>
-    </>
+        <ChatSection
+          userInfo={userInfo}
+          gameId={gameId}
+          gameState={gameInfo.gameStatus}
+        />
+      </div>
+    </Suspense>
   );
 };
 
