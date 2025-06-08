@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     response.cookies.set('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'strict',
-      maxAge: 1 * 60, // 1분
+      maxAge: 15 * 60, // 15분
     });
   }
 

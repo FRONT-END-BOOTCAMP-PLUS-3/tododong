@@ -24,6 +24,9 @@ const UserDropDown = ({ userInfo }: { userInfo: UserInfo }) => {
     }
     if (modalAction === 'delete') {
       // 계정 삭제 로직 추가
+      await fetch('/api/user/delete', {
+        method: 'PATCH',
+      });
       location.reload();
     }
   };
@@ -51,7 +54,13 @@ const UserDropDown = ({ userInfo }: { userInfo: UserInfo }) => {
         onConfirm={handleModalConfirm}
       >
         {modalAction === 'logout' && <p>로그아웃 하시겠습니까?</p>}
-        {modalAction === 'delete' && <p>계정을 삭제하시겠습니까?</p>}
+        {modalAction === 'delete' && (
+          <p style={{ whiteSpace: 'pre-wrap' }}>
+            {
+              '계정을 삭제하시겠습니까?\n\n 30일 내에 같은 이메일로 재가입 시\n기존의 정보가 복구됩니다.'
+            }
+          </p>
+        )}
       </Modal>
     </>
   );

@@ -49,3 +49,13 @@
     }
   }
 }
+
+.alertModalContent {
+  width: 67%;
+  white-space: pre-wrap;
+  word-break: keep-all;
+
+  .explanation {
+    color: $color-gray-400;
+  }
+}
