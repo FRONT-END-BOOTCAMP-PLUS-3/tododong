@@ -36,10 +36,12 @@ const TodayGameSection = () => {
     return res.json();
   };
 
-  const { data: todayGamesRaw = [] } = useQuery({
-    queryKey: ['todayGames', dayjs().format('YYYY-MM-DD')],
-    queryFn: fetchTodayGames,
-  });
+  const { data: todayGamesRaw = [], isLoading: isTodayGamesLoading } = useQuery(
+    {
+      queryKey: ['todayGames', dayjs().format('YYYY-MM-DD')],
+      queryFn: fetchTodayGames,
+    }
+  );
 
   const todayGames = useMemo(
     () =>
@@ -78,65 +80,74 @@ const TodayGameSection = () => {
         <br />
         경기 일정
       </h2>
-
-      {shouldShowNavigation && (
-        <button
-          ref={prevRef}
-          type="button"
-          className={styles.customPrev}
-          disabled={isFirstSlide}
-        >
-          <Icon id="left" width={6.55} height={11.15} />
-        </button>
-      )}
-      <Swiper
-        modules={[Navigation]}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
-        }}
-        onSwiper={setSwiperInstance}
-        onSlideChange={(swiper) => {
-          setIsLastSlide(swiper.isEnd);
-          setIsFirstSlide(swiper.isBeginning);
-        }}
-        breakpoints={{
-          0: {
-            slidesPerView: 'auto',
-            slidesPerGroup: 1,
-          },
-          1280: {
-            slidesPerView: 5,
-            slidesPerGroup: 3,
-          },
-        }}
-        spaceBetween={16}
-        centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
-        className={`swiper ${todayGames.length <= 5 ? 'limited-swiper' : 'full-swiper'}`}
-      >
-        {todayGames.map((data, index) => (
-          <SwiperSlide
-            key={data?.gameId ?? index}
-            className={`custom-swiper-slide`}
+      {isTodayGamesLoading ? (
+        <div className={styles.loadingContainer}>
+          {[...Array(5)].map((_, index) => (
+            <div key={index} className={styles.loading} />
+          ))}
+        </div>
+      ) : (
+        <>
+          {shouldShowNavigation && (
+            <button
+              ref={prevRef}
+              type="button"
+              className={styles.customPrev}
+              disabled={isFirstSlide}
+            >
+              <Icon id="left" width={6.55} height={11.15} />
+            </button>
+          )}
+          <Swiper
+            modules={[Navigation]}
+            navigation={{
+              prevEl: prevRef.current,
+              nextEl: nextRef.current,
+            }}
+            onSwiper={setSwiperInstance}
+            onSlideChange={(swiper) => {
+              setIsLastSlide(swiper.isEnd);
+              setIsFirstSlide(swiper.isBeginning);
+            }}
+            breakpoints={{
+              0: {
+                slidesPerView: 'auto',
+                slidesPerGroup: 1,
+              },
+              1280: {
+                slidesPerView: 5,
+                slidesPerGroup: 3,
+              },
+            }}
+            spaceBetween={16}
+            centerInsufficientSlides // 마지막에 빈 공간 없이 정렬
+            className={`${todayGames.length <= 5 ? 'limited-swiper' : 'swiper'}`}
           >
-            <TodayGameCard
-              gameId={data?.gameId}
-              gameStatus={data?.gameStatus}
-              startTime={data?.startTime}
-              teams={data?.teams}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      {shouldShowNavigation && (
-        <button
-          ref={nextRef}
-          type="button"
-          className={styles.customNext}
-          disabled={isLastSlide}
-        >
-          <Icon id="right" width={6.55} height={11.15} />
-        </button>
+            {todayGames.map((data, index) => (
+              <SwiperSlide
+                key={data?.gameId ?? index}
+                className={`custom-swiper-slide`}
+              >
+                <TodayGameCard
+                  gameId={data?.gameId}
+                  gameStatus={data?.gameStatus}
+                  startTime={data?.startTime}
+                  teams={data?.teams}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {shouldShowNavigation && (
+            <button
+              ref={nextRef}
+              type="button"
+              className={styles.customNext}
+              disabled={isLastSlide}
+            >
+              <Icon id="right" width={6.55} height={11.15} />
+            </button>
+          )}
+        </>
       )}
     </section>
   );

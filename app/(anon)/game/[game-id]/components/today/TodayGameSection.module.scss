@@ -43,6 +43,19 @@
   margin-right: 16px;
 }
 
+.loadingContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.loading {
+  width: 182px;
+  height: 90px;
+  border-radius: $border-radius-8;
+  background-color: $color-gray-800;
+}
+
 @include mq(tablet) {
   .todayGameContainer {
     width: 100%;
@@ -54,5 +67,11 @@
   .customPrev,
   .customNext {
     display: none;
+  }
+}
+
+@media (max-width: 1006px) {
+  .todayGameContainer {
+    @include flexbox($justify: start);
   }
 }

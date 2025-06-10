@@ -10,6 +10,8 @@
   left: 50%;
   translate: -50% -50%;
   display: flex;
+
+  pointer-events: auto;
 }
 
 .dialog {

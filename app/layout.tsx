@@ -2,6 +2,7 @@ import '@/styles/globals.scss';
 import MediaProvider from '@/providers/MediaProvider';
 import QueryProvider from '@/components/query-provider/QueryProvider';
 import '@/styles/globals.scss';
+import ScrollToTop from '@/components/scroll-to-top/ScrollToTop';
 
 export const metadata = {
   title: '토도동',
@@ -39,6 +40,7 @@ export default async function RootLayout({
     <html lang="ko-KR">
       <body>
         <MediaProvider />
+        <ScrollToTop />
         <QueryProvider>{children}</QueryProvider>
 
         <div id="loading-start" aria-live="assertive"></div>

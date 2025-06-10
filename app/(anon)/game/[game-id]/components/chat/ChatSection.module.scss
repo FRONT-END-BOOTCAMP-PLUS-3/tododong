@@ -16,7 +16,7 @@
 }
 .chatSection {
   @include flexbox($direction: column);
-  height: calc(100vh - 13.75rem);
+  height: calc(100vh - 14.75rem);
   width: 364px;
   position: sticky;
   top: 72px;

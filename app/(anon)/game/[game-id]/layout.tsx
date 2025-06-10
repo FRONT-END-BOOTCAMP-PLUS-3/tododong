@@ -7,6 +7,8 @@ import GamePageNav from './components/game-page-nav/GamePageNav';
 import GameStatusSection from './components/game-status/GameStatusSection';
 import TodayGameSection from './components/today/TodayGameSection';
 import styles from './layout.module.scss';
+import { Suspense } from 'react';
+import Loading from './components/loading/loading';
 
 export const generateMetadata = async ({
   params,
@@ -65,7 +67,7 @@ const GameLayout = async ({
   const gameInfo: GameDetailDto = await response.json();
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <TodayGameSection />
       <div className={styles.container}>
         <div className={styles.mainInfo}>
@@ -81,7 +83,7 @@ const GameLayout = async ({
           gameState={gameInfo.gameStatus}
         />
       </div>
-    </>
+    </Suspense>
   );
 };
 
