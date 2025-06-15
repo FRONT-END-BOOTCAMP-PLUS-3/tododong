@@ -3,7 +3,7 @@
 .todayGameContainer {
   padding: 20px 0;
   width: 1280px;
-
+  overflow: hidden;
   h2 {
     font-size: $text-28;
     font-weight: 600;
@@ -41,4 +41,37 @@
 .swiperslide {
   width: 182px;
   margin-right: 16px;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.loading {
+  width: 182px;
+  height: 90px;
+  border-radius: $border-radius-8;
+  background-color: $color-gray-800;
+}
+
+@include mq(tablet) {
+  .todayGameContainer {
+    width: 100%;
+    h2 {
+      @include srOnly;
+    }
+    @include flexbox($justify: center, $align: center);
+  }
+  .customPrev,
+  .customNext {
+    display: none;
+  }
+}
+
+@media (max-width: 1006px) {
+  .todayGameContainer {
+    @include flexbox($justify: start);
+  }
 }

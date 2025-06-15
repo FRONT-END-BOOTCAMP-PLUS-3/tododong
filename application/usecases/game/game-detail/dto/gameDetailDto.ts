@@ -2,6 +2,7 @@ import GameStatus from '@/types/game-status';
 
 interface TeamDto {
   name: string;
+  code: string;
   logoSrc: string;
   score: number;
   periods: number[];

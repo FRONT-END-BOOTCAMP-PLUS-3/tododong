@@ -4,7 +4,7 @@ import PrVerificationCodeRepository from '@/infrastructure/repositories/prisma/P
 import { NextResponse } from 'next/server';
 
 // 이메일 인증 API
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   const { email } = await request.json();
 
   if (!email) {
@@ -37,4 +37,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+};

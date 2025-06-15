@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrMessageRepository } from '@/infrastructure/repositories/prisma/PrMessageRepository';
-import { getChatMessagesUseCase } from '@/application/usecases/chat/getChatMessagesUseCase';
 import { createMessageUsecase } from '@/application/usecases/chat/createChatMessageUsecase';
-import { cookies } from 'next/headers';
+import { getChatMessagesUseCase } from '@/application/usecases/chat/getChatMessagesUseCase';
+import { PrMessageRepository } from '@/infrastructure/repositories/prisma/PrMessageRepository';
 import { verifyToken } from '@/utils/auth';
 import { JWTPayload } from 'jose';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface JWTPayloadWithUser extends JWTPayload {
   id: string;
@@ -41,8 +40,7 @@ export const POST = async (
   const { message } = body;
 
   // 쿠키에서 토큰 꺼내고, 토큰에서 user정보 꺼내기
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken')?.value || '';
+  const accessToken = req.cookies.get('accessToken')?.value || '';
 
   let userInfo: JWTPayloadWithUser = { id: '', nickname: '' };
 
@@ -50,11 +48,14 @@ export const POST = async (
   if (accessToken) {
     const decoded = (await verifyToken(accessToken)) as JWTPayloadWithUser;
     if (decoded) userInfo = decoded;
-    else
-      return NextResponse.json({
-        message: '토큰이 만료되었습니다.',
-        status: 400,
-      });
+    else {
+      return NextResponse.json(
+        {
+          error: '토큰이 만료되었습니다.',
+        },
+        { status: 401 }
+      );
+    }
   }
 
   const repository = new PrMessageRepository();

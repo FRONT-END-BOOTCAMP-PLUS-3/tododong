@@ -1,13 +1,9 @@
 //import { ScheduledGameDto } from './dto/ScheduledGameDto';
-import { StatisticsRepository } from '@/domain/repositories/StatisticsRepository';
-import { TeamRepository } from '@/domain/repositories/TeamRepository';
-import GameStatus from '@/types/game-status';
-import { convertGameStatus, convertUTCtoKST } from '@/utils';
-import { GameDetailDto } from './dto/gameDetailDto';
-import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
 import { GameRepository } from '@/domain/repositories/GameRepository';
-import { off } from 'process';
-import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
+import { NbaGameRepository } from '@/domain/repositories/NbaGameRepository';
+import { TeamRepository } from '@/domain/repositories/TeamRepository';
+import { GameDetailDto } from './dto/gameDetailDto';
+import GameStatus from '@/types/game-status';
 
 export const getGameDetailUsecase = async (
   internalRepository: GameRepository,
@@ -20,16 +16,6 @@ export const getGameDetailUsecase = async (
   let game = await internalRepository.findById(gameId);
   if (!game) {
     throw new Error(`게임(${gameId}) 정보가 없습니다.`);
-  }
-
-  const currentTime = new Date().getTime();
-  const gameStartTime = convertKSTtoTime(game.startTime);
-  const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
-
-  if (currentTime >= threeHoursLater) {
-    game.status = 'final';
-  } else if (currentTime >= gameStartTime) {
-    game.status = 'live';
   }
 
   if (game.status === 'live')
@@ -63,6 +49,7 @@ export const getGameDetailUsecase = async (
     teams: {
       homeTeam: {
         name: homeTeam.name,
+        code: homeTeam.code,
         logoSrc: homeTeam.logo,
         score: game.homeTeamScore,
         isWinner: game.homeTeamScore > game.awayTeamScore,
@@ -70,6 +57,7 @@ export const getGameDetailUsecase = async (
       },
       awayTeam: {
         name: awayTeam.name,
+        code: awayTeam.code,
         logoSrc: awayTeam.logo,
         score: game.awayTeamScore,
         isWinner: game.awayTeamScore > game.homeTeamScore,

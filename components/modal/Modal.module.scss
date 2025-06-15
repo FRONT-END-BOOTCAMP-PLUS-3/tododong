@@ -10,6 +10,8 @@
   left: 50%;
   translate: -50% -50%;
   display: flex;
+
+  pointer-events: auto;
 }
 
 .dialog {
@@ -24,25 +26,28 @@
   justify-content: center;
   align-items: center;
   padding-block: 0.75rem;
-  width: 440px;
+  width: 100%;
+  max-width: 440px;
   text-align: center;
 }
 
 .buttonWrapper {
+  width: 100%;
+  max-width: 19.5rem;
   @include flexbox($gap: 2rem);
 
   > button {
-    width: 8.75rem;
+    flex-grow: 1;
     height: 3rem;
     border-radius: $border-radius-8;
 
-    &:first-child {
+    &.closeBtn {
       border: 1px solid $color-white;
       &:hover {
         background-color: $color-gray-600;
       }
     }
-    &:last-child {
+    &.confirmBtn {
       background-color: $color-primary;
       &:hover {
         background-color: $color-primary-hover;

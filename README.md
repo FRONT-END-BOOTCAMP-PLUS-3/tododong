@@ -46,8 +46,8 @@
 | --------- | --------- |
 | Framework | <img src="https://img.shields.io/badge/NEXT.JS-000000?style=for-the-badge&logo=NEXT.JS&logoColor=white" /> |
 | Language  | <img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white" /> |
-| Styling   | <img src="https://img.shields.io/badge/CSS MODULES-000000?style=for-the-badge&logo=CSS MODULES&logoColor=white" /> <img src="https://img.shields.io/badge/SASS-CC6699?style=for-the-badge&logo=SASS&logoColor=white" /> |
-| Library   | <img src="https://img.shields.io/badge/SWIPER-6332F6?style=for-the-badge&logo=SWIPER&logoColor=white" /> <img src="https://img.shields.io/badge/DAY.JS-FF5F4C?style=for-the-badge&logo=DAY.JS&logoColor=white" /> <img src="https://img.shields.io/badge/REACT CALENDAR-61DAFB?style=for-the-badge&logo=REACT CALENDAR&logoColor=white" /> |
+| Styling   | <img src="https://img.shields.io/badge/CSS%20MODULES-000000?style=for-the-badge&logo=CSS%20MODULES&logoColor=white" /> <img src="https://img.shields.io/badge/SASS-CC6699?style=for-the-badge&logo=SASS&logoColor=white" /> |
+| Library   | <img src="https://img.shields.io/badge/SWIPER-6332F6?style=for-the-badge&logo=SWIPER&logoColor=white" /> <img src="https://img.shields.io/badge/DAY.JS-FF5F4C?style=for-the-badge&logo=DAY.JS&logoColor=white" /> <img src="https://img.shields.io/badge/REACT%20CALENDAR-61DAFB?style=for-the-badge&logo=REACT%20CALENDAR&logoColor=white" /> |
 
 ### Bankend
 

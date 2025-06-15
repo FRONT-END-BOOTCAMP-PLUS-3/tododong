@@ -5,7 +5,6 @@ import {
 } from './dto/YoutubeVideosDto';
 import { GameRepository } from '@/domain/repositories/GameRepository';
 import { TeamRepository } from '@/domain/repositories/TeamRepository';
-import convertKSTtoTime from '@/utils/convertKSTtoTimestamp';
 
 export const getYoutubeVideosUsecase = async (
   gameId: string,
@@ -15,16 +14,6 @@ export const getYoutubeVideosUsecase = async (
   const game = await gameRepository.findById(gameId);
   if (!game) {
     throw new Error(`게임(${gameId}) 정보가 없습니다.`);
-  }
-
-  const currentTime = new Date().getTime();
-  const gameStartTime = convertKSTtoTime(game.startTime);
-  const threeHoursLater = gameStartTime + 3 * 60 * 60 * 1000;
-
-  if (currentTime >= threeHoursLater) {
-    game.status = 'final';
-  } else if (currentTime >= gameStartTime) {
-    game.status = 'live';
   }
 
   if (game.status !== 'final') return { game, videos: null };

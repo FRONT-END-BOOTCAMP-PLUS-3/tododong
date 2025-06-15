@@ -1,15 +1,47 @@
+'use client';
+
 import { GameDetailDto } from '@/application/usecases/game/game-detail/dto/gameDetailDto';
 import GameStatusTag from '@/components/game-status-tag/GameStatusTag';
 import Team from '@/components/team/Team';
+import { useEffect, useState } from 'react';
 import styles from './GameStatusSection.module.scss';
 
-const GameStatusSection = ({ gameInfo }: { gameInfo: GameDetailDto }) => {
+type Props = {
+  initialGameInfo: GameDetailDto;
+};
+
+const GameStatusSection = ({ initialGameInfo }: Props) => {
+  const [gameInfo, setGameInfo] = useState(initialGameInfo);
+
+  useEffect(() => {
+    if (gameInfo.gameStatus !== 'live') return;
+
+    const fetchGameInfo = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/game/${gameInfo.gameId}`,
+          {
+            cache: 'no-store',
+          }
+        );
+        if (!res.ok) return;
+        const updated: GameDetailDto = await res.json();
+        setGameInfo(updated);
+      } catch (err) {
+        console.error('게임 정보 갱신 실패', err);
+      }
+    };
+
+    const interval = setInterval(fetchGameInfo, 10000);
+    return () => clearInterval(interval);
+  }, [gameInfo]);
+
   return (
     <section className={styles.container}>
       <div className={styles.teamWrap}>
         <Team
           logoSrc={gameInfo.teams.awayTeam.logoSrc}
-          name={gameInfo.teams.awayTeam.name}
+          name={gameInfo.teams.awayTeam.code}
         />
       </div>
       {gameInfo.gameStatus === 'scheduled' ? (
@@ -38,13 +70,13 @@ const GameStatusSection = ({ gameInfo }: { gameInfo: GameDetailDto }) => {
             </thead>
             <tbody>
               <tr>
-                <td>{gameInfo.teams.awayTeam.name}</td>
+                <td>{gameInfo.teams.awayTeam.code}</td>
                 {gameInfo.teams.awayTeam.periods.map((score, index) => (
                   <td key={index}>{score || '-'}</td>
                 ))}
               </tr>
               <tr>
-                <td>{gameInfo.teams.homeTeam.name}</td>
+                <td>{gameInfo.teams.homeTeam.code}</td>
                 {gameInfo.teams.homeTeam.periods.map((score, index) => (
                   <td key={index}>{score || '-'}</td>
                 ))}
@@ -57,7 +89,7 @@ const GameStatusSection = ({ gameInfo }: { gameInfo: GameDetailDto }) => {
       <div className={styles.teamWrap}>
         <Team
           logoSrc={gameInfo.teams.homeTeam.logoSrc}
-          name={gameInfo.teams.homeTeam.name}
+          name={gameInfo.teams.homeTeam.code}
         />
       </div>
     </section>

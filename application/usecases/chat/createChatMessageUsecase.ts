@@ -5,7 +5,7 @@ export const createMessageUsecase = async (
   repository: MessageRepository,
   message: CreateMessageDto
 ): Promise<void> => {
-  repository.createMessage({
+  await repository.createMessage({
     id: 0,
     gameId: message.gameId,
     userId: message.userId,
